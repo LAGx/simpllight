@@ -11,6 +11,7 @@ protected:
 	sf::Texture texture_zone;
 
 	float radiusZone = 30.f;
+	bool isVisibleZone = true;
 	float drug_air = 0.7;
 	float drug_angle = 1;
 
@@ -19,6 +20,11 @@ protected:
 
 public:
 	signed int depthRender = 0;
+
+	void setRadius(float radius = 0);
+	void moveRadius(float radius_delta = 0);
+	void setZoneVisible(bool isVisible = true);
+
 	b2Body *body_ph;
 
 	Human(sf::Vector2f initCord, std::string texture); //Human texture have to be a single color with shadow 32x32. 

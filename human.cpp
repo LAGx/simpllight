@@ -50,17 +50,35 @@ void Human::update() {
 	World.Step(1 / 60.f, 8, 3);
 }
 
+
 void Human::setTexturePosition(Vector2f cord, float angle) {
 	body.setPosition(cord);
+	zone.setRadius(radiusZone);
 	zone.setPosition(cord);
 	body.setRotation(angle);
+}
+
+void Human::setRadius(float radius) {
+	if (!radius) {
+		radiusZone = radius;
+	}
+}
+
+void Human::moveRadius(float radiusDelta) {
+		radiusZone += radiusDelta;
+}
+
+void Human::setZoneVisible(bool isVisible) {
+	isVisibleZone = isVisible;
 }
 
 void Human::blit() {
 	update();
 	spl::ToDraw set_b = {&body, depthRender};
-	spl::ToDraw set_z = {&zone, depthRender-1};
-	spl::Window::allDrawable.push_back(set_z);
+	if (isVisibleZone) {
+		spl::ToDraw set_z = { &zone, depthRender - 1 };
+		spl::Window::allDrawable.push_back(set_z);
+	}
 	spl::Window::allDrawable.push_back(set_b);
 }
 
