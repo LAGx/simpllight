@@ -19,13 +19,14 @@ protected:
 	void setTexturePosition(sf::Vector2f cord, float angle);
 
 public:
-	signed int depthRender = 0;
+	int depthRender = 0;
 
 	void setRadius(float radius = 0);
 	void moveRadius(float radius_delta = 0);
 	void setZoneVisible(bool isVisible = true);
 
 	b2Body *body_ph;
+	b2Body *zone_ph;
 
 	Human(sf::Vector2f initCord, std::string texture); //Human texture have to be a single color with shadow 32x32. 
 	

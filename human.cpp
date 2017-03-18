@@ -76,7 +76,7 @@ void Human::blit() {
 	update();
 	spl::ToDraw set_b = {&body, depthRender};
 	if (isVisibleZone) {
-		spl::ToDraw set_z = { &zone, depthRender - 1 };
+		spl::ToDraw set_z = { &zone, depthRender + 1 };
 		spl::Window::allDrawable.push_back(set_z);
 	}
 	spl::Window::allDrawable.push_back(set_b);
