@@ -11,6 +11,7 @@ using namespace sf;
 
 Human::Human(Vector2f initCord, string textr){
 	////////////////graphic part
+	///body
 	if (!texture_body.loadFromFile(textr)) {
 		Log::error("Texture load in Human. ", true);
 	}
@@ -18,7 +19,7 @@ Human::Human(Vector2f initCord, string textr){
 	body.setTexture(texture_body);
 	body.setOrigin(Vector2f(16,16));
 	body.setPosition(initCord);
-
+	///circle
 	if (!texture_zone.loadFromFile(textr, sf::IntRect(13,13, 2, 2))) {
 		Log::error("Texture load in Human. ", true);
 	}
@@ -29,7 +30,8 @@ Human::Human(Vector2f initCord, string textr){
 	zone.setOrigin(Vector2f(radiusZone, radiusZone));
 	zone.setPosition(initCord);
 
-	/////////////////phisic part
+	/////////////////phisic part 
+	///body
 	b2BodyDef bdef;
 	b2PolygonShape b_shape;
 	b_shape.SetAsBox(6 / SCALE_BOX, 6 / SCALE_BOX);
@@ -37,6 +39,16 @@ Human::Human(Vector2f initCord, string textr){
 	bdef.position.Set(initCord.x/ SCALE_BOX, initCord.y / SCALE_BOX);
 	body_ph = World.CreateBody(&bdef);
 	body_ph->CreateFixture(&b_shape, 1);
+	///circle
+	/*
+	b2BodyDef bdef_s;
+	b2CircleShape shape_s;
+	shape_s.m_radius = radiusZone;
+	bdef_s.type = b2_dynamicBody;
+	zone_ph.
+	bdef_s.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX);
+	zone_ph = World.CreateBody(&bdef_s);
+	body_ph->CreateFixture(&shape_s, 1);*/
 }
 
 void Human::update() {

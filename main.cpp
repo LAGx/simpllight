@@ -12,8 +12,8 @@ int main() {
 
 	ScreenLog screenLog;
 	screenLog.setNewLog("FPS", 1, 0);
-	screenLog.setNewLog("LOG", 55, 1);
-	screenLog.setNewLog("LOG_2", 50, 2);
+	screenLog.setNewLog("collision h1", 2, 1);
+	screenLog.setNewLog("collision h2", 3, 2);
 	spl::Window window;
 
 	Human h(sf::Vector2f(250, 250), "image/human.png");
@@ -54,8 +54,8 @@ int main() {
 		}
 		window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
 
-		ScreenLog::setValue(55, "some log");
-		ScreenLog::setValue(50, "some");
+		ScreenLog::setValue(2, "some log");
+		ScreenLog::setValue(3, "some");
 
 		window.updateState();
 
