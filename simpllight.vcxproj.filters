@@ -61,6 +61,21 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="log.txt" />
+    <Text Include="plan.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="image\human.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+    <Image Include="image\player.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
     <Font Include="font\arial.ttf">
       <Filter>Resource Files\font</Filter>
     </Font>
@@ -76,13 +91,5 @@
     <Font Include="font\ariblk.ttf">
       <Filter>Resource Files\font</Filter>
     </Font>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="image\human.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
-    <Image Include="image\player.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
   </ItemGroup>
 </Project>
