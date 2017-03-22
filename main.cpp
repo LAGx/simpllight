@@ -23,7 +23,7 @@ int main() {
 
 	int i = 0;
 	sf::Clock clock;
-	float speed = 3;
+	float speed = 2.5;
 
 	while (window.canvas.isOpen()){
 		sf::Event event;
@@ -50,7 +50,6 @@ int main() {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
 			//window.view.move(sf::Vector2f(-1, 0));
 			player.body_ph->ApplyForceToCenter(b2Vec2(-speed, 0), true);
-
 		}
 		window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
 
@@ -64,7 +63,6 @@ int main() {
 		player.blit();
 		screenLog.blit();
 		window.drawAll();
-
 	}
 
 	Log::log("____________LOG SESSION END____________", true);

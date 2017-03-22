@@ -13,7 +13,4 @@ class State {
 
 		static sf::Color mainColorMajor;
 
-		State();
-
-		~State();
 	};
