@@ -9,7 +9,8 @@
 using namespace std;
 using namespace sf;
 
-Human::Human(Vector2f initCord, string textr){
+Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
+	name = l_name;
 	////////////////graphic part
 	if (!texture_body.loadFromFile(textr)) {
 		Log::error("Texture load in Human. ", true);
@@ -30,37 +31,64 @@ Human::Human(Vector2f initCord, string textr){
 	zone.setPosition(initCord);
 
 	/////////////////phisic part
-	b2BodyDef bdef;
+	///body
+	b2BodyDef b_bdef;
+	b_bdef.type = b2_dynamicBody;
+	b_bdef.linearDamping = drug_air;
+	b_bdef.angularDamping = drug_angle;
+	b_bdef.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX);
+	body_ph = World->CreateBody(&b_bdef);
 	b2PolygonShape b_shape;
 	b_shape.SetAsBox(6 / SCALE_BOX, 6 / SCALE_BOX);
-	bdef.type = b2_dynamicBody;
-	bdef.position.Set(initCord.x/ SCALE_BOX, initCord.y / SCALE_BOX);
-	body_ph = World.CreateBody(&bdef);
-	body_ph->CreateFixture(&b_shape, 1);
+	b2FixtureDef b_fixture;
+	b_fixture.isSensor = false;
+	b_fixture.shape = &b_shape;
+	b_fixture.density = 1;
+	body_ph->CreateFixture(&b_fixture);
+	///zone
+	b2CircleShape z_shape;
+	z_shape.m_radius = radiusZone / SCALE_BOX;
+	b2FixtureDef z_fixture;
+	z_fixture.isSensor = true;
+	z_fixture.shape = &z_shape;
+	body_ph->CreateFixture(&z_fixture);
+
+	body_ph->SetUserData(this);
+
 }
 
 void Human::update() {
-	b2Vec2 air = -body_ph->GetLinearVelocity();
-	air.x = air.x * drug_air;
-	air.y = air.y * drug_air;
-	body_ph->ApplyForceToCenter(air, true);
-	body_ph->SetAngularDamping(drug_angle);
-
 	setTexturePosition(Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX), body_ph->GetAngle()*DEG_BOX);
-	World.Step(1 / 60.f, 8, 3);
 }
 
 void Human::setTexturePosition(Vector2f cord, float angle) {
 	body.setPosition(cord);
+	zone.setRadius(radiusZone);
 	zone.setPosition(cord);
 	body.setRotation(angle);
 }
 
+void Human::setRadius(float radius) {
+	if (!radius) {
+		radiusZone = radius;
+	}
+}
+
+void Human::moveRadius(float radiusDelta) {
+	radiusZone += radiusDelta;
+}
+
+void Human::setZoneVisible(bool isVisible) {
+	isVisibleZone = isVisible;
+}
+
 void Human::blit() {
 	update();
-	spl::ToDraw set_b = {&body, depthRender};
-	spl::ToDraw set_z = {&zone, depthRender-1};
-	spl::Window::allDrawable.push_back(set_z);
+	spl::ToDraw set_b = { &body, depthRender };
+	if (isVisibleZone) {
+		spl::ToDraw set_z = { &zone, depthRender + 1 };
+		spl::Window::allDrawable.push_back(set_z);
+	}
 	spl::Window::allDrawable.push_back(set_b);
 }
 
