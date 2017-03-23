@@ -51,6 +51,3 @@ Temporary Items
 *.vcxproj
 *.cd
 /Debug
-/x64
-/Release
-*vcxproj.user
