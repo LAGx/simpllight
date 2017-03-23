@@ -58,7 +58,7 @@ Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 	b2FixtureDef z_fixt;
 	z_fixt.isSensor = true;
 	z_fixt.shape = &z_shape;
-	zoneFix = body_ph->CreateFixture(&z_fixt);
+	zoneFixt = body_ph->CreateFixture(&z_fixt);
 	body_ph->SetUserData(this);
 }
 
@@ -100,6 +100,7 @@ void Human::moveRadius(float radiusDelta) {
 		radiusZone += radiusDelta;
 	else
 		radiusZone = 1;
+	updateRadiusZone();
 }
 
 void Human::setZoneVisible(bool isVisible) {
