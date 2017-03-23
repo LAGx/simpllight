@@ -7,18 +7,20 @@ protected:
 	sf::Sprite body;
 	sf::CircleShape zone;
 
+	b2Fixture* zoneFix;
+
 	sf::Texture texture_body;
 	sf::Texture texture_zone;
 
 	float radiusZone = 30.f;
 	bool isVisibleZone = true;
 
-	float drug_air = 1;
-	float drug_angle = 1;
-
+	float drug_air = 2;
+	float drug_angle = 2;
 
 	void update();
-	void setTexturePosition(sf::Vector2f cord, float angle);
+	void updateTexturePosition(sf::Vector2f cord, float angle);
+	void updateRadiusZone();
 
 public:
 	int depthRender = 0;

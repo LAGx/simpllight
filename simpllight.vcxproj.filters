@@ -85,4 +85,11 @@
       <Filter>Resource Files\image</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="log.txt" />
+    <Text Include="plan.txt" />
+  </ItemGroup>
 </Project>
