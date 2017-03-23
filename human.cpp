@@ -9,7 +9,10 @@
 using namespace std;
 using namespace sf;
 
-Human::Human(Vector2f initCord, string textr,string id, b2World* World){
+
+Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
+	name = l_name;
+
 	////////////////graphic part
 	///body
 	if (!texture_body.loadFromFile(textr)) {
@@ -29,14 +32,18 @@ Human::Human(Vector2f initCord, string textr,string id, b2World* World){
 	zone.setTexture(&texture_zone);
 	zone.setOrigin(Vector2f(radiusZone, radiusZone));
 	zone.setPosition(initCord);
-	/////////////////phisic part 
+
+
+	/////////////////phisic part
 	///body
-	
+
 	b2BodyDef b_bdef;
 	b_bdef.type = b2_dynamicBody;
 	b_bdef.linearDamping = drug_air;
 	b_bdef.angularDamping = drug_angle;
-	b_bdef.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX); 
+
+	b_bdef.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX);
+
 	body_ph = World->CreateBody(&b_bdef);
 	b2PolygonShape b_shape;
 	b_shape.SetAsBox(6 / SCALE_BOX, 6 / SCALE_BOX);
@@ -46,16 +53,16 @@ Human::Human(Vector2f initCord, string textr,string id, b2World* World){
 	b_fixture.density = 1;
 	body_ph->CreateFixture(&b_fixture);
 
-	//z_bdef.type = b2_dynamicBody;
-	//zone_ph = World->CreateBody(&z_bdef);
+	///zone
 	b2CircleShape z_shape;
-	z_shape.m_radius = radiusZone/SCALE_BOX;
+	z_shape.m_radius = radiusZone / SCALE_BOX;
 	b2FixtureDef z_fixture;
-	z_fixture.isSensor = false;
+	z_fixture.isSensor = true;
 	z_fixture.shape = &z_shape;
 	body_ph->CreateFixture(&z_fixture);
 
-//	body_ph->SetUserData();
+	body_ph->SetUserData(this);
+
 
 }
 
@@ -78,7 +85,9 @@ void Human::setRadius(float radius) {
 }
 
 void Human::moveRadius(float radiusDelta) {
-		radiusZone += radiusDelta;
+
+	radiusZone += radiusDelta;
+
 }
 
 void Human::setZoneVisible(bool isVisible) {
@@ -87,7 +96,9 @@ void Human::setZoneVisible(bool isVisible) {
 
 void Human::blit() {
 	update();
-	spl::ToDraw set_b = {&body, depthRender};
+
+	spl::ToDraw set_b = { &body, depthRender };
+
 	if (isVisibleZone) {
 		spl::ToDraw set_z = { &zone, depthRender + 1 };
 		spl::Window::allDrawable.push_back(set_z);

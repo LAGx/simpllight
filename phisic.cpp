@@ -1,17 +1,26 @@
 #include "phisic.h"
-#include <iostream>
 #include "log.h"
-
-using namespace std;
+#include "human.h"
 
 void CollideListener::BeginContact(b2Contact* contact) {
-//	if ((contact->GetFixtureA()->GetBody()->GetUserData() == "player") &&
-//		(contact->GetFixtureB()->GetBody()->GetUserData() == "human1"))
-	//	ScreenLog::setValue(2, "START");
+	void *dataA = contact->GetFixtureA()->GetBody()->GetUserData();
+	void *dataB = contact->GetFixtureB()->GetBody()->GetUserData();
+
+	if(((static_cast<Human*>(dataA)->name == "player") && (static_cast<Human*>(dataB)->name == "human1"))||((static_cast<Human*>(dataB)->name == "player") && (static_cast<Human*>(dataA)->name == "human1")))
+		ScreenLog::setValue(2, "YES");
+
+	if (((static_cast<Human*>(dataA)->name == "player") && (static_cast<Human*>(dataB)->name == "human2")) || ((static_cast<Human*>(dataB)->name == "player") && (static_cast<Human*>(dataA)->name == "human2")))
+		ScreenLog::setValue(3, "YES");
+
 }
 
 void CollideListener::EndContact(b2Contact* contact) {
-//	if ((contact->GetFixtureA()->GetBody()->GetUserData() == "player") &&
-	//	(contact->GetFixtureB()->GetBody()->GetUserData() == "human1"))
-	///	ScreenLog::setValue(2, "END");
+	void *dataA = contact->GetFixtureA()->GetBody()->GetUserData();
+	void *dataB = contact->GetFixtureB()->GetBody()->GetUserData();
+
+	if (((static_cast<Human*>(dataA)->name == "player") && (static_cast<Human*>(dataB)->name == "human1")) || ((static_cast<Human*>(dataB)->name == "player") && (static_cast<Human*>(dataA)->name == "human1")))
+		ScreenLog::setValue(2, "NO");
+
+	if (((static_cast<Human*>(dataA)->name == "player") && (static_cast<Human*>(dataB)->name == "human2")) || ((static_cast<Human*>(dataB)->name == "player") && (static_cast<Human*>(dataA)->name == "human2")))
+		ScreenLog::setValue(3, "NO");
 }
