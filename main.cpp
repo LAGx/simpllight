@@ -80,7 +80,6 @@ int main() {
 		player.blit();
 		screenLog.blit();
 		window.drawAll();
-
 	}
 	Log::log("____________LOG SESSION END____________", true);
 	return 0;
