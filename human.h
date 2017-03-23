@@ -12,8 +12,8 @@ protected:
 
 	float radiusZone = 30.f;
 	bool isVisibleZone = true;
-	float drug_air = 0.7;
-	float drug_angle = 1;
+	float drug_air = 2;
+	float drug_angle = 2;
 
 	void update();
 	void setTexturePosition(sf::Vector2f cord, float angle);
@@ -26,9 +26,8 @@ public:
 	void setZoneVisible(bool isVisible = true);
 
 	b2Body *body_ph;
-	b2Body *zone_ph;
 
-	Human(sf::Vector2f initCord, std::string texture); //Human texture have to be a single color with shadow 32x32. 
+	Human(sf::Vector2f initCord, std::string texture, string id, b2World* World); //Human texture have to be a single color with shadow 32x32. 
 	
 	void blit();
 	

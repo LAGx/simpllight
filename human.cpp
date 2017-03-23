@@ -9,7 +9,7 @@
 using namespace std;
 using namespace sf;
 
-Human::Human(Vector2f initCord, string textr){
+Human::Human(Vector2f initCord, string textr,string id, b2World* World){
 	////////////////graphic part
 	///body
 	if (!texture_body.loadFromFile(textr)) {
@@ -29,37 +29,38 @@ Human::Human(Vector2f initCord, string textr){
 	zone.setTexture(&texture_zone);
 	zone.setOrigin(Vector2f(radiusZone, radiusZone));
 	zone.setPosition(initCord);
-
 	/////////////////phisic part 
 	///body
-	b2BodyDef bdef;
+	
+	b2BodyDef b_bdef;
+	b_bdef.type = b2_dynamicBody;
+	b_bdef.linearDamping = drug_air;
+	b_bdef.angularDamping = drug_angle;
+	b_bdef.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX); 
+	body_ph = World->CreateBody(&b_bdef);
 	b2PolygonShape b_shape;
 	b_shape.SetAsBox(6 / SCALE_BOX, 6 / SCALE_BOX);
-	bdef.type = b2_dynamicBody;
-	bdef.position.Set(initCord.x/ SCALE_BOX, initCord.y / SCALE_BOX);
-	body_ph = World.CreateBody(&bdef);
-	body_ph->CreateFixture(&b_shape, 1);
-	///circle
-	/*
-	b2BodyDef bdef_s;
-	b2CircleShape shape_s;
-	shape_s.m_radius = radiusZone;
-	bdef_s.type = b2_dynamicBody;
-	zone_ph.
-	bdef_s.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX);
-	zone_ph = World.CreateBody(&bdef_s);
-	body_ph->CreateFixture(&shape_s, 1);*/
+	b2FixtureDef b_fixture;
+	b_fixture.isSensor = false;
+	b_fixture.shape = &b_shape;
+	b_fixture.density = 1;
+	body_ph->CreateFixture(&b_fixture);
+
+	//z_bdef.type = b2_dynamicBody;
+	//zone_ph = World->CreateBody(&z_bdef);
+	b2CircleShape z_shape;
+	z_shape.m_radius = radiusZone/SCALE_BOX;
+	b2FixtureDef z_fixture;
+	z_fixture.isSensor = false;
+	z_fixture.shape = &z_shape;
+	body_ph->CreateFixture(&z_fixture);
+
+//	body_ph->SetUserData();
+
 }
 
 void Human::update() {
-	b2Vec2 air = -body_ph->GetLinearVelocity();
-	air.x = air.x * drug_air;
-	air.y = air.y * drug_air;
-	body_ph->ApplyForceToCenter(air, true);
-	body_ph->SetAngularDamping(drug_angle);
-
 	setTexturePosition(Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX), body_ph->GetAngle()*DEG_BOX);
-	World.Step(1 / 60.f, 8, 3);
 }
 
 
@@ -95,5 +96,5 @@ void Human::blit() {
 }
 
 Human::~Human() {
-
+	//World.DestroyBody(zone_ph);
 }

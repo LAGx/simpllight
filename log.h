@@ -38,9 +38,7 @@ public:
 	ScreenLog();
 	void setNewLog(string name,int id, int pos = 0);
 
-	
-
 	static void setValue(int id, string value = "None");
+	
 	void blit();
-
 };
