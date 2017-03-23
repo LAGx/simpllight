@@ -6,7 +6,7 @@ namespace spl {
 
 struct ToDraw {
 	sf::Drawable *image;
-	signed int depth = 0;
+	int depth = 0;
 };
 
 class Window {

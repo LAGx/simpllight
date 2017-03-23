@@ -12,5 +12,4 @@ class State {
 		static std::string mode; //dev, game
 
 		static sf::Color mainColorMajor;
-
 	};
