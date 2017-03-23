@@ -27,7 +27,6 @@ Window::Window() {
 
 void Window::drawAll() {
 	canvas.setView(view);
-
 	canvas.clear(State::mainColorMajor);
 
 	sort(allDrawable.begin(), allDrawable.end(), [](const ToDraw& a, const ToDraw& b) {

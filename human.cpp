@@ -9,9 +9,12 @@
 using namespace std;
 using namespace sf;
 
+
 Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 	name = l_name;
+
 	////////////////graphic part
+	///body
 	if (!texture_body.loadFromFile(textr)) {
 		Log::error("Texture load in Human. ", true);
 	}
@@ -19,7 +22,7 @@ Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 	body.setTexture(texture_body);
 	body.setOrigin(Vector2f(16,16));
 	body.setPosition(initCord);
-
+	///circle
 	if (!texture_zone.loadFromFile(textr, sf::IntRect(13,13, 2, 2))) {
 		Log::error("Texture load in Human. ", true);
 	}
@@ -30,13 +33,17 @@ Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 	zone.setOrigin(Vector2f(radiusZone, radiusZone));
 	zone.setPosition(initCord);
 
+
 	/////////////////phisic part
 	///body
+
 	b2BodyDef b_bdef;
 	b_bdef.type = b2_dynamicBody;
 	b_bdef.linearDamping = drug_air;
 	b_bdef.angularDamping = drug_angle;
+
 	b_bdef.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX);
+
 	body_ph = World->CreateBody(&b_bdef);
 	b2PolygonShape b_shape;
 	b_shape.SetAsBox(6 / SCALE_BOX, 6 / SCALE_BOX);
@@ -45,6 +52,7 @@ Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 	b_fixture.shape = &b_shape;
 	b_fixture.density = 1;
 	body_ph->CreateFixture(&b_fixture);
+
 	///zone
 	b2CircleShape z_shape;
 	z_shape.m_radius = radiusZone / SCALE_BOX;
@@ -55,11 +63,13 @@ Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 
 	body_ph->SetUserData(this);
 
+
 }
 
 void Human::update() {
 	setTexturePosition(Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX), body_ph->GetAngle()*DEG_BOX);
 }
+
 
 void Human::setTexturePosition(Vector2f cord, float angle) {
 	body.setPosition(cord);
@@ -75,7 +85,9 @@ void Human::setRadius(float radius) {
 }
 
 void Human::moveRadius(float radiusDelta) {
+
 	radiusZone += radiusDelta;
+
 }
 
 void Human::setZoneVisible(bool isVisible) {
@@ -84,7 +96,9 @@ void Human::setZoneVisible(bool isVisible) {
 
 void Human::blit() {
 	update();
+
 	spl::ToDraw set_b = { &body, depthRender };
+
 	if (isVisibleZone) {
 		spl::ToDraw set_z = { &zone, depthRender + 1 };
 		spl::Window::allDrawable.push_back(set_z);
@@ -93,5 +107,5 @@ void Human::blit() {
 }
 
 Human::~Human() {
-
+	//World.DestroyBody(zone_ph);
 }

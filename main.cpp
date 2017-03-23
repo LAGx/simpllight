@@ -7,20 +7,26 @@
 using namespace std;
 
 int main() {
+
 	b2Vec2 Gravity(0.f, 0.f);
 	b2World World(Gravity);
 
 	CollideListener collideListener;
 	World.SetContactListener(&collideListener);
 
+
 	Log::clear();
 	Log::log("____________LOG SESSION START__________", true);
+
+	CollideListener collideListener;
+	World.SetContactListener(&collideListener);
 
 	ScreenLog screenLog;
 	screenLog.setNewLog("FPS", 1, 0);
 	screenLog.setNewLog("collision h1", 2, 1);
 	screenLog.setNewLog("collision h2", 3, 2);
 	spl::Window window;
+
 
 	Human h(sf::Vector2f(250, 250), "image/human.png","human1",  &World);
 	Human h2(sf::Vector2f(200, 100), "image/human.png","human2",  &World);
@@ -40,7 +46,7 @@ int main() {
 				window.canvas.close();
 		}
 	
-
+	
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 			//window.view.setCenter(sf::Vector2f(player.body_ph->getPosition().x, player.body_ph->getPosition().x));
 			player.body_ph->ApplyForceToCenter(b2Vec2(0, -speed), true);
@@ -77,7 +83,6 @@ int main() {
 		window.drawAll();
 
 	}
-
 	Log::log("____________LOG SESSION END____________", true);
 	return 0;
 }
