@@ -20,7 +20,7 @@ protected:
 
 
 	void update();
-	void setTexturePosition(sf::Vector2f cord, float angle);
+	void updateTexturePosition(sf::Vector2f cord, float angle);
 	void updateRadiusZone();
 
 public:
