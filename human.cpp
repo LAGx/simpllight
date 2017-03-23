@@ -30,8 +30,7 @@ Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 	zone.setRadius(radiusZone);
 	zone.setFillColor(Color(230, 255, 255, 30));
 	zone.setTexture(&texture_zone);
-	zone.setOrigin(Vector2f(radiusZone, radiusZone));
-	zone.setPosition(initCord);
+
 
 
 	/////////////////phisic part
@@ -57,9 +56,9 @@ Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 	b2CircleShape z_shape;
 	z_shape.m_radius = radiusZone / SCALE_BOX;
 	b2FixtureDef z_fixture;
-	z_fixture.isSensor = true;
+	//z_fixture.isSensor = true;
 	z_fixture.shape = &z_shape;
-	body_ph->CreateFixture(&z_fixture);
+	zoneFixt = body_ph->CreateFixture(&z_fixture);
 
 	body_ph->SetUserData(this);
 
@@ -74,20 +73,35 @@ void Human::update() {
 void Human::setTexturePosition(Vector2f cord, float angle) {
 	body.setPosition(cord);
 	zone.setRadius(radiusZone);
-	zone.setPosition(cord);
+	zone.setPosition(Vector2f(cord.x-radiusZone,cord.y- radiusZone));
 	body.setRotation(angle);
 }
 
 void Human::setRadius(float radius) {
-	if (!radius) {
+	if (radius >= 0) {
 		radiusZone = radius;
 	}
+	updateRadiusZone();
+}
+
+void Human::updateRadiusZone() {
+	body_ph->DestroyFixture(zoneFixt);
+
+	b2CircleShape z_shape;
+	z_shape.m_radius = radiusZone / SCALE_BOX;
+	b2FixtureDef z_fixture;
+	//z_fixture.isSensor = true;
+	z_fixture.shape = &z_shape;
+	zoneFixt = body_ph->CreateFixture(&z_fixture);
 }
 
 void Human::moveRadius(float radiusDelta) {
+	if(radiusZone + radiusDelta >= 1)
+		radiusZone += radiusDelta;
+	else
+		radiusZone = 1;
 
-	radiusZone += radiusDelta;
-
+	updateRadiusZone();
 }
 
 void Human::setZoneVisible(bool isVisible) {

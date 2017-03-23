@@ -18,9 +18,6 @@ int main() {
 	Log::clear();
 	Log::log("____________LOG SESSION START__________", true);
 
-	CollideListener collideListener;
-	World.SetContactListener(&collideListener);
-
 	ScreenLog screenLog;
 	screenLog.setNewLog("FPS", 1, 0);
 	screenLog.setNewLog("collision h1", 2, 1);
@@ -48,22 +45,24 @@ int main() {
 	
 	
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-			//window.view.setCenter(sf::Vector2f(player.body_ph->getPosition().x, player.body_ph->getPosition().x));
 			player.body_ph->ApplyForceToCenter(b2Vec2(0, -speed), true);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-			//window.view.move(sf::Vector2f(0, 1));
 			player.body_ph->ApplyForceToCenter(b2Vec2(0, speed), true);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-			//window.view.move(sf::Vector2f(1, 0));
 			player.body_ph->ApplyForceToCenter(b2Vec2(speed, 0), true);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-			//window.view.move(sf::Vector2f(-1, 0));
 			player.body_ph->ApplyForceToCenter(b2Vec2(-speed, 0), true);
-
 		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+			player.moveRadius(1);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+			player.moveRadius(-1);
+		}
+
 		window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
 		/////////////// FPS //////////////////
 		if (i > 10) {
