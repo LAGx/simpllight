@@ -5,6 +5,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <Windows.h>
 
 using namespace spl;
 
@@ -15,6 +16,7 @@ Window::Window() {
 		view.setCenter(450, 250);
 	}
 	else {
+		FreeConsole();
 		canvas.create(sf::VideoMode().getDesktopMode(), "simpllight", sf::Style::None);
 		view.setSize(sf::VideoMode().getDesktopMode().width, sf::VideoMode().getDesktopMode().height);
 		view.setCenter(sf::VideoMode().getDesktopMode().width/2, sf::VideoMode().getDesktopMode().height/2);
