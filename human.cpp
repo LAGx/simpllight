@@ -30,8 +30,6 @@ Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 	zone.setRadius(radiusZone);
 	zone.setFillColor(Color(230, 255, 255, 30));
 	zone.setTexture(&texture_zone);
-	zone.setOrigin(Vector2f(radiusZone, radiusZone));
-	zone.setPosition(initCord);
 
 
 	/////////////////phisic part
@@ -56,38 +54,52 @@ Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 	///zone
 	b2CircleShape z_shape;
 	z_shape.m_radius = radiusZone / SCALE_BOX;
-	b2FixtureDef z_fixture;
-	z_fixture.isSensor = true;
-	z_fixture.shape = &z_shape;
-	body_ph->CreateFixture(&z_fixture);
 
+	b2FixtureDef z_fixt;
+	z_fixt.isSensor = true;
+	z_fixt.shape = &z_shape;
+	zoneFix = body_ph->CreateFixture(&z_fixt);
 	body_ph->SetUserData(this);
-
-
 }
 
 void Human::update() {
-	setTexturePosition(Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX), body_ph->GetAngle()*DEG_BOX);
+	updateTexturePosition(Vector2f(body_ph->GetPosition().x*SCALE_BOX-6, body_ph->GetPosition().y*SCALE_BOX-6), body_ph->GetAngle()*DEG_BOX);
 }
 
 
-void Human::setTexturePosition(Vector2f cord, float angle) {
+void Human::updateTexturePosition(Vector2f cord, float angle) {
 	body.setPosition(cord);
+
 	zone.setRadius(radiusZone);
-	zone.setPosition(cord);
+	zone.setPosition(Vector2f(cord.x-radiusZone,cord.y- radiusZone));
+
 	body.setRotation(angle);
 }
 
 void Human::setRadius(float radius) {
-	if (!radius) {
-		radiusZone = radius;
+	if (radius > 0) {
+			radiusZone = radius;
 	}
+	updateRadiusZone();
+}
+
+void Human::updateRadiusZone() {
+
+	body_ph->DestroyFixture(zoneFixt);
+
+	b2CircleShape z_shape;
+	z_shape.m_radius = radiusZone / SCALE_BOX;
+	b2FixtureDef z_fixture;
+	z_fixture.isSensor = true;
+	z_fixture.shape = &z_shape;
+	zoneFixt = body_ph->CreateFixture(&z_fixture);
 }
 
 void Human::moveRadius(float radiusDelta) {
-
-	radiusZone += radiusDelta;
-
+	if(radiusZone + radiusDelta >= 1)
+		radiusZone += radiusDelta;
+	else
+		radiusZone = 1;
 }
 
 void Human::setZoneVisible(bool isVisible) {
