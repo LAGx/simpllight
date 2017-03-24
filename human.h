@@ -15,9 +15,8 @@ protected:
 	float radiusZone = 30.f;
 	bool isVisibleZone = true;
 
-	float drug_air = 1;
-	float drug_angle = 1;
-
+	float drug_air = 3;
+	float drug_angle = 3;
 
 	void update();
 	void updateTexturePosition(sf::Vector2f cord, float angle);

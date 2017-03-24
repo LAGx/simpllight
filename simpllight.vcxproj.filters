@@ -22,6 +22,9 @@
     <Filter Include="Resource Files\image">
       <UniqueIdentifier>{6cfda5ff-d353-4063-a229-f01de2093f50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game_objects">
+      <UniqueIdentifier>{6ccf13cd-1228-4c9f-b01b-9b5f77306fc1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="human.h">
@@ -37,6 +40,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="game_objects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -58,6 +64,9 @@
     </ClCompile>
     <ClCompile Include="window.cpp">
       <Filter>Source Files\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="baseObjects.cpp">
+      <Filter>Source Files\game_objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -84,5 +93,18 @@
     <Image Include="image\player.png">
       <Filter>Resource Files\image</Filter>
     </Image>
+    <Image Include="image\human2.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+    <Image Include="image\test.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="log.txt" />
+    <Text Include="plan.txt" />
   </ItemGroup>
 </Project>
