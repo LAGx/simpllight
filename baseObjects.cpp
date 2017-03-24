@@ -1,10 +1,12 @@
 #include "game_objects.h"
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
+#include "phisic.h"
 #include "log.h"
 #include "window.h"
 using namespace std;
 using namespace sf;
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        BASE OBJECT       ///////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -21,7 +23,7 @@ BaseObject::BaseObject(Vector2f initCord, string textr) {
 }
 
 
-void BaseObject::updatePosition(sf::Vector2f newCord, float newAngle) {
+void BaseObject::updateTextrPosition(Vector2f newCord, float newAngle) {
 	g_body.setPosition(newCord);
 	g_body.setRotation(newAngle);
 }
@@ -36,5 +38,102 @@ void BaseObject::blit() {
 }
 
 BaseObject::~BaseObject() {
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////        DYNAMIC OBJECT       ////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, string name, figureType type, float figureSize, bool isSensor):BaseObject(initCord, textr){
+	
+	this->name = name;
+	
+	if ((texture.getSize().x - texture.getSize().y) && type != 3) 
+		Log::error("Texture " + textr + " have to be square.");
+	
+	b2BodyDef b_bdef;
+	b_bdef.type = b2_dynamicBody;
+	b_bdef.linearDamping = drug_air;
+	b_bdef.angularDamping = drug_angle;
+	b_bdef.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX);
+	body_ph = World->CreateBody(&b_bdef);
+
+	/*
+	b2PolygonShape b_shape;
+	b2PolygonShape c_shape;
+	b2Vec2 vec[4];
+	float x = texture.getSize().x;
+	float y = texture.getSize().y;
+	switch (type) {
+		case 1:{
+			c_shape.m_radius = figureSize;
+			b_fixture.shape = &c_shape;
+			break;
+		}
+		case 2: {
+			vec[0].Set(0, figureSize);
+			vec[1].Set(-figureSize/sqrt(1+tan(PI/6)*tan(PI / 6)), (-tan(PI/6)*figureSize)/ sqrt(1 + tan(PI / 6)*tan(PI / 6)));
+			vec[2].Set(figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (-tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
+			b_shape.Set(vec, 3);
+			b_fixture.shape = &b_shape;
+			break;
+		}
+		case 3: {
+			vec[0].Set(-x/2+figureSize,y/2-figureSize);
+			vec[1].Set(-x / 2 + figureSize, -y / 2 + figureSize);
+			vec[2].Set(x / 2 - figureSize, -y / 2 + figureSize);
+			vec[3].Set(x / 2 - figureSize, y / 2 - figureSize);
+			b_shape.Set(vec, 4);
+			b_fixture.shape = &b_shape;
+			break;
+		}
+		case 4: {
+			vec[0].Set(0, figureSize);
+			vec[1].Set(-figureSize/ sqrt(1 + tan(18.f / DEG_BOX)*tan(18.f / DEG_BOX)), (tan(18.f / DEG_BOX)*figureSize)/ sqrt(1 + tan(18.f / DEG_BOX)*tan(18.f / DEG_BOX)));
+			vec[2].Set(-figureSize / sqrt(1 + tan(54.f / DEG_BOX)*tan(54.f / DEG_BOX)), (-tan(54.f / DEG_BOX)*figureSize) / sqrt(1 + tan(54.f / DEG_BOX)*tan(54.f / DEG_BOX)));
+			vec[3].Set(figureSize / sqrt(1 + tan(54.f / DEG_BOX)*tan(54.f / DEG_BOX)), (-tan(54.f / DEG_BOX)*figureSize) / sqrt(1 + tan(54.f / DEG_BOX)*tan(54.f / DEG_BOX)));
+			vec[4].Set(figureSize / sqrt(1 + tan(18.f / DEG_BOX)*tan(18.f / DEG_BOX)), (tan(18.f / DEG_BOX)*figureSize) / sqrt(1 + tan(18.f / DEG_BOX)*tan(18.f / DEG_BOX)));
+			b_shape.Set(vec, 5);
+			b_fixture.shape = &b_shape;
+			break;
+		}
+		case 5: {
+			vec[0].Set(0, figureSize);
+			vec[1].Set(-figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
+			vec[2].Set(-figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (-tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
+			vec[3].Set(0, -figureSize);
+			vec[4].Set(figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
+			vec[5].Set(figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (-tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
+			b_shape.Set(vec, 6);
+			b_fixture.shape = &b_shape;
+			break;
+		}
+		default:
+			Log::error("No such type (figure type) in DynamicObject");
+	}*/
+	b2CircleShape c_shape;
+	c_shape.m_radius = 5/SCALE_BOX;
+	b2FixtureDef b_fixture;
+	b_fixture.shape = &c_shape;
+	b_fixture.isSensor = isSensor;
+	b_fixture.density = mass;
+	zoneFixt = body_ph->CreateFixture(&b_fixture);
+	body_ph->SetUserData(this);
+}
+
+void DynamicObject::update() {
+	updateTextrPosition(Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX), body_ph->GetAngle()*DEG_BOX);
+}
+
+void DynamicObject::blit() {
+	update();
+	if (isVisible) {
+		spl::ToDraw draw = { &g_body, depthRender + 1 };
+		spl::Window::allDrawable.push_back(draw);
+	}
+}
+
+DynamicObject::~DynamicObject() {
 
 }

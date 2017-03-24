@@ -32,8 +32,8 @@ int main() {
 	Human player(sf::Vector2f(100, 100), "image/player.png","player", &World);
 	player.depthRender = -10;
 
-	BaseObject obj(sf::Vector2f(200, 200), "image/human.png");
-
+	DynamicObject obj(&World, sf::Vector2f(200, 200), "image/human.png", "obj", rect_T,10);
+	
 	int i = 0;
 	sf::Clock clock;
 
@@ -70,13 +70,14 @@ int main() {
 		//window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
 		/////////////// FPS //////////////////
 		if (i > 10) {
-			ScreenLog::setValue(1, to_string(1.f / clock.getElapsedTime().asSeconds()));
+			ScreenLog::setValue(1, to_string(int(1.f / clock.getElapsedTime().asSeconds())));
 			i = 0;
-		}else { i++; }
+		}
+		else
+			i++;
 		clock.restart();
 		///////////////////////////////
 
-	//	ScreenLog::setValue(4, to_string(sf::Mouse::getPosition(window.canvas).x+int(window.view.getCenter().x)) + " | " + to_string(sf::Mouse::getPosition(window.canvas).y + int(window.view.getCenter().y)));
 		ScreenLog::setValue(4, to_string(sf::Mouse::getPosition(window.canvas).x) + " | " + to_string(sf::Mouse::getPosition(window.canvas).y));
 
 		World.Step(1 / 60.f, 8, 3);
@@ -87,7 +88,7 @@ int main() {
 		player.blit();
 		screenLog.blit();
 		window.drawAll();
-	}
+}
 	Log::log("____________LOG SESSION END____________", true);
 	return 0;
 }

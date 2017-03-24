@@ -1,14 +1,22 @@
-#pragma once
+﻿#pragma once
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
+
+enum figureType {
+	circle_T = 1,
+	tringle_T,
+	rect_T,
+	pentagon_T,
+	intnugon_T
+};
 
 class BaseObject {
 protected:
 	sf::Texture texture;
 	sf::Sprite g_body;
 
-	void updatePosition(sf::Vector2f newCord, float newAngle);
+	void updateTextrPosition(sf::Vector2f newCord, float newAngle);
 	bool isVisible = true;
 
 public:
@@ -30,13 +38,20 @@ protected:
 	float drug_angle = 1;
 	float mass = 1;
 
+	b2Fixture *zoneFixt;
 public:
+
+	std::string name = "None";
 
 	b2Body *body_ph;
 
-	DynamicObject(sf::Vector2f initCord, std::string texture, std::string name, std::string type,sf::Vector2f size, bool isSensor = false); //type circle, tringle(3), rect(4), pentagon(5), intnugon(6)//size 1 - lenth of side(pentagon, intnugon, circle)
-
+	//can be load only square texture, for rect сan be not square
+	//figureSize - redius of figue. for rect it`s shadow size
+	DynamicObject(b2World* World, sf::Vector2f initCord, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);//circle, tringle
+	
 	void update();
+
+	void blit();
 
 	~DynamicObject();
 };
@@ -51,7 +66,7 @@ public:
 
 	b2Body *body_ph;
 
-	StaticObject(sf::Vector2f initCord, std::string texture, std::string name, std::string type, sf::Vector2f size, bool isSensor = false);
+	StaticObject(sf::Vector2f initCord, std::string textr, std::string name, std::string type, sf::Vector2f size, bool isSensor = false);
 
 	void update();
 
