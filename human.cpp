@@ -48,7 +48,7 @@ Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 	b2FixtureDef b_fixture;
 	b_fixture.isSensor = false;
 	b_fixture.shape = &b_shape;
-	b_fixture.density = 1;
+	b_fixture.density = 20;
 	body_ph->CreateFixture(&b_fixture);
 
 	///zone

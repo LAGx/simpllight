@@ -32,7 +32,7 @@ int main() {
 	Human player(sf::Vector2f(100, 100), "image/player.png","player", &World);
 	player.depthRender = -10;
 
-	DynamicObject obj(&World, sf::Vector2f(200, 200), "image/human.png", "obj", rect_T,10);
+	DynamicObject obj(&World, sf::Vector2f(200, 200), "image/human2.png", "obj", intnugon_T,16);
 	
 	int i = 0;
 	sf::Clock clock;
