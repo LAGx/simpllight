@@ -63,7 +63,7 @@ Human::Human(Vector2f initCord, string textr, string l_name, b2World* World){
 }
 
 void Human::update() {
-	updateTexturePosition(Vector2f(body_ph->GetPosition().x*SCALE_BOX-6, body_ph->GetPosition().y*SCALE_BOX-6), body_ph->GetAngle()*DEG_BOX);
+	updateTexturePosition(Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX), body_ph->GetAngle()*DEG_BOX);
 }
 
 

@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "phisic.h"
 #include <iostream>
+#include "game_objects.h"
 using namespace std;
 
 int main() {
@@ -22,13 +23,16 @@ int main() {
 	screenLog.setNewLog("FPS", 1, 0);
 	screenLog.setNewLog("collision h1", 2, 1);
 	screenLog.setNewLog("collision h2", 3, 2);
+	screenLog.setNewLog("Mouse: ", 4, 3);
 	spl::Window window;
 
 
-	Human h(sf::Vector2f(250, 250), "image/human.png","human1",  &World);
+	Human h(sf::Vector2f(50, 70), "image/human.png","human1",  &World);
 	Human h2(sf::Vector2f(200, 100), "image/human.png","human2",  &World);
-	Human player(sf::Vector2f(150, 150), "image/player.png","player", &World);
+	Human player(sf::Vector2f(100, 100), "image/player.png","player", &World);
 	player.depthRender = -10;
+
+	BaseObject obj(sf::Vector2f(200, 200), "image/human.png");
 
 	int i = 0;
 	sf::Clock clock;
@@ -42,8 +46,8 @@ int main() {
 			if (event.type == sf::Event::Closed)
 				window.canvas.close();
 		}
-	
-	
+		
+		
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
 			player.body_ph->ApplyForceToCenter(b2Vec2(0, -speed), true);
 		}
@@ -63,7 +67,7 @@ int main() {
 			player.moveRadius(-1);
 		}
 
-		window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
+		//window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
 		/////////////// FPS //////////////////
 		if (i > 10) {
 			ScreenLog::setValue(1, to_string(1.f / clock.getElapsedTime().asSeconds()));
@@ -72,9 +76,12 @@ int main() {
 		clock.restart();
 		///////////////////////////////
 
+	//	ScreenLog::setValue(4, to_string(sf::Mouse::getPosition(window.canvas).x+int(window.view.getCenter().x)) + " | " + to_string(sf::Mouse::getPosition(window.canvas).y + int(window.view.getCenter().y)));
+		ScreenLog::setValue(4, to_string(sf::Mouse::getPosition(window.canvas).x) + " | " + to_string(sf::Mouse::getPosition(window.canvas).y));
+
 		World.Step(1 / 60.f, 8, 3);
 		window.updateState();
-
+		obj.blit();
 		h.blit();
 		h2.blit();
 		player.blit();

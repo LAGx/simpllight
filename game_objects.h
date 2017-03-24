@@ -5,10 +5,10 @@
 
 class BaseObject {
 protected:
-	sf::Texture texture_body;
-	sf::Sprite body;
+	sf::Texture texture;
+	sf::Sprite g_body;
 
-	void updateTexturePosition(sf::Vector2f newCord, float newAngle);
+	void updatePosition(sf::Vector2f newCord, float newAngle);
 	bool isVisible = true;
 
 public:
@@ -29,6 +29,7 @@ protected:
 	float drug_air = 1;
 	float drug_angle = 1;
 	float mass = 1;
+
 public:
 
 	b2Body *body_ph;
