@@ -27,7 +27,6 @@ private:
 		int id = 0;
 		string name;
 		sf::Text text;
-		int pos = 0;
 	};
 
 	static sf::Font font;
@@ -36,7 +35,7 @@ private:
 public:
 	
 	ScreenLog();
-	void setNewLog(string name,int id, int pos = 0);
+	void setNewLog(string name,int id = 0);
 
 	static void setValue(int id, string value = "None");
 	
