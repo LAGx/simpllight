@@ -18,7 +18,6 @@ protected:
 	float drug_air = 1;
 	float drug_angle = 1;
 
-
 	void update();
 	void updateTexturePosition(sf::Vector2f cord, float angle);
 	void updateRadiusZone();
