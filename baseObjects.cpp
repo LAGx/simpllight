@@ -61,7 +61,7 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 
 	b2FixtureDef b_fixture;
 	b2PolygonShape b_shape;
-	b2PolygonShape c_shape;
+	b2CircleShape c_shape;
 	b2Vec2 vec[6];
 	float x = texture.getSize().x;
 	float y = texture.getSize().y;
