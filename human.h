@@ -7,22 +7,35 @@ protected:
 	sf::Sprite body;
 	sf::CircleShape zone;
 
+	b2Fixture *zoneFixt;
+
 	sf::Texture texture_body;
 	sf::Texture texture_zone;
 
 	float radiusZone = 30.f;
-	float drug_air = 0.7;
+	bool isVisibleZone = true;
+
+	float drug_air = 1;
 	float drug_angle = 1;
 
+
 	void update();
-	void setTexturePosition(sf::Vector2f cord, float angle);
+	void updateTexturePosition(sf::Vector2f cord, float angle);
+	void updateRadiusZone();
 
 public:
-	signed int depthRender = 0;
-	b2Body *body_ph;
+	int depthRender = 0;
 
-	Human(sf::Vector2f initCord, std::string texture); //Human texture have to be a single color with shadow 32x32. 
-	
+	std::string name = "None";
+
+	void setRadius(float radius = 0);
+	void moveRadius(float radius_delta = 0);
+	void setZoneVisible(bool isVisible = true);
+
+	b2Body *body_ph;
+    Human(sf::Vector2f initCord, std::string texture,std::string name, b2World* World); //Human texture have to be a single color with shadow 32x32. 
+
+
 	void blit();
 	
 	~Human();
