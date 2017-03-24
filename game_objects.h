@@ -31,16 +31,11 @@ public:
 
 
 class DynamicObject :public BaseObject {
-private:
-
 protected:
 	float drug_air = 1;
 	float drug_angle = 1;
 	float mass = 1;
-
-	b2Fixture *zoneFixt;
 public:
-
 	std::string name = "None";
 
 	b2Body *body_ph;
@@ -58,17 +53,16 @@ public:
 
 
 class StaticObject :public BaseObject {
-private:
-
 protected:
-
+	b2Body *body_ph;
 public:
 
-	b2Body *body_ph;
+	std::string name = "None";
 
-	StaticObject(sf::Vector2f initCord, std::string textr, std::string name, std::string type, sf::Vector2f size, bool isSensor = false);
-
-	void update();
+	//can be load only square texture. for rect сan be not square
+	//figureSize - radius of figure. for rect it`s shadow size
+	//angle in degree. 
+	StaticObject(b2World* World, sf::Vector2f initCord,float angle, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);
 
 	~StaticObject();
 };
