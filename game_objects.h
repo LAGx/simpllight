@@ -45,8 +45,8 @@ public:
 
 	b2Body *body_ph;
 
-	//can be load only square texture, for rect сan be not square
-	//figureSize - redius of figue. for rect it`s shadow size
+	//can be load only square texture. for rect сan be not square
+	//figureSize - radius of figure. for rect it`s shadow size
 	DynamicObject(b2World* World, sf::Vector2f initCord, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);//circle, tringle
 	
 	void update();

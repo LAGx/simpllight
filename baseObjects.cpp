@@ -14,7 +14,7 @@ using namespace sf;
 
 BaseObject::BaseObject(Vector2f initCord, string textr) {
 	if (!texture.loadFromFile(textr)) {
-		Log::error("Texture load in BaseObjec from " + textr, true);
+		Log::error("Texture load in BaseObject from " + textr, true);
 	}
 	texture.setSmooth(true);
 	g_body.setTexture(texture);

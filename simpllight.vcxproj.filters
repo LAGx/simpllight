@@ -96,6 +96,9 @@
     <Image Include="image\human2.png">
       <Filter>Resource Files\image</Filter>
     </Image>
+    <Image Include="image\test.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
