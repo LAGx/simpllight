@@ -37,14 +37,8 @@ House::~House() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-Fir_tree::Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name){
+Fir_tree::Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name) :StaticObject(World, initCord, 0, textr, name, tringle_T, 17, false) {
 
-	if (1) {
-		StaticObject(World, initCord, 0, textr, name, tringle_T, 17, false);
-	}
-	else {
-		StaticObject(World, initCord, 0, textr, name, tringle_T, 18, false);
-	}
 }
 
 Fir_tree::~Fir_tree() {

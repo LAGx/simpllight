@@ -63,7 +63,7 @@ public:
 	//figureSize - radius of figure. for rect it`s shadow size
 	//angle in degree. 
 	StaticObject(b2World* World, sf::Vector2f initCord,float angle, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);
-	StaticObject();
+
 	~StaticObject();
 };
 
