@@ -31,13 +31,14 @@ int main() {
 	Human h2(sf::Vector2f(200, 100), "image/human.png","human2",  &World);
 	Human player(sf::Vector2f(100, 100), "image/player.png","player", &World);
 	player.depthRender = -10;
-
-	StaticObject obj(&World, sf::Vector2f(200, 200), 120, "image/test.png", "obj", rect_T,2);
-	
+	int d = 90;
+	House house(&World, sf::Vector2f(250, 200), 30,"image/house/house.png", "image/house/door.png", "house");
+	House house1(&World, sf::Vector2f(250, 350), -45, "image/house/house2.png", "image/house/door2.png", "house1");
+	House house2(&World, sf::Vector2f(500, 100), 120, "image/house/house2.png", "image/house/door.png", "house2");
 	int i = 0;
 	sf::Clock clock;
 
-	float speed = 3;
+	float speed = 5;
 	while (window.canvas.isOpen()){
 		sf::Event event;
 		
@@ -82,7 +83,9 @@ int main() {
 
 		World.Step(1 / 60.f, 8, 3);
 		window.updateState();
-		obj.blit();
+		house.blit();
+		house1.blit();
+		house2.blit();
 		h.blit();
 		h2.blit();
 		player.blit();

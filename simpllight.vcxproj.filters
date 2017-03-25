@@ -68,6 +68,9 @@
     <ClCompile Include="baseObjects.cpp">
       <Filter>Source Files\game_objects</Filter>
     </ClCompile>
+    <ClCompile Include="gameObjects.cpp">
+      <Filter>Source Files\game_objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Font Include="font\arial.ttf">
@@ -96,7 +99,16 @@
     <Image Include="image\human2.png">
       <Filter>Resource Files\image</Filter>
     </Image>
-    <Image Include="image\test.png">
+    <Image Include="image\house\door2.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+    <Image Include="image\house\door.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+    <Image Include="image\house\house.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+    <Image Include="image\house\house2.png">
       <Filter>Resource Files\image</Filter>
     </Image>
   </ItemGroup>
