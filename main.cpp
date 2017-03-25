@@ -30,11 +30,17 @@ int main() {
 	Human h(sf::Vector2f(50, 70), "image/human.png","human1",  &World);
 	Human h2(sf::Vector2f(200, 100), "image/human.png","human2",  &World);
 	Human player(sf::Vector2f(100, 100), "image/player.png","player", &World);
-	player.depthRender = -10;
+	player.depthRender = 10;
 	int d = 90;
 	House house(&World, sf::Vector2f(250, 200), 30,"image/house/house.png", "image/house/door.png", "house");
 	House house1(&World, sf::Vector2f(250, 350), -45, "image/house/house2.png", "image/house/door2.png", "house1");
 	House house2(&World, sf::Vector2f(500, 100), 120, "image/house/house2.png", "image/house/door.png", "house2");
+
+	Yolka y1(&World, sf::Vector2f(440, 230), "image/tree.png", "y1");
+	Yolka y2(&World, sf::Vector2f(600, 290), "image/tree.png", "y2");
+	Yolka y3(&World, sf::Vector2f(490, 395), "image/tree.png", "y3");
+	
+
 	int i = 0;
 	sf::Clock clock;
 
@@ -86,6 +92,9 @@ int main() {
 		house.blit();
 		house1.blit();
 		house2.blit();
+		y1.blit();
+		y2.blit();
+		y3.blit();
 		h.blit();
 		h2.blit();
 		player.blit();

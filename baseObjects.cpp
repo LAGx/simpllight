@@ -72,9 +72,9 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 			break;
 		}
 		case 2: {
-			vec[0].Set(0, figureSize);
-			vec[1].Set(-figureSize/sqrt(1+tan(PI/6)*tan(PI / 6)), (-tan(PI/6)*figureSize)/ sqrt(1 + tan(PI / 6)*tan(PI / 6)));
-			vec[2].Set(figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (-tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
+			vec[0].Set(0, -figureSize);
+			vec[1].Set(figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
+			vec[2].Set(-figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
 			for (int i = 0; i < 3; i++) {
 				vec[i].x = vec[i].x / SCALE_BOX;
 				vec[i].y = vec[i].y / SCALE_BOX;
@@ -181,9 +181,9 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord,float angle , strin
 		break;
 	}
 	case 2: {
-		vec[0].Set(0, figureSize);
-		vec[1].Set(-figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (-tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
-		vec[2].Set(figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (-tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
+		vec[0].Set(0, -figureSize);
+		vec[1].Set(figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
+		vec[2].Set(-figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
 		for (int i = 0; i < 3; i++) {
 			vec[i].x = vec[i].x / SCALE_BOX;
 			vec[i].y = vec[i].y / SCALE_BOX;
