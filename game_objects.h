@@ -56,7 +56,7 @@ class StaticObject :public BaseObject {
 protected:
 	b2Body *body_ph;
 public:
-
+	
 	std::string name = "None";
 
 	//can be load only square texture. for rect сan be not square
@@ -79,7 +79,17 @@ public:
 	~House();
 };
 
-class Tree;
+class Yolka :public StaticObject {
+public:
+
+	//texture 40, 40. siz - 17
+	Yolka(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+
+	~Yolka();
+};
+
+
+
 class Alive;
 	class Human;
 		class Person;
