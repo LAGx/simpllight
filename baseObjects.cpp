@@ -248,3 +248,7 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord,float angle , strin
 StaticObject::~StaticObject() {
 
 }
+
+StaticObject::StaticObject() {
+
+}

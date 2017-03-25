@@ -63,7 +63,7 @@ public:
 	//figureSize - radius of figure. for rect it`s shadow size
 	//angle in degree. 
 	StaticObject(b2World* World, sf::Vector2f initCord,float angle, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);
-
+	StaticObject();
 	~StaticObject();
 };
 
@@ -79,13 +79,13 @@ public:
 	~House();
 };
 
-class Yolka :public StaticObject {
+class Fir_tree :public StaticObject {
 public:
 
 	//texture 40, 40. siz - 17
-	Yolka(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+	Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
-	~Yolka();
+	~Fir_tree();
 };
 
 

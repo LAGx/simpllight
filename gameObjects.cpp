@@ -37,9 +37,15 @@ House::~House() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-Yolka::Yolka(b2World* World, sf::Vector2f initCord, std::string textr, std::string name) :StaticObject(World, initCord,0, textr, name, tringle_T, 17, false){
+Fir_tree::Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name){
 
+	if (1) {
+		StaticObject(World, initCord, 0, textr, name, tringle_T, 17, false);
+	}
+	else {
+		StaticObject(World, initCord, 0, textr, name, tringle_T, 18, false);
+	}
 }
 
-Yolka::~Yolka() {
+Fir_tree::~Fir_tree() {
 }
