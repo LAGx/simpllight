@@ -68,7 +68,17 @@ public:
 };
 
 
-class House;
+class House :public StaticObject {
+public:
+	StaticObject *door;
+
+	House(b2World* World, sf::Vector2f initCord, float angle, std::string textureHouse, std::string textureDoor, std::string name);
+
+	void blit();
+
+	~House();
+};
+
 class Tree;
 class Alive;
 	class Human;
