@@ -40,6 +40,9 @@ int main() {
 	Fir_tree y2(&World, sf::Vector2f(600, 290), "image/tree.png", "y2");
 	Fir_tree y3(&World, sf::Vector2f(490, 395), "image/tree.png", "y3");
 
+	Shrub s1(&World, sf::Vector2f(370, 300), "image/shrub.png", "s1");
+	Shrub s2(&World, sf::Vector2f(730, 375), "image/shrub2.png", "s2");
+	Shrub s3(&World, sf::Vector2f(65, 230), "image/shrub2.png", "s3");
 
 	int i = 0;
 	sf::Clock clock;
@@ -97,6 +100,9 @@ int main() {
 		y3.blit();
 		h.blit();
 		h2.blit();
+		s1.blit();
+		s2.blit();
+		s3.blit();
 		player.blit();
 		screenLog.blit();
 		window.drawAll();

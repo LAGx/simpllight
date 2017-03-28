@@ -35,6 +35,8 @@ protected:
 	float drug_air = 1;
 	float drug_angle = 1;
 	float mass = 1;
+
+	void update();
 public:
 	std::string name = "None";
 
@@ -44,7 +46,7 @@ public:
 	//figureSize - radius of figure. for rect it`s shadow size
 	DynamicObject(b2World* World, sf::Vector2f initCord, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);//circle, tringle
 	
-	void update();
+
 
 	void blit();
 
@@ -80,12 +82,32 @@ public:
 };
 
 class Fir_tree :public StaticObject {
+private:
+	int helth = 100;
 public:
 
-	//texture 40, 40. siz - 17
+	//texture 40x40. size - 17
 	Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
+	void setHelth(int helth);
+	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+
 	~Fir_tree();
+};
+
+
+class Shrub :public StaticObject {
+private:
+	int helth = 100;
+public:
+
+	//sahdow size 15, rect trtigger
+	Shrub(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+
+	void setHelth(int helth);
+	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+
+	~Shrub();
 };
 
 
