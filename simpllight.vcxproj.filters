@@ -31,6 +31,9 @@
     <Filter Include="Source Files\phisic">
       <UniqueIdentifier>{afe2a5ca-576f-4eaa-b40f-fc2af164803f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\game_objects\animals">
+      <UniqueIdentifier>{8a1e5f10-c505-4a7d-bf80-9835cbdb1111}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="human.h">
@@ -82,6 +85,9 @@
     </ClCompile>
     <ClCompile Include="phisic.cpp">
       <Filter>Source Files\phisic</Filter>
+    </ClCompile>
+    <ClCompile Include="animal.cpp">
+      <Filter>Source Files\game_objects\animals</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

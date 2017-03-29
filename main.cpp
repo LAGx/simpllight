@@ -1,5 +1,4 @@
 #include "window.h"
-//#include "human.h"
 #include "log.h"
 #include <SFML/Graphics.hpp>
 #include "phisic.h"
@@ -26,10 +25,10 @@ int main() {
 	screenLog.setNewLog("Mouse: ", 3);
 	spl::Window window;
 
-
-	Alive h(&World, sf::Vector2f(50, 70), "image/human.png","human1",  rect_T, 10);
-	Alive h2(&World, sf::Vector2f(200, 100), "image/human.png","human2", rect_T, 10);
-	Alive player(&World, sf::Vector2f(100, 100), "image/player.png","player", rect_T, 10);
+ 
+    Human h(&World, sf::Vector2f(50, 70), "image/human.png","human1");
+	Human h2(&World, sf::Vector2f(200, 100), "image/human.png","human2");
+	Human player(&World, sf::Vector2f(100, 100), "image/player.png","player");
 	player.depthRender = 10;
 	int d = 90;
 	House house(&World, sf::Vector2f(250, 200), 30,"image/house/house.png", "image/house/door.png", "house");
@@ -47,7 +46,7 @@ int main() {
 	int i = 0;
 	sf::Clock clock;
 
-	float speed = 5;
+	float speed = 2;
 	while (window.canvas.isOpen()){
 		sf::Event event;
 		

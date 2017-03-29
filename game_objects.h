@@ -41,6 +41,8 @@ public:
 
 	std::string name = "None";
 
+	void setPhisicParam();
+
 	b2Body *body_ph;
 
 	//can be load only square texture. for rect сan be not square
@@ -155,7 +157,7 @@ protected:
 
 public:
 
-	Human();
+	Human(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);//Human texture have to be a single color with shadow(10 px) 32x32. 
 
 	~Human();
 };
