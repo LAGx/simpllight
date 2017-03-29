@@ -162,9 +162,28 @@ public:
 	~Human();
 };
 
+
 class Person : public Human {
-};
-class Player : public Human {
+private:
+
+protected:
+
+public:
+	Person(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+
+	~Person();
 };
 
-class Lut;
+
+class Player : public Human {
+private:
+
+protected:
+
+public:
+
+	Player(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+
+	~Player();
+};
+
