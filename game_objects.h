@@ -38,6 +38,7 @@ protected:
 
 	void update();
 public:
+
 	std::string name = "None";
 
 	b2Body *body_ph;
@@ -111,10 +112,57 @@ public:
 };
 
 
+class Alive :public DynamicObject {
+private:
 
-class Alive;
-	class Human;
-		class Person;
-		class Player;
+	b2Fixture *zoneFixt;
+	sf::Texture texture_zone;
+	sf::CircleShape g_zone;
+	void updateZonePos(sf::Vector2f cord);
+
+	float radiusZone = 30.f;
+	bool isVisibleZone = true;
+
+	void updateRadiusZone();
+
+protected:
+
+	void update();
+	int helth = 100;
+
+public:
+
+	Alive(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, figureType type, float figureSize);
+
+	void setHelth(int helth);
+	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+
+	void setRadius(float radius = 0);
+	void moveRadius(float radius_delta = 0);
+	void setZoneVisible(bool isVisible = true);
+
+	void blit();
+	
+	~Alive();
+
+};
+
+
+class Human :public Alive {
+private:
+
+protected:
+
+public:
+
+	Human();
+
+	~Human();
+};
+
+class Person : public Human {
+};
+class Player : public Human {
+};
 
 class Lut;

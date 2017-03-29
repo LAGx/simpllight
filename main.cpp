@@ -1,5 +1,5 @@
 #include "window.h"
-#include "human.h"
+//#include "human.h"
 #include "log.h"
 #include <SFML/Graphics.hpp>
 #include "phisic.h"
@@ -27,9 +27,9 @@ int main() {
 	spl::Window window;
 
 
-	Human h(sf::Vector2f(50, 70), "image/human.png","human1",  &World);
-	Human h2(sf::Vector2f(200, 100), "image/human.png","human2",  &World);
-	Human player(sf::Vector2f(100, 100), "image/player.png","player", &World);
+	Alive h(&World, sf::Vector2f(50, 70), "image/human.png","human1",  rect_T, 10);
+	Alive h2(&World, sf::Vector2f(200, 100), "image/human.png","human2", rect_T, 10);
+	Alive player(&World, sf::Vector2f(100, 100), "image/player.png","player", rect_T, 10);
 	player.depthRender = 10;
 	int d = 90;
 	House house(&World, sf::Vector2f(250, 200), 30,"image/house/house.png", "image/house/door.png", "house");
