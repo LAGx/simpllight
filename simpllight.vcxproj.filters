@@ -25,6 +25,12 @@
     <Filter Include="Source Files\game_objects">
       <UniqueIdentifier>{6ccf13cd-1228-4c9f-b01b-9b5f77306fc1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\service">
+      <UniqueIdentifier>{9bc2a2cd-9d02-4c1c-adf1-b824f0cdfeda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\phisic">
+      <UniqueIdentifier>{afe2a5ca-576f-4eaa-b40f-fc2af164803f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="human.h">
@@ -45,18 +51,15 @@
     <ClInclude Include="game_objects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="service.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="human.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="log.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="phisic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="state.cpp">
@@ -70,6 +73,15 @@
     </ClCompile>
     <ClCompile Include="gameObjects.cpp">
       <Filter>Source Files\game_objects</Filter>
+    </ClCompile>
+    <ClCompile Include="log.cpp">
+      <Filter>Source Files\service</Filter>
+    </ClCompile>
+    <ClCompile Include="service.cpp">
+      <Filter>Source Files\service</Filter>
+    </ClCompile>
+    <ClCompile Include="phisic.cpp">
+      <Filter>Source Files\phisic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,9 +126,16 @@
     <Image Include="image\tree.png">
       <Filter>Resource Files\image</Filter>
     </Image>
+    <Image Include="image\shrub.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
+    <Image Include="image\shrub2.png">
+      <Filter>Resource Files\image</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="log.txt" />

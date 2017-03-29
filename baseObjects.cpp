@@ -142,7 +142,7 @@ void DynamicObject::update() {
 void DynamicObject::blit() {
 	update();
 	if (isVisible) {
-		spl::ToDraw draw = { &g_body, depthRender + 1 };
+		spl::ToDraw draw = { &g_body, depthRender };
 		spl::Window::allDrawable.push_back(draw);
 	}
 }

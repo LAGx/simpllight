@@ -35,7 +35,10 @@ protected:
 	float drug_air = 1;
 	float drug_angle = 1;
 	float mass = 1;
+
+	void update();
 public:
+
 	std::string name = "None";
 
 	b2Body *body_ph;
@@ -44,7 +47,7 @@ public:
 	//figureSize - radius of figure. for rect it`s shadow size
 	DynamicObject(b2World* World, sf::Vector2f initCord, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);//circle, tringle
 	
-	void update();
+
 
 	void blit();
 
@@ -79,20 +82,87 @@ public:
 	~House();
 };
 
-class Yolka :public StaticObject {
+class Fir_tree :public StaticObject {
+private:
+	int helth = 100;
 public:
 
-	//texture 40, 40. siz - 17
-	Yolka(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+	//texture 40x40. size - 17
+	Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
-	~Yolka();
+	void setHelth(int helth);
+	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+
+	~Fir_tree();
 };
 
 
+class Shrub :public StaticObject {
+private:
+	int helth = 100;
+public:
 
-class Alive;
-	class Human;
-		class Person;
-		class Player;
+	//sahdow size 15, rect trtigger
+	Shrub(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+
+	void setHelth(int helth);
+	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+
+	~Shrub();
+};
+
+
+class Alive :public DynamicObject {
+private:
+
+	b2Fixture *zoneFixt;
+	sf::Texture texture_zone;
+	sf::CircleShape g_zone;
+	void updateZonePos(sf::Vector2f cord);
+
+	float radiusZone = 30.f;
+	bool isVisibleZone = true;
+
+	void updateRadiusZone();
+
+protected:
+
+	void update();
+	int helth = 100;
+
+public:
+
+	Alive(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, figureType type, float figureSize);
+
+	void setHelth(int helth);
+	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+
+	void setRadius(float radius = 0);
+	void moveRadius(float radius_delta = 0);
+	void setZoneVisible(bool isVisible = true);
+
+	void blit();
+	
+	~Alive();
+
+};
+
+
+class Human :public Alive {
+private:
+
+protected:
+
+public:
+
+	Human();
+
+	~Human();
+};
+
+class Person : public Human {
+};
+class Player : public Human {
+};
 
 class Lut;
