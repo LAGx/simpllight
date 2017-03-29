@@ -26,11 +26,10 @@ int main() {
 	spl::Window window;
 
  
-    Human h(&World, sf::Vector2f(50, 70), "image/human.png","human1");
-	Human h2(&World, sf::Vector2f(200, 100), "image/human.png","human2");
-	Human player(&World, sf::Vector2f(100, 100), "image/player.png","player");
-	player.depthRender = 10;
-	int d = 90;
+    Person h(&World, sf::Vector2f(50, 70), "image/human.png","human1");
+	Person h2(&World, sf::Vector2f(200, 100), "image/human.png","human2");
+	Player player(&World, sf::Vector2f(100, 100), "image/player.png","player");
+
 	House house(&World, sf::Vector2f(250, 200), 30,"image/house/house.png", "image/house/door.png", "house");
 	House house1(&World, sf::Vector2f(250, 350), -45, "image/house/house2.png", "image/house/door2.png", "house1");
 	House house2(&World, sf::Vector2f(500, 100), 120, "image/house/house2.png", "image/house/door.png", "house2");
@@ -45,7 +44,6 @@ int main() {
 
 	int i = 0;
 	sf::Clock clock;
-
 	float speed = 2;
 	while (window.canvas.isOpen()){
 		sf::Event event;
@@ -76,7 +74,7 @@ int main() {
 			player.moveRadius(-1);
 		}
 
-		//window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
+		window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
 		/////////////// FPS //////////////////
 		if (i > 10) {
 			ScreenLog::setValue(0, to_string(int(1.f / clock.getElapsedTime().asSeconds())));
