@@ -33,11 +33,13 @@ public:
 class DynamicObject :public BaseObject {
 private:
 	void update();
-	const float drug_air = 1;
-	const float drug_angle = 1;
-	const float mass = 1;
+	
 protected:
 
+	//TODO maybe...
+	void setPhisicParameters(float mass, int linear_drug, int angular_drug);//better to use only in constructors
+
+	void setDrug(float linear, float angular);
 
 public:
 
@@ -196,6 +198,8 @@ protected:
 public:
 
 	Player(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+
+	void blit();
 
 	~Player();
 };
