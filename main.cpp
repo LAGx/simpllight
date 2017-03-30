@@ -26,21 +26,21 @@ int main() {
 	spl::Window window;
 
  
-    Person h(&World, sf::Vector2f(50, 70), "image/human.png","human1");
-	Person h2(&World, sf::Vector2f(200, 100), "image/human.png","human2");
-	Player player(&World, sf::Vector2f(100, 100), "image/player.png","player");
+    Person h(&World, sf::Vector2f(605, 190), "image/human/human1.png","human1");
+	Person h2(&World, sf::Vector2f(520, 354), "image/human/human2.png","human2");
+	Player player(&World, sf::Vector2f(370, 235), "image/human/player.png","player");
 
-	House house(&World, sf::Vector2f(250, 200), 30,"image/house/house.png", "image/house/door.png", "house");
-	House house1(&World, sf::Vector2f(250, 350), -45, "image/house/house2.png", "image/house/door2.png", "house1");
-	House house2(&World, sf::Vector2f(500, 100), 120, "image/house/house2.png", "image/house/door.png", "house2");
+	House house(&World, sf::Vector2f(150, 100), -120,"image/house/house2.png", "image/house/door2.png", "house");
+	House house1(&World, sf::Vector2f(300, 400), 30, "image/house/house.png", "image/house/door.png", "house1");
+	House house2(&World, sf::Vector2f(500, 100), 120, "image/house/house.png", "image/house/door.png", "house2");
 
-	Fir_tree y1(&World, sf::Vector2f(440, 230), "image/tree.png", "y1");
-	Fir_tree y2(&World, sf::Vector2f(600, 290), "image/tree.png", "y2");
-	Fir_tree y3(&World, sf::Vector2f(490, 395), "image/tree.png", "y3");
+	Fir_tree y1(&World, sf::Vector2f(350, 175), "image/veget/tree.png", "y1");
+	Fir_tree y2(&World, sf::Vector2f(127, 419), "image/veget/tree.png", "y2");
+	Fir_tree y3(&World, sf::Vector2f(107, 316), "image/veget/tree.png", "y3");
 
-	Shrub s1(&World, sf::Vector2f(370, 300), "image/shrub.png", "s1");
-	Shrub s2(&World, sf::Vector2f(730, 375), "image/shrub2.png", "s2");
-	Shrub s3(&World, sf::Vector2f(65, 230), "image/shrub2.png", "s3");
+	Shrub s1(&World, sf::Vector2f(207, 250), "image/veget/shrub.png", "s1");
+	Shrub s2(&World, sf::Vector2f(397, 324), "image/veget/shrub2.png", "s2");
+	Shrub s3(&World, sf::Vector2f(492, 290), "image/veget/shrub2.png", "s3");
 
 	int i = 0;
 	sf::Clock clock;
