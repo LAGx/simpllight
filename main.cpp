@@ -65,10 +65,12 @@ int main() {
 
 		window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
 		/////////////// FPS //////////////////
-		if (i > 10) {
-			ScreenLog::setValue(1, to_string(1.f / clock.getElapsedTime().asSeconds()));
+		if (i > 15) {
+			ScreenLog::setValue(1, to_string((int) (1.f / clock.getElapsedTime().asSeconds() )));
 			i = 0;
-		}else { i++; }
+		}
+		else 
+			i++;
 		clock.restart();
 		///////////////////////////////
 

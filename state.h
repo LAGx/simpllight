@@ -1,3 +1,6 @@
+#ifndef _STATE_
+#define _STATE_
+
 #pragma once
 #include <string>
 #include <SFML/Graphics.hpp>
@@ -12,4 +15,5 @@ class State {
 		static std::string mode; //dev, game
 
 		static sf::Color mainColorMajor;
-	};
+};
+#endif
