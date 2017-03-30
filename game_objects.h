@@ -24,18 +24,18 @@ public:
 
 	BaseObject(sf::Vector2f initCord, std::string texture);
 
-	void blit();
+	virtual void blit();
 
-	~BaseObject();
+	virtual ~BaseObject();
 };
 
 
 class DynamicObject :public BaseObject {
 private:
 	void update();
-	float drug_air = 1;
-	float drug_angle = 1;
-	float mass = 1;
+	const float drug_air = 1;
+	const float drug_angle = 1;
+	const float mass = 1;
 protected:
 
 
@@ -158,7 +158,7 @@ class Human :public Alive {
 private:
 
 protected:
-
+	float speed = 0.5;
 public:
 
 	//Human texture have to be a single color with shadow(10 px) 32x32. 
@@ -178,7 +178,7 @@ private:
 	int PAIiter = 0;
 
 protected:
-	float speed = 0.5;
+	
 public:
 	Person(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 

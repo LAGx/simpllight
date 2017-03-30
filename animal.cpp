@@ -69,7 +69,7 @@ Person::~Person() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 Player::Player(b2World* World, Vector2f initCord, string textr, string name) :Human(World, initCord, textr, name) {
-	while (1) {}
+
 }
 
 Player::~Player() {
