@@ -24,24 +24,24 @@ public:
 
 	BaseObject(sf::Vector2f initCord, std::string texture);
 
-	void blit();
+	virtual void blit();
 
-	~BaseObject();
+	virtual ~BaseObject();
 };
 
 
 class DynamicObject :public BaseObject {
-protected:
-	float drug_air = 1;
-	float drug_angle = 1;
-	float mass = 1;
-
+private:
 	void update();
+	const float drug_air = 1;
+	const float drug_angle = 1;
+	const float mass = 1;
+protected:
+
+
 public:
 
 	std::string name = "None";
-
-	void setPhisicParam();
 
 	b2Body *body_ph;
 
@@ -77,6 +77,9 @@ class House :public StaticObject {
 public:
 	StaticObject *door;
 
+
+	//shadow size 10
+	//door shadow 4
 	House(b2World* World, sf::Vector2f initCord, float angle, std::string textureHouse, std::string textureDoor, std::string name);
 
 	void blit();
@@ -127,9 +130,10 @@ private:
 
 	void updateRadiusZone();
 
+	void update();
 protected:
 
-	void update();
+
 	int helth = 100;
 
 public:
@@ -154,10 +158,11 @@ class Human :public Alive {
 private:
 
 protected:
-
+	float speed = 0.5;
 public:
 
-	Human(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);//Human texture have to be a single color with shadow(10 px) 32x32. 
+	//Human texture have to be a single color with shadow(10 px) 32x32. 
+	Human(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
 	~Human();
 };
@@ -165,11 +170,19 @@ public:
 
 class Person : public Human {
 private:
+	void PAIForce();//pseudo AI
+	void update();
+
+	b2Vec2 PAIvec;
+	int PAIdelta = 0;
+	int PAIiter = 0;
 
 protected:
-
+	
 public:
 	Person(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+
+	void blit();
 
 	~Person();
 };

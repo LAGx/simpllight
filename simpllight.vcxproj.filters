@@ -34,6 +34,15 @@
     <Filter Include="Source Files\game_objects\animals">
       <UniqueIdentifier>{8a1e5f10-c505-4a7d-bf80-9835cbdb1111}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\image\house">
+      <UniqueIdentifier>{3896e636-3256-477a-9b29-cc986140af10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\image\veget">
+      <UniqueIdentifier>{ea57235f-5e34-44ad-a6e5-6e12cc0126eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\image\human">
+      <UniqueIdentifier>{546684ec-1712-43c9-ab85-a5f61842245f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="log.h">
@@ -102,44 +111,39 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="image\human.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
-    <Image Include="image\player.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
-    <Image Include="image\human2.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
-    <Image Include="image\house\door2.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
-    <Image Include="image\house\door.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
-    <Image Include="image\house\house.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
-    <Image Include="image\house\house2.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
-    <Image Include="image\tree.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
-    <Image Include="image\shrub.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
-    <Image Include="image\shrub2.png">
-      <Filter>Resource Files\image</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="log.txt" />
     <Text Include="plan.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="image\house\door.png">
+      <Filter>Resource Files\image\house</Filter>
+    </Image>
+    <Image Include="image\house\door2.png">
+      <Filter>Resource Files\image\house</Filter>
+    </Image>
+    <Image Include="image\house\house.png">
+      <Filter>Resource Files\image\house</Filter>
+    </Image>
+    <Image Include="image\house\house2.png">
+      <Filter>Resource Files\image\house</Filter>
+    </Image>
+    <Image Include="image\veget\shrub.png">
+      <Filter>Resource Files\image\veget</Filter>
+    </Image>
+    <Image Include="image\veget\shrub2.png">
+      <Filter>Resource Files\image\veget</Filter>
+    </Image>
+    <Image Include="image\veget\tree.png">
+      <Filter>Resource Files\image\veget</Filter>
+    </Image>
+    <Image Include="image\human\human1.png">
+      <Filter>Resource Files\image\human</Filter>
+    </Image>
+    <Image Include="image\human\human2.png">
+      <Filter>Resource Files\image\human</Filter>
+    </Image>
+    <Image Include="image\human\player.png">
+      <Filter>Resource Files\image\human</Filter>
+    </Image>
   </ItemGroup>
 </Project>
