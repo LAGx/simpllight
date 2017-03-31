@@ -1,3 +1,6 @@
+#ifndef _PHISIC_
+#define _PHISIC_
+
 #pragma once
 #include <Box2D/Box2D.h>
 
@@ -12,3 +15,4 @@ public:
 
 	void EndContact(b2Contact* contact);
 };
+#endif

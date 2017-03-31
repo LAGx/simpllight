@@ -1,15 +1,18 @@
+#ifndef _WINDOW_
+#define _WINDOW_
+
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
 
 namespace spl {
 
-struct ToDraw {
-	sf::Drawable *image;
-	int depth = 0;
-};
+	struct ToDraw {
+		sf::Drawable *image;
+		int depth = 0;
+	};
 
-class Window {
+	class Window {
 	private:
 
 	public:
@@ -30,3 +33,4 @@ class Window {
 	};
 
 }
+#endif

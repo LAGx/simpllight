@@ -1,3 +1,5 @@
+#ifndef _LOG_
+#define _LOG_
 
 #include <string>
 #include <vector>
@@ -41,3 +43,4 @@ public:
 	
 	void blit();
 };
+#endif
