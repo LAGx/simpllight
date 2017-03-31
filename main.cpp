@@ -54,8 +54,8 @@ int main() {
 				window.canvas.close();
 		}
 		
-		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+		int w = sf::Keyboard::W;
+		if (sf::Keyboard::isKeyPressed(w)) {
 			player.body_ph->ApplyForceToCenter(b2Vec2(0, -speed), true);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
@@ -73,6 +73,7 @@ int main() {
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
 			player.moveRadius(-1);
 		}
+		
 
 		window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
 		/////////////// FPS //////////////////

@@ -54,8 +54,8 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 	
 	b2BodyDef b_bdef;
 	b_bdef.type = b2_dynamicBody;
-	b_bdef.linearDamping = drug_air;
-	b_bdef.angularDamping = drug_angle;
+	b_bdef.linearDamping = 1;
+	b_bdef.angularDamping = 1;
 	b_bdef.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX);
 	body_ph = World->CreateBody(&b_bdef);
 
@@ -130,9 +130,15 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 	}
 
 	b_fixture.isSensor = isSensor;
-	b_fixture.density = mass;
+	b_fixture.density = 1;
 	body_ph->CreateFixture(&b_fixture);
 	body_ph->SetUserData(this);
+}
+
+
+void DynamicObject::setDrug(float linear, float angular) {
+	body_ph->SetLinearDamping(linear);
+	body_ph->SetAngularDamping(angular);
 }
 
 void DynamicObject::update() {

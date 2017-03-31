@@ -63,6 +63,9 @@
     <ClInclude Include="service.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="control.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -91,6 +94,9 @@
     </ClCompile>
     <ClCompile Include="animal.cpp">
       <Filter>Source Files\game_objects\animals</Filter>
+    </ClCompile>
+    <ClCompile Include="control.cpp">
+      <Filter>Source Files\service</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

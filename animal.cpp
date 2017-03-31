@@ -11,8 +11,7 @@ using namespace sf;
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 Human::Human(b2World* World, Vector2f initCord, string textr, string name) :Alive(World, initCord, textr, name, rect_T, 10) {
-	body_ph->SetLinearDamping(3);
-	body_ph->SetAngularDamping(1);
+	setDrug(3, 2);
 } 
 
 Human::~Human() {
@@ -69,7 +68,12 @@ Person::~Person() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 Player::Player(b2World* World, Vector2f initCord, string textr, string name) :Human(World, initCord, textr, name) {
+	speed = 2;
+}
 
+
+void Player::blit(){
+	Human::blit();
 }
 
 Player::~Player() {
