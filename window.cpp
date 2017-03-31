@@ -21,7 +21,7 @@ Window::Window() {
 		view.setSize(sf::VideoMode().getDesktopMode().width, sf::VideoMode().getDesktopMode().height);
 		view.setCenter(sf::VideoMode().getDesktopMode().width/2, sf::VideoMode().getDesktopMode().height/2);
 	}
-	canvas.setFramerateLimit(60);
+	canvas.setFramerateLimit(120);
 	canvas.setView(view);
 }
 
