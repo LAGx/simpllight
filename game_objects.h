@@ -36,9 +36,6 @@ private:
 	
 protected:
 
-	//TODO maybe...
-	void setPhisicParameters(float mass, int linear_drug, int angular_drug);//better to use only in constructors
-
 	void setDrug(float linear, float angular);
 
 public:

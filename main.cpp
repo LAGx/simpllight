@@ -54,8 +54,8 @@ int main() {
 				window.canvas.close();
 		}
 		
-		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+		int w = sf::Keyboard::W;
+		if (sf::Keyboard::isKeyPressed(w)) {
 			player.body_ph->ApplyForceToCenter(b2Vec2(0, -speed), true);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {

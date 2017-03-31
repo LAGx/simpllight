@@ -141,10 +141,6 @@ void DynamicObject::setDrug(float linear, float angular) {
 	body_ph->SetAngularDamping(angular);
 }
 
-void DynamicObject::setPhisicParameters(float mass, int linear_drug, int angular_drug) {
-
-}
-
 void DynamicObject::update() {
 	updateTextrPosition(Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX), body_ph->GetAngle()*DEG_BOX);
 }
