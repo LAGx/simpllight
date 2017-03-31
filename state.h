@@ -1,3 +1,6 @@
+#ifndef _STATE_
+#define _STATE_
+
 #pragma once
 #include <string>
 #include <SFML/Graphics.hpp>
@@ -14,4 +17,5 @@ class State {
 		static sf::Color mainColorMajor;
 
 		static sf::Color mainColorMinor;
-	};
+};
+#endif
