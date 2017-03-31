@@ -38,9 +38,10 @@ int main() {
 	Fir_tree y2(&World, sf::Vector2f(127, 419), "image/veget/tree.png", "y2");
 	Fir_tree y3(&World, sf::Vector2f(107, 316), "image/veget/tree.png", "y3");
 
-	Shrub s1(&World, sf::Vector2f(207, 250), "image/veget/shrub.png", "s1");
-	Shrub s2(&World, sf::Vector2f(397, 324), "image/veget/shrub2.png", "s2");
-	Shrub s3(&World, sf::Vector2f(492, 290), "image/veget/shrub2.png", "s3");
+	Shrub s1(&World, sf::Vector2f(207, 250), "image/veget/shrub.png", "sh1");
+	Shrub s2(&World, sf::Vector2f(397, 324), "image/veget/shrub2.png", "sh2");
+	Shrub s3(&World, sf::Vector2f(492, 290), "image/veget/shrub2.png", "sh3");
+
 
 	int i = 0;
 	sf::Clock clock;
