@@ -48,12 +48,10 @@ Temporary Items
 
 #ignore my files 
 *.txt
+*.vcxproj
 *.cd
 /Debug
 /Release
 /x64
-<<<<<<< HEAD
 /map converter/Debug
-=======
->>>>>>> refs/remotes/origin/master
 *.vcxproj.user
