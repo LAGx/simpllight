@@ -31,9 +31,6 @@
     <Filter Include="Source Files\phisic">
       <UniqueIdentifier>{afe2a5ca-576f-4eaa-b40f-fc2af164803f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\game_objects\animals">
-      <UniqueIdentifier>{8a1e5f10-c505-4a7d-bf80-9835cbdb1111}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resource Files\image\house">
       <UniqueIdentifier>{3896e636-3256-477a-9b29-cc986140af10}</UniqueIdentifier>
     </Filter>
@@ -45,59 +42,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="phisic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="state.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game_objects.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="phisic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="service.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="control.h">
+    <ClInclude Include="state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="state.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="window.cpp">
-      <Filter>Source Files\graphic</Filter>
-    </ClCompile>
-    <ClCompile Include="baseObjects.cpp">
-      <Filter>Source Files\game_objects</Filter>
-    </ClCompile>
-    <ClCompile Include="gameObjects.cpp">
-      <Filter>Source Files\game_objects</Filter>
-    </ClCompile>
-    <ClCompile Include="log.cpp">
-      <Filter>Source Files\service</Filter>
-    </ClCompile>
-    <ClCompile Include="service.cpp">
-      <Filter>Source Files\service</Filter>
-    </ClCompile>
-    <ClCompile Include="phisic.cpp">
-      <Filter>Source Files\phisic</Filter>
-    </ClCompile>
-    <ClCompile Include="animal.cpp">
-      <Filter>Source Files\game_objects\animals</Filter>
-    </ClCompile>
-    <ClCompile Include="control.cpp">
-      <Filter>Source Files\service</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Font Include="font\arial.ttf">
@@ -117,10 +79,6 @@
     </Font>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="log.txt" />
-    <Text Include="plan.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Image Include="image\house\door.png">
       <Filter>Resource Files\image\house</Filter>
     </Image>
@@ -133,15 +91,6 @@
     <Image Include="image\house\house2.png">
       <Filter>Resource Files\image\house</Filter>
     </Image>
-    <Image Include="image\veget\shrub.png">
-      <Filter>Resource Files\image\veget</Filter>
-    </Image>
-    <Image Include="image\veget\shrub2.png">
-      <Filter>Resource Files\image\veget</Filter>
-    </Image>
-    <Image Include="image\veget\tree.png">
-      <Filter>Resource Files\image\veget</Filter>
-    </Image>
     <Image Include="image\human\human1.png">
       <Filter>Resource Files\image\human</Filter>
     </Image>
@@ -151,5 +100,43 @@
     <Image Include="image\human\player.png">
       <Filter>Resource Files\image\human</Filter>
     </Image>
+    <Image Include="image\veget\shrub.png">
+      <Filter>Resource Files\image\veget</Filter>
+    </Image>
+    <Image Include="image\veget\shrub2.png">
+      <Filter>Resource Files\image\veget</Filter>
+    </Image>
+    <Image Include="image\veget\tree.png">
+      <Filter>Resource Files\image\veget</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="gameObjects.cpp">
+      <Filter>Source Files\game_objects</Filter>
+    </ClCompile>
+    <ClCompile Include="animal.cpp">
+      <Filter>Source Files\game_objects</Filter>
+    </ClCompile>
+    <ClCompile Include="baseObjects.cpp">
+      <Filter>Source Files\game_objects</Filter>
+    </ClCompile>
+    <ClCompile Include="window.cpp">
+      <Filter>Source Files\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="phisic.cpp">
+      <Filter>Source Files\phisic</Filter>
+    </ClCompile>
+    <ClCompile Include="log.cpp">
+      <Filter>Source Files\service</Filter>
+    </ClCompile>
+    <ClCompile Include="service.cpp">
+      <Filter>Source Files\service</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="state.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
