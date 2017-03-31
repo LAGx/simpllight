@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
-
+#include "control.h"
 enum figureType {
 	circle_T = 1,
 	tringle_T,
@@ -131,8 +131,8 @@ private:
 
 	void update();
 protected:
-
-
+	float radiusSpeed = 1;
+	float speed = 1;
 	int helth = 100;
 
 public:
@@ -157,7 +157,7 @@ class Human :public Alive {
 private:
 
 protected:
-	float speed = 0.5;
+
 public:
 
 	//Human texture have to be a single color with shadow(10 px) 32x32. 
@@ -167,7 +167,7 @@ public:
 };
 
 
-class Person : public Human {
+class Person : public Human{
 private:
 	void PAIForce();//pseudo AI
 	void update();
@@ -187,11 +187,18 @@ public:
 };
 
 
-class Player : public Human {
+class Player : public Human, public spl::EventInterface{
 private:
-
+	b2Vec2 currForceVec;
 protected:
+	void moveTop();
+	void moveBottom();
+	void moveLeft();
+	void moveRight();	
+	void moveRadiusPlus();
+	void moveRadiusMinus();
 
+	void update();
 public:
 
 	Player(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);

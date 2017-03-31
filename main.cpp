@@ -14,6 +14,7 @@ int main() {
 	CollideListener collideListener;
 	World.SetContactListener(&collideListener);
 
+	spl::ControlBox controlBox;
 
 	Log::clear();
 	Log::log("____________LOG SESSION START__________", true);
@@ -28,6 +29,7 @@ int main() {
     Person h(&World, sf::Vector2f(605, 190), "image/human/human1.png","human1");
 	Person h2(&World, sf::Vector2f(520, 354), "image/human/human2.png","human2");
 	Player player(&World, sf::Vector2f(370, 235), "image/human/player.png","player");
+	controlBox.setControlObject(&player);
 
 	House house(&World, sf::Vector2f(150, 100), -120,"image/house/house2.png", "image/house/door2.png", "house");
 	House house1(&World, sf::Vector2f(300, 400), 30, "image/house/house.png", "image/house/door.png", "house1");
@@ -40,7 +42,6 @@ int main() {
 	Shrub s2(&World, sf::Vector2f(397, 324), "image/veget/shrub2.png", "sh2");
 	Shrub s3(&World, sf::Vector2f(492, 290), "image/veget/shrub2.png", "sh3");
 
-
 	int i = 0;
 	sf::Clock clock;	float speed = 2;
 	while (window.canvas.isOpen()){
@@ -52,27 +53,9 @@ int main() {
 				window.canvas.close();
 		}
 		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-			player.body_ph->ApplyForceToCenter(b2Vec2(0, -speed), true);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-			player.body_ph->ApplyForceToCenter(b2Vec2(0, speed), true);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-			player.body_ph->ApplyForceToCenter(b2Vec2(speed, 0), true);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-			player.body_ph->ApplyForceToCenter(b2Vec2(-speed, 0), true);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
-			player.moveRadius(1);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-			player.moveRadius(-1);
-		}
-		
 
 		window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
+		
 		/////////////// FPS //////////////////
 		if (i > 15) {
 			ScreenLog::setValue(1, to_string((int) (1.f / clock.getElapsedTime().asSeconds() )));
@@ -84,6 +67,9 @@ int main() {
 		///////////////////////////////
 
 		ScreenLog::setValue(3, to_string(sf::Mouse::getPosition(window.canvas).x) + " | " + to_string(sf::Mouse::getPosition(window.canvas).y));
+
+		controlBox.resulveControl();
+		
 
 		World.Step(1 / 60.f, 8, 3);
 		window.updateState();
