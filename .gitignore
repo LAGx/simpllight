@@ -52,5 +52,8 @@ Temporary Items
 /Debug
 /Release
 /x64
+<<<<<<< HEAD
 /map converter/Debug
+=======
+>>>>>>> refs/remotes/origin/master
 *.vcxproj.user
