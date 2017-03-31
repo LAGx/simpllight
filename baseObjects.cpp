@@ -32,7 +32,7 @@ void BaseObject::updateTextrPosition(Vector2f newCord, float newAngle) {
 void BaseObject::blit() {
 
 	if (isVisible) {
-		spl::ToDraw draw = { &g_body, depthRender + 1 };
+		spl::ToDraw draw = { &g_body, depthRender};
 		spl::Window::allDrawable.push_back(draw);
 	}
 }
