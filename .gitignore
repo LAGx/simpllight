@@ -48,7 +48,6 @@ Temporary Items
 
 #ignore my files 
 *.txt
-*.vcxproj
 *.cd
 /Debug
 /Release
