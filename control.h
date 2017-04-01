@@ -48,7 +48,7 @@ namespace spl {
 		
 		void updateKeyBindings();//for xml setting key
 		
-		void deleteControlObject(EventInterface*);
+		bool deleteControlObject(EventInterface*);
 
 		void setControlObject(EventInterface*);
 

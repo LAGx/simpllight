@@ -43,15 +43,15 @@ for (int i = 0; i < controlObjects.size(); i++) {
 }
 
 
-void ControlBox::deleteControlObject(EventInterface* obj) {
+bool ControlBox::deleteControlObject(EventInterface* obj) {
 	for (int i = 0; i < controlObjects.size(); i++) {
 
 		if (controlObjects[i] == obj) {
 			controlObjects.erase(controlObjects.begin()+i);
-			goto end;
+			return true;
 		}
 	}
 
-	Log::log("No such object in Control to remove.", true);
-end:;
+	Log::error("No such object in Control to remove.", true);
+	return false;
 }

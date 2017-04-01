@@ -36,6 +36,17 @@ void Log::log(string log, bool time) {
 	file.close();
 }
 
+void Log::warning(string warn, bool time) {
+	ofstream file(logName, ios_base::app);
+	if (!time) {
+		file << "WARNING: " << warn << endl;
+	}
+	else {
+		file << "WARNING|" << getTime() << "|: " << warn << endl;
+	}
+	file.close();
+}
+
 void Log::error(string err, bool time) {
 	ofstream file(logName, ios_base::app);
 	if (!time) {
@@ -44,7 +55,10 @@ void Log::error(string err, bool time) {
 	else {
 		file << "ERROR|"  << getTime() << "|: " << err << endl;
 	}
+	log("_______EMERGENCY CLOSING PROGRAM_______", true);
+	log("____________LOG SESSION END____________", true);
 	file.close();
+	exit(EXIT_FAILURE);
 }
 
 
