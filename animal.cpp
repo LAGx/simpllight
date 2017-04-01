@@ -73,8 +73,41 @@ Player::Player(b2World* World, Vector2f initCord, string textr, string name) :Hu
 
 
 void Player::blit(){
+	update();
 	Human::blit();
 }
+
+void Player::update() {
+	currForceVec.Normalize();
+	currForceVec *= speed;
+	body_ph->ApplyForceToCenter(currForceVec, true);
+	currForceVec.SetZero();
+}
+
+
+void Player::moveTop() {
+	b2Vec2 curr(0, -1);
+	currForceVec += curr;
+}
+void Player::moveBottom() {
+	b2Vec2 curr(0, 1);
+	currForceVec += curr;
+}
+void Player::moveLeft() {
+	b2Vec2 curr(-1, 0);
+	currForceVec += curr;
+}
+void Player::moveRight() {
+	b2Vec2 curr(1, 0);
+	currForceVec += curr;
+}
+void Player::moveRadiusPlus() {
+	moveRadius(radiusSpeed);
+}
+void Player::moveRadiusMinus() {
+	moveRadius(-radiusSpeed);
+}
+
 
 Player::~Player() {
 }
