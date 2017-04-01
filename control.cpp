@@ -19,35 +19,35 @@ void ControlBox::updateKeyBindings() {
 }
 
 void ControlBox::setControlObject(EventInterface* obj) {
-	controlObgects.push_back(obj);
+	controlObjects.push_back(obj);
 }
 
 void ControlBox::resulveControl() {
-for (int i = 0; i < controlObgects.size(); i++) {
+for (int i = 0; i < controlObjects.size(); i++) {
 
 
 	if (sf::Keyboard::isKeyPressed(keyBindings.moveTop))
-		controlObgects[i]->moveTop();
+		controlObjects[i]->moveTop();
 	if (sf::Keyboard::isKeyPressed(keyBindings.moveBottom))
-		controlObgects[i]->moveBottom();
+		controlObjects[i]->moveBottom();
 	if (sf::Keyboard::isKeyPressed(keyBindings.moveLeft))
-		controlObgects[i]->moveLeft();
+		controlObjects[i]->moveLeft();
 	if (sf::Keyboard::isKeyPressed(keyBindings.moveRight))
-		controlObgects[i]->moveRight();
+		controlObjects[i]->moveRight();
 	if (sf::Keyboard::isKeyPressed(keyBindings.moveRadiusPlus))
-		controlObgects[i]->moveRadiusPlus();
+		controlObjects[i]->moveRadiusPlus();
 	if (sf::Keyboard::isKeyPressed(keyBindings.moveRadiusMinus))
-		controlObgects[i]->moveRadiusMinus();
+		controlObjects[i]->moveRadiusMinus();
 
 }
 }
 
 
 void ControlBox::deleteControlObject(EventInterface* obj) {
-	for (int i = 0; i < controlObgects.size(); i++) {
+	for (int i = 0; i < controlObjects.size(); i++) {
 
-		if (controlObgects[i] == obj) {
-			controlObgects.erase(controlObgects.begin()+i);
+		if (controlObjects[i] == obj) {
+			controlObjects.erase(controlObjects.begin()+i);
 			goto end;
 		}
 	}
@@ -55,6 +55,3 @@ void ControlBox::deleteControlObject(EventInterface* obj) {
 	Log::log("No such object in Control to remove.", true);
 end:;
 }
-
-
-

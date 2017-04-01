@@ -28,8 +28,7 @@ namespace spl {
 	class ControlBox {
 	private:
 
-		class KeyBindings {
-		public:
+		struct KeyBindings {
 			sf::Keyboard::Key moveTop = sf::Keyboard::Unknown;
 			sf::Keyboard::Key moveBottom = sf::Keyboard::Unknown;
 			sf::Keyboard::Key moveLeft = sf::Keyboard::Unknown;
@@ -39,7 +38,7 @@ namespace spl {
 			sf::Keyboard::Key moveRadiusPlus = sf::Keyboard::Unknown;
 		};
 
-		std::vector<EventInterface*> controlObgects;
+		std::vector<EventInterface*> controlObjects;
 
 		KeyBindings keyBindings;
 
