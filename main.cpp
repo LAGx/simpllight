@@ -58,7 +58,7 @@ int main() {
 		
 		/////////////// FPS //////////////////
 		if (i > 15) {
-			ScreenLog::setValue(1, to_string((int) (1.f / clock.getElapsedTime().asSeconds() )));
+			ScreenLog::setValue(0, to_string((int) (1.f / clock.getElapsedTime().asSeconds() )));
 			i = 0;
 		}
 		else 
