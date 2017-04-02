@@ -38,15 +38,15 @@ House::~House() {
 Fir_tree::Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name) :StaticObject(World, initCord, 0, textr, name, tringle_T, 17, false) {
 }
 
-bool Fir_tree::decreaseHelth(int delta){
-	helth -= delta;
-	if (helth <= 0)
+bool Fir_tree::decreaseHealth(int delta){
+	health -= delta;
+	if (health <= 0)
 		return 0;
 	return 1;
 }
 
-void Fir_tree::setHelth(int helth) {
-	this->helth = helth;
+void Fir_tree::setHealth(int health) {
+	this->health = health;
 }
 
 Fir_tree::~Fir_tree() {
@@ -62,15 +62,15 @@ Shrub::Shrub(b2World* World, sf::Vector2f initCord, std::string textr, std::stri
 	depthRender = -200;
 }
 
-bool Shrub::decreaseHelth(int delta) {
-	helth -= delta;
-	if (helth <= 0)
+bool Shrub::decreaseHealth(int delta) {
+	health -= delta;
+	if (health <= 0)
 		return 0;
 	return 1;
 }
 
-void Shrub::setHelth(int helth) {
-	this->helth = helth;
+void Shrub::setHealth(int health) {
+	this->health = health;
 }
 
 Shrub::~Shrub() {
@@ -148,15 +148,15 @@ void Alive::blit() {
 	}
 }
 
-bool Alive::decreaseHelth(int delta) {
-	helth -= delta;
-	if (helth <= 0)
+bool Alive::decreaseHealth(int delta) {
+	health -= delta;
+	if (health <= 0)
 		return 0;
 	return 1;
 }
 
-void Alive::setHelth(int helth) {
-	this->helth = helth;
+void Alive::setHealth(int health) {
+	this->health = health;
 }
 
 Alive::~Alive() {
