@@ -12,7 +12,7 @@ class State {
 
 		static std::string current_state; //states of game like lvls/menus/ect
 
-		static std::string mode; //dev, game
+		static std::string mode; //dev, game, editor
 
 		static sf::Color mainColorMajor;
 

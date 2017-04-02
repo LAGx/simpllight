@@ -1,3 +1,6 @@
+#ifndef _CONTROL_
+#define _CONTROL_
+
 #pragma once
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -58,3 +61,4 @@ namespace spl {
 
 
 }
+#endif
