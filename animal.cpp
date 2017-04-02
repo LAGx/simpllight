@@ -42,18 +42,18 @@ void Person::PAIForce() {
 	if (PAIdelta < PAIiter) {
 		PAIdelta++;
 		body_ph->ApplyForceToCenter(PAIvec, true);
-	}else {
+	}
+	else {
 		PAIiter = Rand::intRand(60,240);
 		PAIdelta = 0;
 		b2Vec2 temp(0, 0);
 		float x = Rand::intRand(0, 10), y = Rand::intRand(0, 10);
 		temp.Set(x,y);
 		temp.Normalize();
-		if (Rand::intRand(0, 1)) {
+		if (Rand::intRand(0, 1))
 			PAIvec = -speed*temp;
-		}else{
+		else
 			PAIvec = speed*temp;
-		}
 	}
 }
 
