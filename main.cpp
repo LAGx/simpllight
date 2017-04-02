@@ -23,7 +23,8 @@ int main() {
 	screenLog.setNewLog("FPS", 0);
 	screenLog.setNewLog("collision h1", 1);
 	screenLog.setNewLog("collision h2", 2);
-	screenLog.setNewLog("Mouse: ", 3);	spl::Window window;
+	screenLog.setNewLog("Mouse: ", 3);	
+	spl::Window window;
 
  
     Person h(&World, sf::Vector2f(605, 190), "image/human/human1.png","human1");
@@ -43,7 +44,8 @@ int main() {
 	Shrub s3(&World, sf::Vector2f(492, 290), "image/veget/shrub2.png", "sh3");
 
 	int i = 0;
-	sf::Clock clock;	float speed = 2;
+	sf::Clock clock;
+	float speed = 2;
 	while (window.canvas.isOpen()){
 		sf::Event event;
 		
