@@ -1,7 +1,6 @@
 ﻿#include <SFML/Graphics.hpp>
 #include "state.h"
 #include "window.h"
-#include "log.h"
 #include <iostream>
 #include <algorithm>
 #include <vector>
@@ -10,17 +9,16 @@
 using namespace spl;
 
 Window::Window() {
-	if (State::mode == "dev") {
-		canvas.create(sf::VideoMode(900, 500), "simpllight", sf::Style::Default);
-		view.setSize(900, 500);
-		view.setCenter(450, 250);
-	}
-	else {
-		FreeConsole();
-		canvas.create(sf::VideoMode().getDesktopMode(), "simpllight", sf::Style::None);
-		view.setSize(sf::VideoMode().getDesktopMode().width, sf::VideoMode().getDesktopMode().height);
-		view.setCenter(sf::VideoMode().getDesktopMode().width/2, sf::VideoMode().getDesktopMode().height/2);
-	}
+#ifdef GAME_MODE
+	FreeConsole();
+	canvas.create(sf::VideoMode().getDesktopMode(), "simpllight", sf::Style::None);
+	view.setSize(sf::VideoMode().getDesktopMode().width, sf::VideoMode().getDesktopMode().height);
+	view.setCenter(sf::VideoMode().getDesktopMode().width / 2, sf::VideoMode().getDesktopMode().height / 2);
+#else
+	canvas.create(sf::VideoMode(900, 500), "simpllight", sf::Style::Default);
+	view.setSize(900, 500);
+	view.setCenter(450, 250);
+#endif
 	canvas.setFramerateLimit(120);
 	canvas.setView(view);
 }

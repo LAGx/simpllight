@@ -5,7 +5,6 @@
 #include <ctime>
 #include <SFML/Graphics.hpp>
 #include "window.h"
-#include "state.h"
 
 using namespace std;
 
