@@ -83,7 +83,7 @@ Shrub::~Shrub() {
 Alive::Alive(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, figureType type, float figureSize): DynamicObject(World, initCord, textr, name, type, figureSize, false) {
 
 	if (!texture_zone.loadFromFile(textr, sf::IntRect(texture.getSize().x/2, texture.getSize().x / 2, 2, 2))) {
-		Log::error("Texture load in Alive. ");
+		throw Log::Exception("Texture load in Alive. ");
 	}
 	texture_zone.setSmooth(true);
 	g_zone.setRadius(radiusZone);

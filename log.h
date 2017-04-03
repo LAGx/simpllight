@@ -13,7 +13,14 @@ private:
 
 	static std::string logName;
 
+	static void error(string err, bool time = false);
+
 public:
+
+	class Exception {
+	public:
+		Exception(string error, bool isTime = false);
+	};
  
 	static void clear();
 
@@ -21,7 +28,7 @@ public:
 
 	static void warning(string warn, bool time = false);
 
-	static void error(string err, bool time = false);
+
 
 };
 

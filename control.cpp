@@ -52,6 +52,6 @@ bool ControlBox::deleteControlObject(EventInterface* obj) {
 		}
 	}
 
-	Log::error("No such object in Control to remove.", true);
+	throw Log::Exception("No such object in Control to remove.", true);
 	return false;
 }

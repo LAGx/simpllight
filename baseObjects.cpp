@@ -14,7 +14,7 @@ using namespace sf;
 
 BaseObject::BaseObject(Vector2f initCord, string textr) {
 	if (!texture.loadFromFile(textr)) {
-		Log::error("Texture load in BaseObject from " + textr, true);
+		throw Log::Exception("Texture load in BaseObject from " + textr, true);
 	}
 	texture.setSmooth(true);
 	g_body.setTexture(texture);
@@ -50,7 +50,7 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 	this->name = name;
 	
 	if ((texture.getSize().x - texture.getSize().y) && type != 3) 
-		Log::error("Texture " + textr + " have to be square.");
+		throw Log::Exception("Texture " + textr + " have to be square.");
 	
 	b2BodyDef b_bdef;
 	b_bdef.type = b2_dynamicBody;
@@ -126,7 +126,7 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 			break;
 		}
 		default:
-			Log::error("No such type (figure type) in DynamicObject");
+			throw Log::Exception("No such type (figure type) in DynamicObject");
 	}
 
 	b_fixture.isSensor = isSensor;
@@ -167,7 +167,7 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord,float angle , strin
 	this->name = name;
 
 	if ((texture.getSize().x - texture.getSize().y) && type != 3)
-		Log::error("Texture " + textr + " have to be square.");
+		throw Log::Exception("Texture " + textr + " have to be square.");
 
 	b2BodyDef b_bdef;
 	b_bdef.type = b2_staticBody;
@@ -241,7 +241,7 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord,float angle , strin
 		break;
 	}
 	default:
-		Log::error("No such type (figure type) in StaticObject");
+		throw Log::Exception("No such type (figure type) in StaticObject");
 	}
 
 	b_fixture.isSensor = isSensor;

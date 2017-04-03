@@ -54,12 +54,12 @@ void Log::error(string err, bool time) {
 	else {
 		file << "ERROR|"  << getTime() << "|: " << err << endl;
 	}
-	log("_______EMERGENCY CLOSING PROGRAM_______", true);
-	log("____________LOG SESSION END____________", true);
 	file.close();
-	exit(EXIT_FAILURE);
 }
 
+Log::Exception::Exception(string error, bool isTime) {
+	Log::error(error, isTime);
+}
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ sf::Font ScreenLog::font;
 ScreenLog::ScreenLog() {
 	if (!font.loadFromFile("font/arial.ttf"))
 	{
-		Log::error("load screenLog font");
+		throw Log::Exception("load screenLog font");
 	}
 }
 
@@ -96,7 +96,7 @@ void ScreenLog::setValue(int id, string value) {
 			return;
 		}
 	}
-	Log::error("id screen log.");
+	throw Log::Exception("id screen log.");
 }
 
 void ScreenLog::blit() {
