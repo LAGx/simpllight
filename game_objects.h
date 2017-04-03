@@ -6,6 +6,7 @@
 #include <Box2D/Box2D.h>
 #include <string>
 #include "control.h"
+#include "state.h"
 enum figureType {
 	circle_T = 1,
 	tringle_T,
@@ -146,7 +147,9 @@ public:
 	bool decreaseHealth(int delta = 0); //1 - if health >= 0
 
 	void setRadius(float radius = 0);
+#ifdef DEV_MODE
 	void moveRadius(float radius_delta = 0);
+#endif
 	void setZoneVisible(bool isVisible = true);
 
 	void blit();
@@ -198,9 +201,11 @@ protected:
 	void moveBottom();
 	void moveLeft();
 	void moveRight();	
+
+#ifdef DEV_MODE
 	void moveRadiusPlus();
 	void moveRadiusMinus();
-
+#endif
 	void update();
 public:
 

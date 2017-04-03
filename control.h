@@ -4,6 +4,7 @@
 #pragma once
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include "state.h"
 
 namespace spl {
 
@@ -19,11 +20,13 @@ namespace spl {
 
 		virtual void moveRight() {} //for player
 
+#ifdef DEV_MODE
 		virtual void moveRadiusMinus() {} //for player
 
 		virtual void moveRadiusPlus() {} //for player
 
 		virtual void herna() {} //TEST
+#endif
 	};
 
 
