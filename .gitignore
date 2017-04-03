@@ -52,4 +52,5 @@ Temporary Items
 /Debug
 /Release
 /x64
+/map converter/Debug
 *.vcxproj.user

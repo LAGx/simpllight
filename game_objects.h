@@ -1,4 +1,7 @@
-﻿#pragma once
+﻿#ifndef _GAME_OBJECTS_
+#define _GAME_OBJECTS_
+
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
@@ -88,14 +91,14 @@ public:
 
 class Fir_tree :public StaticObject {
 private:
-	int helth = 100;
+	int health = 100;
 public:
 
 	//texture 40x40. size - 17
 	Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
-	void setHelth(int helth);
-	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+	void setHealth(int health);
+	bool decreaseHealth(int delta = 0); //1 - if health >= 0
 
 	~Fir_tree();
 };
@@ -103,14 +106,14 @@ public:
 
 class Shrub :public StaticObject {
 private:
-	int helth = 100;
+	int health = 100;
 public:
 
 	//sahdow size 15, rect trtigger
 	Shrub(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
-	void setHelth(int helth);
-	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+	void setHealth(int health);
+	bool decreaseHealth(int delta = 0); //1 - if health >= 0
 
 	~Shrub();
 };
@@ -133,14 +136,14 @@ private:
 protected:
 	float radiusSpeed = 1;
 	float speed = 1;
-	int helth = 100;
+	int health = 100;
 
 public:
 
 	Alive(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, figureType type, float figureSize);
 
-	void setHelth(int helth);
-	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+	void setHealth(int health);
+	bool decreaseHealth(int delta = 0); //1 - if health >= 0
 
 	void setRadius(float radius = 0);
 	void moveRadius(float radius_delta = 0);
@@ -207,4 +210,4 @@ public:
 
 	~Player();
 };
-
+#endif

@@ -5,14 +5,14 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
+#define DEV_MODE //GAME_MODE, DEV_MODE, EDITOR_MODE
+
 class State {
 	private:
 	 
 	public:
 
 		static std::string current_state; //states of game like lvls/menus/ect
-
-		static std::string mode; //dev, game
 
 		static sf::Color mainColorMajor;
 
