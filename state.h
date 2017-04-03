@@ -5,7 +5,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-#define GAME_MODE //GAME_MODE, DEV_MODE, EDITOR_MODE
+#define DEV_MODE //GAME_MODE, DEV_MODE, EDITOR_MODE
 
 class State {
 	private:

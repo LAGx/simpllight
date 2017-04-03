@@ -27,7 +27,8 @@ int main() {
 	screenLog.setNewLog("collision h1", 1);
 	screenLog.setNewLog("collision h2", 2);
 	screenLog.setNewLog("Mouse", 3);
-#elif EDITOR_MODE
+#endif
+#ifdef EDITOR_MODE
 	ScreenLog screenLog;
 	screenLog.setNewLog("Mouse", 0);
 #endif
@@ -77,7 +78,8 @@ int main() {
 		clock.restart();
 		///////////////////////////////
 		ScreenLog::setValue(3, to_string(sf::Mouse::getPosition(window.canvas).x) + " | " + to_string(sf::Mouse::getPosition(window.canvas).y));
-#elif EDITOR_MODE
+#endif
+#ifdef EDITOR_MODE
 		ScreenLog::setValue(0, to_string(sf::Mouse::getPosition(window.canvas).x) + " | " + to_string(sf::Mouse::getPosition(window.canvas).y));
 #endif
 		controlBox.resulveControl();

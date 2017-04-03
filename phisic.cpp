@@ -6,7 +6,7 @@
 void CollideListener::BeginContact(b2Contact* contact) {
 	void *dataA = contact->GetFixtureA()->GetBody()->GetUserData();
 	void *dataB = contact->GetFixtureB()->GetBody()->GetUserData();
-#ifndef GAME_MODE
+#ifdef DEV_MODE
 	if(((static_cast<Human*>(dataA)->name == "player") && (static_cast<Human*>(dataB)->name == "human1"))||((static_cast<Human*>(dataB)->name == "player") && (static_cast<Human*>(dataA)->name == "human1")))
 		ScreenLog::setValue(1, "YES");
 
@@ -18,7 +18,7 @@ void CollideListener::BeginContact(b2Contact* contact) {
 void CollideListener::EndContact(b2Contact* contact) {
 	void *dataA = contact->GetFixtureA()->GetBody()->GetUserData();
 	void *dataB = contact->GetFixtureB()->GetBody()->GetUserData();
-#ifndef GAME_MODE
+#ifdef DEV_MODE
 	if (((static_cast<Human*>(dataA)->name == "player") && (static_cast<Human*>(dataB)->name == "human1")) || ((static_cast<Human*>(dataB)->name == "player") && (static_cast<Human*>(dataA)->name == "human1")))
 		ScreenLog::setValue(1, "NO");
 
