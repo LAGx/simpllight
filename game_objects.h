@@ -49,9 +49,7 @@ public:
 
 	//can be load only square texture. for rect сan be not square
 	//figureSize - radius of figure. for rect it`s shadow size
-	DynamicObject(b2World* World, sf::Vector2f initCord, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);//circle, tringle
-	
-
+	DynamicObject(b2World* World, sf::Vector2f initCord, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);
 
 	void blit();
 
@@ -162,7 +160,7 @@ private:
 protected:
 
 public:
-
+	
 	//Human texture have to be a single color with shadow(10 px) 32x32. 
 	Human(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
@@ -189,6 +187,13 @@ public:
 	~Person();
 };
 
+class Cursor : public DynamicObject, public spl::EventInterface {
+private:
+	void positionMouse(int x, int y);
+public:
+	Cursor(b2World* World, std::string textr, std::string name = "cursor");
+};
+
 
 class Player : public Human, public spl::EventInterface{
 private:
@@ -198,13 +203,12 @@ protected:
 	void moveBottom();
 	void moveLeft();
 	void moveRight();	
-	void moveRadiusPlus();
-	void moveRadiusMinus();
 
 	void update();
 public:
+	Cursor *cursor;
 
-	Player(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+	Player(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, std::string textrCur = "None");
 
 	void blit();
 

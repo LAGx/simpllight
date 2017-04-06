@@ -28,18 +28,14 @@ int main() {
 	screenLog.setNewLog("collision h2", 2);
 	screenLog.setNewLog("Mouse", 3);
 #endif
-#ifdef EDITOR_MODE
-	ScreenLog screenLog;
-	screenLog.setNewLog("Mouse", 0);
-#endif
 
 	spl::Window window;
  
     Person h(&World, sf::Vector2f(605, 190), "image/human/human1.png","human1");
 	Person h2(&World, sf::Vector2f(520, 354), "image/human/human2.png","human2");
-	Player player(&World, sf::Vector2f(370, 235), "image/human/player.png","player");
+	Player player(&World, sf::Vector2f(370, 235), "image/human/player.png","player", "image/cursor.png");
 	controlBox.setControlObject(&player);
-
+	controlBox.setControlObject(player.cursor);
 	House house(&World, sf::Vector2f(150, 100), -120,"image/house/house2.png", "image/house/door2.png", "house");
 	House house1(&World, sf::Vector2f(300, 400), 30, "image/house/house.png", "image/house/door.png", "house1");
 	House house2(&World, sf::Vector2f(500, 100), 120, "image/house/house.png", "image/house/door.png", "house2");
@@ -55,18 +51,10 @@ int main() {
 	int i = 0;
 	sf::Clock clock;
 #endif
-	while (window.canvas.isOpen()){
-		sf::Event event;
-		
-
-		while (window.canvas.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
-				window.canvas.close();
-		}
-		
+while (window.canvas.isOpen()){
 
 		window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
-		
+
 #ifdef DEV_MODE
 		/////////////// FPS //////////////////
 		if (i > 15) {
@@ -77,13 +65,9 @@ int main() {
 			i++;
 		clock.restart();
 		///////////////////////////////
-		ScreenLog::setValue(3, to_string(sf::Mouse::getPosition(window.canvas).x) + " | " + to_string(sf::Mouse::getPosition(window.canvas).y));
+	//	ScreenLog::setValue(3, to_string(sf::Mouse::getPosition().x) + " | " + to_string(sf::Mouse::getPosition().y));
 #endif
-#ifdef EDITOR_MODE
-		ScreenLog::setValue(0, to_string(sf::Mouse::getPosition(window.canvas).x) + " | " + to_string(sf::Mouse::getPosition(window.canvas).y));
-#endif
-		controlBox.resulveControl();
-		
+		controlBox.resulveControl(window);
 
 		World.Step(1 / 60.f, 8, 3);
 		window.updateState();
@@ -99,7 +83,7 @@ int main() {
 		s2.blit();
 		s3.blit();
 		player.blit();
-#ifndef GAME_MODE
+#ifdef DEV_MODE
 		screenLog.blit();
 #endif
 		window.drawAll();

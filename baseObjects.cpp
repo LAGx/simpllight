@@ -4,6 +4,7 @@
 #include "phisic.h"
 #include "log.h"
 #include "window.h"
+#include "state.h"
 using namespace std;
 using namespace sf;
 
@@ -253,4 +254,20 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord,float angle , strin
 
 StaticObject::~StaticObject() {
 
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////        CURSOR               ////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+Cursor::Cursor(b2World* World, std::string textr, std::string name) :DynamicObject(World, sf::Vector2f(0, 0), textr, name, circle_T, 1, true) {
+	depthRender = -500;
+}
+#include <string>
+void Cursor::positionMouse(int x, int y) {
+	body_ph->SetTransform(b2Vec2((x+spl::Window::currGlobalViewCord.x - spl::Window::screenSize.x/2)/SCALE_BOX, (y + spl::Window::currGlobalViewCord.y - spl::Window::screenSize.y / 2) / SCALE_BOX), 0);
+#ifdef DEV_MODE
+	ScreenLog::setValue(3, std::to_string(x) + " | " + std::to_string(y));
+#endif
 }
