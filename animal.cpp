@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include "service.h"
-#include "log.h"
+#include "state.h"
 
 using namespace std;
 using namespace sf;
@@ -88,22 +88,32 @@ void Player::update() {
 }
 
 
-void Player::moveTop() {
+inline void Player::moveTop() {
 	b2Vec2 curr(0, -1);
 	currForceVec += curr;
 }
-void Player::moveBottom() {
+inline void Player::moveBottom() {
 	b2Vec2 curr(0, 1);
 	currForceVec += curr;
 }
-void Player::moveLeft() {
+inline void Player::moveLeft() {
 	b2Vec2 curr(-1, 0);
 	currForceVec += curr;
 }
-void Player::moveRight() {
+inline void Player::moveRight() {
 	b2Vec2 curr(1, 0);
 	currForceVec += curr;
 }
+
+#ifdef DEV_MODE
+inline void Player::moveRadiusPlus() {
+	moveRadius(radiusSpeed);
+}
+inline void Player::moveRadiusMinus() {
+	moveRadius(-radiusSpeed);
+}
+#endif
+
 
 Player::~Player() {
 	delete cursor;

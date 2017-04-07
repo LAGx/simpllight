@@ -4,6 +4,7 @@
 #include "phisic.h"
 #include "log.h"
 #include "window.h"
+#include "state.h"
 
 using namespace std;
 using namespace sf;
@@ -105,6 +106,7 @@ void Alive::setRadius(float radius) {
 	updateRadiusZone();
 }
 
+#ifdef DEV_MODE
 void Alive::moveRadius(float radiusDelta) {
 	if (radiusZone + radiusDelta >= 1)
 		radiusZone += radiusDelta;
@@ -112,6 +114,7 @@ void Alive::moveRadius(float radiusDelta) {
 		radiusZone = 1;
 	updateRadiusZone();
 }
+#endif
 
 void Alive::setZoneVisible(bool isVisible) {
 	isVisibleZone = isVisible;

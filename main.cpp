@@ -10,6 +10,11 @@ using namespace std;
 
 int main() {
 
+	Log::clear();
+	Log::log("____________LOG SESSION START__________", true);
+
+	spl::Window window;
+
 	b2Vec2 Gravity(0.f, 0.f);
 	b2World World(Gravity);
 
@@ -17,9 +22,6 @@ int main() {
 	World.SetContactListener(&collideListener);
 
 	spl::ControlBox controlBox;
-
-	Log::clear();
-	Log::log("____________LOG SESSION START__________", true);
 
 #ifdef DEV_MODE
 	ScreenLog screenLog;
@@ -29,7 +31,11 @@ int main() {
 	screenLog.setNewLog("Mouse", 3);
 #endif
 
-	spl::Window window;
+#ifdef EDITOR_MODE
+	ScreenLog screenLog;
+	screenLog.setNewLog("Mouse", 0);
+#endif
+
  
     Person h(&World, sf::Vector2f(605, 190), "image/human/human1.png","human1");
 	Person h2(&World, sf::Vector2f(520, 354), "image/human/human2.png","human2");

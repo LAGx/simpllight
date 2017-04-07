@@ -4,7 +4,9 @@
 #pragma once
 #include <vector>
 #include <SFML/Graphics.hpp>
+#include "state.h"
 #include "window.h"
+
 
 namespace spl {
 
@@ -20,6 +22,7 @@ namespace spl {
 
 		virtual void moveRight() {} //for player
 
+#ifdef DEV_MODE
 		virtual void moveRadiusMinus() {} //for player
 
 		virtual void moveRadiusPlus() {} //for player
@@ -30,6 +33,7 @@ namespace spl {
 
 		virtual void wheelMouse(float delta) {} //mouse
 
+#endif
 		virtual void positionMouse(int x, int y) {} //mouse
 	};
 
