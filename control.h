@@ -23,9 +23,9 @@ namespace spl {
 
 		virtual void moveRight() {} //for player
 
-		virtual void selectMouse() {} //mouse
+		virtual void primaryMouseAction() {} //mouse
 
-		virtual void useMouse() {} //mouse
+		virtual void secondaryMouseAction() {} //mouse
 
 		virtual void wheelMouse(float delta) {} //mouse
 
@@ -45,6 +45,8 @@ namespace spl {
 
 			sf::Mouse::Button primaryMouseAction = sf::Mouse::Button::Left;
 			sf::Mouse::Button secondaryMouseAction = sf::Mouse::Button::Right;
+			sf::Mouse::Wheel verticalMouseWheel = sf::Mouse::Wheel::VerticalWheel;
+			sf::Mouse::Wheel horizontalMouseWheel = sf::Mouse::Wheel::HorizontalWheel;
 		} keyBindings;
 
 		std::vector<EventInterface*> controlObjects;

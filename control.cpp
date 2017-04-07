@@ -28,6 +28,8 @@ void ControlBox::updateKeyBindings() {
 
 		keyBindings.primaryMouseAction = (sf::Mouse::Button) settings.GetInteger("keyBindings", "primaryMouseAction", 0);
 		keyBindings.secondaryMouseAction = (sf::Mouse::Button) settings.GetInteger("keyBindings", "secondaryMouseAction", 1);
+		keyBindings.verticalMouseWheel = (sf::Mouse::Wheel) settings.GetInteger("keyBindings", "verticalMouseWheel", 0);
+		keyBindings.horizontalMouseWheel = (sf::Mouse::Wheel) settings.GetInteger("keyBindings", "horizontalMouseWheel", 1);
 	}
 }
 
@@ -40,7 +42,9 @@ void ControlBox::saveKeyBindings() {
 		<< "moveLeft = " << keyBindings.moveLeft << endl
 		<< "moveRight = " << keyBindings.moveRight << endl
 		<< "primaryMouseAction = " << keyBindings.primaryMouseAction << endl
-		<< "secondaryMouseAction = " << keyBindings.secondaryMouseAction << endl;
+		<< "secondaryMouseAction = " << keyBindings.secondaryMouseAction << endl
+		<< "verticalMouseWheel = " << keyBindings.verticalMouseWheel << endl
+		<< "horizontalMouseWheel = " << keyBindings.horizontalMouseWheel << endl;
 
 	Log::log("Saved 'settings.ini'");
 	settingsFile.close();
@@ -66,9 +70,9 @@ void ControlBox::resulveControl(Window &window) {
 		if (sf::Keyboard::isKeyPressed(keyBindings.moveRight))
 			controlObjects[i]->moveRight();
 		if (sf::Mouse::isButtonPressed(keyBindings.primaryMouseAction))
-			controlObjects[i]->selectMouse();
+			controlObjects[i]->primaryMouseAction();
 		if (sf::Mouse::isButtonPressed(keyBindings.secondaryMouseAction))
-			controlObjects[i]->useMouse();
+			controlObjects[i]->secondaryMouseAction();
 
 		controlObjects[i]->positionMouse(sf::Mouse::getPosition(window.canvas).x, sf::Mouse::getPosition(window.canvas).y);
 		if (event.type == sf::Event::MouseWheelScrolled) {
