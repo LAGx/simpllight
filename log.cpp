@@ -54,12 +54,12 @@ void Log::error(string err, bool time) {
 	else {
 		file << "ERROR|"  << getTime() << "|: " << err << endl;
 	}
-	log("_______EMERGENCY CLOSING PROGRAM_______", true);
-	log("____________LOG SESSION END____________", true);
 	file.close();
-	exit(EXIT_FAILURE);
 }
 
+Log::Exception::Exception(string error, bool isTime) {
+	Log::error(error, isTime);
+}
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ sf::Font ScreenLog::font;
 ScreenLog::ScreenLog() {
 	if (!font.loadFromFile("font/arial.ttf"))
 	{
-		Log::error("load screenLog font");
+		throw Log::Exception("load screenLog font");
 	}
 }
 
@@ -96,12 +96,12 @@ void ScreenLog::setValue(int id, string value) {
 			return;
 		}
 	}
-	Log::error("id screen log.");
+	throw Log::Exception("id screen log.");
 }
 
 void ScreenLog::blit() {
 	for (int i = 0; i < logText.size(); i++) {
-		logText[i].text.setPosition(spl::Window::currGlobalViewCord.x + 5- spl::Window::currScreenSize.x/2, 15 * logText[i].id + spl::Window::currGlobalViewCord.y- spl::Window::currScreenSize.y / 2);
+		logText[i].text.setPosition(spl::Window::currGlobalViewCord.x + 5- spl::Window::screenSize.x/2, 15 * logText[i].id + spl::Window::currGlobalViewCord.y- spl::Window::screenSize.y / 2);
 		spl::ToDraw td = { &logText[i].text, -1000 };
 		spl::Window::allDrawable.push_back(td);
 	}

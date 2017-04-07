@@ -5,6 +5,8 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "state.h"
+#include "window.h"
+
 
 namespace spl {
 
@@ -24,9 +26,15 @@ namespace spl {
 		virtual void moveRadiusMinus() {} //for player
 
 		virtual void moveRadiusPlus() {} //for player
+		
+		virtual void selectMouse() {} //mouse
 
-		virtual void herna() {} //TEST
+		virtual void useMouse() {} //mouse
+
+		virtual void wheelMouse(float delta) {} //mouse
+
 #endif
+		virtual void positionMouse(int x, int y) {} //mouse
 	};
 
 
@@ -42,11 +50,16 @@ namespace spl {
 
 			sf::Keyboard::Key moveRadiusMinus = sf::Keyboard::Unknown;
 			sf::Keyboard::Key moveRadiusPlus = sf::Keyboard::Unknown;
+
+			sf::Mouse::Button selectMouse = sf::Mouse::Button::Left;
+			sf::Mouse::Button useMouse = sf::Mouse::Button::Right;
 		};
 
 		std::vector<EventInterface*> controlObjects;
 
 		KeyBindings keyBindings;
+
+		sf::Event event;
 
 	public:
 
@@ -58,7 +71,7 @@ namespace spl {
 
 		void setControlObject(EventInterface*);
 
-		void resulveControl();
+		void resulveControl(spl::Window &window);
 	};
 
 
