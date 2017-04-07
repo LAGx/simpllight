@@ -19,6 +19,8 @@ public:
 
 	static void log(string log, bool time = false);
 
+	static void warning(string warn, bool time = false);
+
 	static void error(string err, bool time = false);
 
 };

@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include "service.h"
+#include "state.h"
 
 using namespace std;
 using namespace sf;
@@ -42,18 +43,18 @@ void Person::PAIForce() {
 	if (PAIdelta < PAIiter) {
 		PAIdelta++;
 		body_ph->ApplyForceToCenter(PAIvec, true);
-	}else {
+	}
+	else {
 		PAIiter = Rand::intRand(60,240);
 		PAIdelta = 0;
 		b2Vec2 temp(0, 0);
 		float x = Rand::intRand(0, 10), y = Rand::intRand(0, 10);
 		temp.Set(x,y);
 		temp.Normalize();
-		if (Rand::intRand(0, 1)) {
+		if (Rand::intRand(0, 1))
 			PAIvec = -speed*temp;
-		}else{
+		else
 			PAIvec = speed*temp;
-		}
 	}
 }
 
@@ -85,29 +86,31 @@ void Player::update() {
 }
 
 
-void Player::moveTop() {
+inline void Player::moveTop() {
 	b2Vec2 curr(0, -1);
 	currForceVec += curr;
 }
-void Player::moveBottom() {
+inline void Player::moveBottom() {
 	b2Vec2 curr(0, 1);
 	currForceVec += curr;
 }
-void Player::moveLeft() {
+inline void Player::moveLeft() {
 	b2Vec2 curr(-1, 0);
 	currForceVec += curr;
 }
-void Player::moveRight() {
+inline void Player::moveRight() {
 	b2Vec2 curr(1, 0);
 	currForceVec += curr;
 }
-void Player::moveRadiusPlus() {
+
+#ifdef DEV_MODE
+inline void Player::moveRadiusPlus() {
 	moveRadius(radiusSpeed);
 }
-void Player::moveRadiusMinus() {
+inline void Player::moveRadiusMinus() {
 	moveRadius(-radiusSpeed);
 }
-
+#endif
 
 Player::~Player() {
 }
