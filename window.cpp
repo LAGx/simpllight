@@ -19,6 +19,9 @@ Window::Window() {
 	view.setSize(900, 500);
 	view.setCenter(450, 250);
 #endif
+	updateState();
+	sf::Mouse::setPosition(sf::Vector2i(currGlobalViewCord), canvas);
+	canvas.setMouseCursorVisible(true);
 	canvas.setFramerateLimit(120);
 	canvas.setView(view);
 }
@@ -39,6 +42,7 @@ void Window::drawAll() {
 
 	canvas.display();
 	allDrawable.clear();
+	screenSize = sf::Vector2f(canvas.getSize());
 }
 
 Window::~Window() {
@@ -49,8 +53,7 @@ std::vector<ToDraw> Window::allDrawable;
 
 void Window::updateState() {
 	currGlobalViewCord = view.getCenter();
-	currScreenSize = sf::Vector2f(canvas.getSize());
 }
 
 sf::Vector2f Window::currGlobalViewCord;
-sf::Vector2f Window::currScreenSize;
+sf::Vector2f Window::screenSize;

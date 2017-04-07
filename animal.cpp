@@ -68,12 +68,14 @@ Person::~Person() {
 ////////////        PLAYER               ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-Player::Player(b2World* World, Vector2f initCord, string textr, string name) :Human(World, initCord, textr, name) {
+Player::Player(b2World* World, Vector2f initCord, string textr, string name, string textrCur) :Human(World, initCord, textr, name) {
+	cursor = new Cursor(World, textrCur);
 	speed = 2;
 }
 
 
 void Player::blit(){
+	cursor->blit();
 	update();
 	Human::blit();
 }
@@ -112,5 +114,8 @@ inline void Player::moveRadiusMinus() {
 }
 #endif
 
+
 Player::~Player() {
+	delete cursor;
 }
+

@@ -4,6 +4,7 @@
 #include "phisic.h"
 #include "log.h"
 #include "window.h"
+#include "state.h"
 using namespace std;
 using namespace sf;
 
@@ -14,7 +15,7 @@ using namespace sf;
 
 BaseObject::BaseObject(Vector2f initCord, string textr) {
 	if (!texture.loadFromFile(textr)) {
-		Log::error("Texture load in BaseObject from " + textr, true);
+		throw Log::Exception("Texture load in BaseObject from " + textr, true);
 	}
 	texture.setSmooth(true);
 	g_body.setTexture(texture);
@@ -50,7 +51,7 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 	this->name = name;
 	
 	if ((texture.getSize().x - texture.getSize().y) && type != 3) 
-		Log::error("Texture " + textr + " have to be square.");
+		throw Log::Exception("Texture " + textr + " have to be square.");
 	
 	b2BodyDef b_bdef;
 	b_bdef.type = b2_dynamicBody;
@@ -126,7 +127,7 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 			break;
 		}
 		default:
-			Log::error("No such type (figure type) in DynamicObject");
+			throw Log::Exception("No such type (figure type) in DynamicObject");
 	}
 
 	b_fixture.isSensor = isSensor;
@@ -167,7 +168,7 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord,float angle , strin
 	this->name = name;
 
 	if ((texture.getSize().x - texture.getSize().y) && type != 3)
-		Log::error("Texture " + textr + " have to be square.");
+		throw Log::Exception("Texture " + textr + " have to be square.");
 
 	b2BodyDef b_bdef;
 	b_bdef.type = b2_staticBody;
@@ -241,7 +242,7 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord,float angle , strin
 		break;
 	}
 	default:
-		Log::error("No such type (figure type) in StaticObject");
+		throw Log::Exception("No such type (figure type) in StaticObject");
 	}
 
 	b_fixture.isSensor = isSensor;
@@ -253,4 +254,20 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord,float angle , strin
 
 StaticObject::~StaticObject() {
 
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////        CURSOR               ////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+Cursor::Cursor(b2World* World, std::string textr, std::string name) :DynamicObject(World, sf::Vector2f(0, 0), textr, name, circle_T, 1, true) {
+	depthRender = -500;
+}
+#include <string>
+void Cursor::positionMouse(int x, int y) {
+	body_ph->SetTransform(b2Vec2((x+spl::Window::currGlobalViewCord.x - spl::Window::screenSize.x/2)/SCALE_BOX, (y + spl::Window::currGlobalViewCord.y - spl::Window::screenSize.y / 2) / SCALE_BOX), 0);
+#ifdef DEV_MODE
+	ScreenLog::setValue(3, std::to_string(x) + " | " + std::to_string(y));
+#endif
 }
