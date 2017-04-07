@@ -52,7 +52,7 @@ namespace spl {
 
 		ControlBox();
 		
-		void updateKeyBindings();//for xml setting key
+		void updateKeyBindings();
 		
 		bool deleteControlObject(EventInterface*);
 
