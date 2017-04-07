@@ -15,8 +15,6 @@ class State {
 	 
 	public:
 
-		#define DEV_MODE //GAME_MODE, DEV_MODE, EDITOR_MODE
-
 		static std::string current_state; //states of game like lvls/menus/ect
 
 		static sf::Color mainColorMajor;

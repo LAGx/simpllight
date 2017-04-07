@@ -105,15 +105,6 @@ inline void Player::moveRight() {
 	currForceVec += curr;
 }
 
-#ifdef DEV_MODE
-inline void Player::moveRadiusPlus() {
-	moveRadius(radiusSpeed);
-}
-inline void Player::moveRadiusMinus() {
-	moveRadius(-radiusSpeed);
-}
-#endif
-
 
 Player::~Player() {
 	delete cursor;

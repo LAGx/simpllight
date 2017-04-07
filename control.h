@@ -22,7 +22,6 @@ namespace spl {
 
 		virtual void moveRight() {} //for player
 
-#ifdef DEV_MODE
 		virtual void moveRadiusMinus() {} //for player
 
 		virtual void moveRadiusPlus() {} //for player
@@ -33,8 +32,9 @@ namespace spl {
 
 		virtual void wheelMouse(float delta) {} //mouse
 
-#endif
 		virtual void positionMouse(int x, int y) {} //mouse
+
+		virtual void l_ctrl() {} //mouse
 	};
 
 
@@ -47,6 +47,8 @@ namespace spl {
 			sf::Keyboard::Key moveBottom = sf::Keyboard::Unknown;
 			sf::Keyboard::Key moveLeft = sf::Keyboard::Unknown;
 			sf::Keyboard::Key moveRight = sf::Keyboard::Unknown;
+
+			sf::Keyboard::Key l_ctrl = sf::Keyboard::Unknown;
 
 			sf::Keyboard::Key moveRadiusMinus = sf::Keyboard::Unknown;
 			sf::Keyboard::Key moveRadiusPlus = sf::Keyboard::Unknown;

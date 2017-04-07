@@ -29,6 +29,7 @@ int main() {
 	screenLog.setNewLog("collision h1", 1);
 	screenLog.setNewLog("collision h2", 2);
 	screenLog.setNewLog("Mouse", 3);
+	screenLog.setNewLog("Tests", 4);
 #endif
 
 #ifdef EDITOR_MODE
@@ -39,9 +40,13 @@ int main() {
  
     Person h(&World, sf::Vector2f(605, 190), "image/human/human1.png","human1");
 	Person h2(&World, sf::Vector2f(520, 354), "image/human/human2.png","human2");
-	Player player(&World, sf::Vector2f(370, 235), "image/human/player.png","player", "image/cursor.png");
-	controlBox.setControlObject(&player);
-	controlBox.setControlObject(player.cursor);
+	//Player player(&World, sf::Vector2f(370, 235), "image/human/player.png","player", "image/cursor.png");
+	//controlBox.setControlObject(&player);
+	//controlBox.setControlObject(player.cursor);
+	Editor edit(&World,window.view ,"image/cursor.png");
+	controlBox.setControlObject(&edit);
+	controlBox.setControlObject(edit.cursor);
+
 	House house(&World, sf::Vector2f(150, 100), -120,"image/house/house2.png", "image/house/door2.png", "house");
 	House house1(&World, sf::Vector2f(300, 400), 30, "image/house/house.png", "image/house/door.png", "house1");
 	House house2(&World, sf::Vector2f(500, 100), 120, "image/house/house.png", "image/house/door.png", "house2");
@@ -59,7 +64,7 @@ int main() {
 #endif
 while (window.canvas.isOpen()){
 
-		window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
+		//window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
 
 #ifdef DEV_MODE
 		/////////////// FPS //////////////////
@@ -88,7 +93,8 @@ while (window.canvas.isOpen()){
 		s1.blit();
 		s2.blit();
 		s3.blit();
-		player.blit();
+		edit.blit();
+		//player.blit();
 #ifdef DEV_MODE
 		screenLog.blit();
 #endif

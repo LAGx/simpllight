@@ -198,9 +198,41 @@ public:
 };
 
 
+class Editor: public spl::EventInterface {
+private:
+	bool isPressedContrl = false;
+	float speed = 1;
+	float delta = 0;
+	sf::Vector2f currSize;
+	sf::Vector2f currPosition;
+
+	sf::View &view;
+protected:
+	void moveTop();
+	void moveBottom();
+	void moveLeft();
+	void moveRight();
+	void l_ctrl();
+
+	void selectMouse();
+	void useMouse();
+	void wheelMouse(float delta);
+
+public:
+	Cursor *cursor;
+
+	Editor(b2World* World, sf::View &view, std::string textrCur = "None");
+
+	void blit();
+
+	~Editor();
+};
+
+
 class Player : public Human, public spl::EventInterface{
 private:
 	b2Vec2 currForceVec;
+
 protected:
 	void moveTop();
 	void moveBottom();

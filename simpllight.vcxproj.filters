@@ -166,4 +166,7 @@
   <ItemGroup>
     <Text Include="log.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
 </Project>
