@@ -1,6 +1,7 @@
-#include "game_objects.h"
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
+
+#include "game_objects.h"
 #include "service.h"
 #include "state.h"
 
@@ -13,7 +14,7 @@ using namespace sf;
 
 Human::Human(b2World* World, Vector2f initCord, string textr, string name) :Alive(World, initCord, textr, name, rect_T, 10) {
 	setDrug(3, 2);
-} 
+}
 
 Human::~Human() {
 }
@@ -45,11 +46,11 @@ void Person::PAIForce() {
 		body_ph->ApplyForceToCenter(PAIvec, true);
 	}
 	else {
-		PAIiter = Rand::intRand(60,240);
+		PAIiter = Rand::intRand(60, 240);
 		PAIdelta = 0;
 		b2Vec2 temp(0, 0);
 		float x = Rand::intRand(0, 10), y = Rand::intRand(0, 10);
-		temp.Set(x,y);
+		temp.Set(x, y);
 		temp.Normalize();
 		if (Rand::intRand(0, 1))
 			PAIvec = -speed*temp;
@@ -74,7 +75,7 @@ Player::Player(b2World* World, Vector2f initCord, string textr, string name, str
 }
 
 
-void Player::blit(){
+void Player::blit() {
 	cursor->blit();
 	update();
 	Human::blit();

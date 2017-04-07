@@ -5,8 +5,10 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
+
 #include "control.h"
 #include "state.h"
+
 enum figureType {
 	circle_T = 1,
 	tringle_T,
@@ -37,7 +39,7 @@ public:
 class DynamicObject :public BaseObject {
 private:
 	void update();
-	
+
 protected:
 
 	void setDrug(float linear, float angular);
@@ -62,13 +64,13 @@ class StaticObject :public BaseObject {
 protected:
 	b2Body *body_ph;
 public:
-	
+
 	std::string name = "None";
 
 	//can be load only square texture. for rect сan be not square
 	//figureSize - radius of figure. for rect it`s shadow size
 	//angle in degree. 
-	StaticObject(b2World* World, sf::Vector2f initCord,float angle, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);
+	StaticObject(b2World* World, sf::Vector2f initCord, float angle, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);
 
 	~StaticObject();
 };
@@ -145,13 +147,13 @@ public:
 	bool decreaseHealth(int delta = 0); //1 - if health >= 0
 
 	void setRadius(float radius = 0);
-#ifdef DEV_MODE
+
 	void moveRadius(float radius_delta = 0);
-#endif
+
 	void setZoneVisible(bool isVisible = true);
 
 	void blit();
-	
+
 	~Alive();
 
 };
@@ -163,7 +165,7 @@ private:
 protected:
 
 public:
-	
+
 	//Human texture have to be a single color with shadow(10 px) 32x32. 
 	Human(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
@@ -171,7 +173,7 @@ public:
 };
 
 
-class Person : public Human{
+class Person : public Human {
 private:
 	void PAIForce();//pseudo AI
 	void update();
@@ -181,7 +183,7 @@ private:
 	int PAIiter = 0;
 
 protected:
-	
+
 public:
 	Person(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
@@ -198,14 +200,14 @@ public:
 };
 
 
-class Player : public Human, public spl::EventInterface{
+class Player : public Human, public spl::EventInterface {
 private:
 	b2Vec2 currForceVec;
 protected:
 	void moveTop();
 	void moveBottom();
 	void moveLeft();
-	void moveRight();	
+	void moveRight();
 
 	void update();
 public:

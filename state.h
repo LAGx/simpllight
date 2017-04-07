@@ -11,16 +11,14 @@
 
 
 class State {
-	private:
-	 
-	public:
+private:
 
-		#define DEV_MODE //GAME_MODE, DEV_MODE, EDITOR_MODE
+public:
 
-		static std::string current_state; //states of game like lvls/menus/ect
+	static std::string current_state; //states of game like lvls/menus/ect
 
-		static sf::Color mainColorMajor;
+	static sf::Color mainColorMajor;
 
-		static sf::Color mainColorMinor;
+	static sf::Color mainColorMinor;
 };
 #endif

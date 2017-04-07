@@ -1,6 +1,7 @@
-#include "service.h"
 #include <iostream>
 #include <random>
+
+#include "service.h"
 
 unsigned int Rand::intRand(int min, int max) {
 	std::mt19937 rng;

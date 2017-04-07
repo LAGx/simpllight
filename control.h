@@ -4,6 +4,7 @@
 #pragma once
 #include <vector>
 #include <SFML/Graphics.hpp>
+
 #include "state.h"
 #include "window.h"
 
@@ -22,18 +23,12 @@ namespace spl {
 
 		virtual void moveRight() {} //for player
 
-#ifdef DEV_MODE
-		virtual void moveRadiusMinus() {} //for player
-
-		virtual void moveRadiusPlus() {} //for player
-		
 		virtual void selectMouse() {} //mouse
 
 		virtual void useMouse() {} //mouse
 
 		virtual void wheelMouse(float delta) {} //mouse
 
-#endif
 		virtual void positionMouse(int x, int y) {} //mouse
 	};
 
@@ -48,11 +43,8 @@ namespace spl {
 			sf::Keyboard::Key moveLeft = sf::Keyboard::Unknown;
 			sf::Keyboard::Key moveRight = sf::Keyboard::Unknown;
 
-			sf::Keyboard::Key moveRadiusMinus = sf::Keyboard::Unknown;
-			sf::Keyboard::Key moveRadiusPlus = sf::Keyboard::Unknown;
-
-			sf::Mouse::Button selectMouse = sf::Mouse::Button::Left;
-			sf::Mouse::Button useMouse = sf::Mouse::Button::Right;
+			sf::Mouse::Button primaryMouseAction = sf::Mouse::Button::Left;
+			sf::Mouse::Button secondaryMouseAction = sf::Mouse::Button::Right;
 		};
 
 		std::vector<EventInterface*> controlObjects;
@@ -64,17 +56,14 @@ namespace spl {
 	public:
 
 		ControlBox();
-		
+
 		void updateKeyBindings();
-		
+
 		bool deleteControlObject(EventInterface*);
 
 		void setControlObject(EventInterface*);
 
 		void resulveControl(spl::Window &window);
 	};
-
-
-
 }
 #endif

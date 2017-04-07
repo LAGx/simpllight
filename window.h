@@ -31,6 +31,5 @@ namespace spl {
 
 		~Window();
 	};
-
 }
 #endif

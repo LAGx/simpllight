@@ -21,14 +21,12 @@ public:
 	public:
 		Exception(string error, bool isTime = false);
 	};
- 
+
 	static void clear();
 
 	static void log(string log, bool time = false);
 
 	static void warning(string warn, bool time = false);
-
-
 
 };
 
@@ -42,14 +40,14 @@ private:
 
 	static sf::Font font;
 	static vector<lgT> logText;
-	
+
 public:
-	
+
 	ScreenLog();
-	void setNewLog(string name,int id = 0);
+	void setNewLog(string name, int id = 0);
 
 	static void setValue(int id, string value = "None");
-	
+
 	void blit();
 };
 #endif

@@ -1,10 +1,11 @@
 ﻿#include <SFML/Graphics.hpp>
-#include "state.h"
-#include "window.h"
 #include <iostream>
 #include <algorithm>
 #include <vector>
 #include <Windows.h>
+
+#include "state.h"
+#include "window.h"
 
 using namespace spl;
 

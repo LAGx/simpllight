@@ -1,9 +1,10 @@
 ﻿#pragma once
-#include "log.h"
 #include <fstream>
 #include <string>
 #include <ctime>
 #include <SFML/Graphics.hpp>
+
+#include "log.h"
 #include "window.h"
 
 using namespace std;
@@ -52,7 +53,7 @@ void Log::error(string err, bool time) {
 		file << "ERROR: " << err << endl;
 	}
 	else {
-		file << "ERROR|"  << getTime() << "|: " << err << endl;
+		file << "ERROR|" << getTime() << "|: " << err << endl;
 	}
 	file.close();
 }
@@ -101,7 +102,7 @@ void ScreenLog::setValue(int id, string value) {
 
 void ScreenLog::blit() {
 	for (int i = 0; i < logText.size(); i++) {
-		logText[i].text.setPosition(spl::Window::currGlobalViewCord.x + 5- spl::Window::screenSize.x/2, 15 * logText[i].id + spl::Window::currGlobalViewCord.y- spl::Window::screenSize.y / 2);
+		logText[i].text.setPosition(spl::Window::currGlobalViewCord.x + 5 - spl::Window::screenSize.x / 2, 15 * logText[i].id + spl::Window::currGlobalViewCord.y - spl::Window::screenSize.y / 2);
 		spl::ToDraw td = { &logText[i].text, -1000 };
 		spl::Window::allDrawable.push_back(td);
 	}
