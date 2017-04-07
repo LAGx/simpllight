@@ -1,7 +1,10 @@
-#include "control.h"
 #include <SFML/Graphics.hpp>
+
+#include "control.h"
 #include "log.h"
 #include "state.h"
+#include "INIReader.h"
+
 
 using namespace spl;
 
@@ -10,13 +13,19 @@ ControlBox::ControlBox(){
 }
 
 void ControlBox::updateKeyBindings() {
-	keyBindings.moveTop = sf::Keyboard::W;
-	keyBindings.moveBottom = sf::Keyboard::S;
-	keyBindings.moveLeft = sf::Keyboard::A;
-	keyBindings.moveRight = sf::Keyboard::D;
+	INIReader settings("settings.ini");
 
-	keyBindings.moveRadiusPlus = sf::Keyboard::E;
-	keyBindings.moveRadiusMinus = sf::Keyboard::Q;
+	if (settings.ParseError() < 0)
+		Log::warning("Can't load 'settings.ini', using default bindings\n");
+
+	keyBindings.moveTop = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveTop", 22);
+	keyBindings.moveBottom = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveBottom", 18);
+	keyBindings.moveLeft = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveLeft", 0);
+	keyBindings.moveRight = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRight", 3);
+#ifdef DEV_MODE
+	keyBindings.moveRadiusPlus = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRadiusPlus", 4);
+	keyBindings.moveRadiusMinus = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRadiusMinus", 16);
+#endif
 }
 
 void ControlBox::setControlObject(EventInterface* obj) {
