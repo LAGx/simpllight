@@ -1,7 +1,13 @@
-﻿#pragma once
+﻿#ifndef _GAME_OBJECTS_
+#define _GAME_OBJECTS_
+
+#pragma once
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
+
+#include "control.h"
+#include "state.h"
 
 enum figureType {
 	circle_T = 1,
@@ -33,7 +39,7 @@ public:
 class DynamicObject :public BaseObject {
 private:
 	void update();
-	
+
 protected:
 
 	void setDrug(float linear, float angular);
@@ -46,9 +52,7 @@ public:
 
 	//can be load only square texture. for rect сan be not square
 	//figureSize - radius of figure. for rect it`s shadow size
-	DynamicObject(b2World* World, sf::Vector2f initCord, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);//circle, tringle
-	
-
+	DynamicObject(b2World* World, sf::Vector2f initCord, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);
 
 	void blit();
 
@@ -60,13 +64,13 @@ class StaticObject :public BaseObject {
 protected:
 	b2Body *body_ph;
 public:
-	
+
 	std::string name = "None";
 
 	//can be load only square texture. for rect сan be not square
 	//figureSize - radius of figure. for rect it`s shadow size
 	//angle in degree. 
-	StaticObject(b2World* World, sf::Vector2f initCord,float angle, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);
+	StaticObject(b2World* World, sf::Vector2f initCord, float angle, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);
 
 	~StaticObject();
 };
@@ -88,14 +92,14 @@ public:
 
 class Fir_tree :public StaticObject {
 private:
-	int helth = 100;
+	int health = 100;
 public:
 
 	//texture 40x40. size - 17
 	Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
-	void setHelth(int helth);
-	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+	void setHealth(int health);
+	bool decreaseHealth(int delta = 0); //1 - if health >= 0
 
 	~Fir_tree();
 };
@@ -103,14 +107,14 @@ public:
 
 class Shrub :public StaticObject {
 private:
-	int helth = 100;
+	int health = 100;
 public:
 
 	//sahdow size 15, rect trtigger
 	Shrub(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
-	void setHelth(int helth);
-	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+	void setHealth(int health);
+	bool decreaseHealth(int delta = 0); //1 - if health >= 0
 
 	~Shrub();
 };
@@ -131,23 +135,25 @@ private:
 
 	void update();
 protected:
-
-
-	int helth = 100;
+	float radiusSpeed = 1;
+	float speed = 1;
+	int health = 100;
 
 public:
 
 	Alive(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, figureType type, float figureSize);
 
-	void setHelth(int helth);
-	bool decreaseHelth(int delta = 0); //1 - if health >= 0
+	void setHealth(int health);
+	bool decreaseHealth(int delta = 0); //1 - if health >= 0
 
 	void setRadius(float radius = 0);
+
 	void moveRadius(float radius_delta = 0);
+
 	void setZoneVisible(bool isVisible = true);
 
 	void blit();
-	
+
 	~Alive();
 
 };
@@ -157,7 +163,7 @@ class Human :public Alive {
 private:
 
 protected:
-	float speed = 0.5;
+
 public:
 
 	//Human texture have to be a single color with shadow(10 px) 32x32. 
@@ -177,7 +183,7 @@ private:
 	int PAIiter = 0;
 
 protected:
-	
+
 public:
 	Person(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
 
@@ -186,18 +192,31 @@ public:
 	~Person();
 };
 
-
-class Player : public Human {
+class Cursor : public DynamicObject, public spl::EventInterface {
 private:
-
-protected:
-
+	void positionMouse(int x, int y);
 public:
+	Cursor(b2World* World, std::string textr, std::string name = "cursor");
+};
 
-	Player(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+
+class Player : public Human, public spl::EventInterface {
+private:
+	b2Vec2 currForceVec;
+protected:
+	void moveTop();
+	void moveBottom();
+	void moveLeft();
+	void moveRight();
+
+	void update();
+public:
+	Cursor *cursor;
+
+	Player(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, std::string textrCur = "None");
 
 	void blit();
 
 	~Player();
 };
-
+#endif

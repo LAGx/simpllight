@@ -75,7 +75,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Game_Lib\SFML_pack\include;C:\Game_Lib\Box2d\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Game_Lib\inih\cpp;C:\Game_Lib\json;C:\Game_Lib\SFML_pack\include;C:\Game_Lib\Box2d\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>SFML_DYNAMIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -117,6 +117,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\cpp\INIReader.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\ini.h" />
+    <ClInclude Include="control.h" />
     <ClInclude Include="game_objects.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="phisic.h" />
@@ -144,8 +147,11 @@
     <Image Include="image\veget\tree.png" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\Game_Lib\inih\cpp\INIReader.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\Game_Lib\inih\ini.c" />
     <ClCompile Include="animal.cpp" />
     <ClCompile Include="baseObjects.cpp" />
+    <ClCompile Include="control.cpp" />
     <ClCompile Include="gameObjects.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="main.cpp" />
@@ -153,6 +159,9 @@
     <ClCompile Include="service.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="log.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

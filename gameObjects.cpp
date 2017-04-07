@@ -1,9 +1,11 @@
-#include "game_objects.h"
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
+
+#include "game_objects.h"
 #include "phisic.h"
 #include "log.h"
 #include "window.h"
+#include "state.h"
 
 using namespace std;
 using namespace sf;
@@ -15,9 +17,9 @@ using namespace sf;
 House::House(b2World* World, Vector2f initCord, float angle, string textureHouse, string textureDoor, string name) :StaticObject(World, initCord, angle, textureHouse, name, rect_T, 10, false) {
 	depthRender = -100;
 	Vector2f doorCord(initCord);
-	doorCord.x = doorCord.x + ((texture.getSize().y)/2-10) * sin(angle / DEG_BOX);
-	doorCord.y = doorCord.y - ((texture.getSize().y)/2-10) * cos(angle / DEG_BOX);
-	door = new StaticObject(World, doorCord, angle,textureDoor,name+"_d",rect_T,4,true);
+	doorCord.x = doorCord.x + ((texture.getSize().y) / 2 - 10) * sin(angle / DEG_BOX);
+	doorCord.y = doorCord.y - ((texture.getSize().y) / 2 - 10) * cos(angle / DEG_BOX);
+	door = new StaticObject(World, doorCord, angle, textureDoor, name + "_d", rect_T, 4, true);
 	door->depthRender = depthRender - 1;
 }
 
@@ -38,15 +40,15 @@ House::~House() {
 Fir_tree::Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name) :StaticObject(World, initCord, 0, textr, name, tringle_T, 17, false) {
 }
 
-bool Fir_tree::decreaseHelth(int delta){
-	helth -= delta;
-	if (helth <= 0)
+bool Fir_tree::decreaseHealth(int delta) {
+	health -= delta;
+	if (health <= 0)
 		return 0;
 	return 1;
 }
 
-void Fir_tree::setHelth(int helth) {
-	this->helth = helth;
+void Fir_tree::setHealth(int health) {
+	this->health = health;
 }
 
 Fir_tree::~Fir_tree() {
@@ -62,15 +64,15 @@ Shrub::Shrub(b2World* World, sf::Vector2f initCord, std::string textr, std::stri
 	depthRender = -200;
 }
 
-bool Shrub::decreaseHelth(int delta) {
-	helth -= delta;
-	if (helth <= 0)
+bool Shrub::decreaseHealth(int delta) {
+	health -= delta;
+	if (health <= 0)
 		return 0;
 	return 1;
 }
 
-void Shrub::setHelth(int helth) {
-	this->helth = helth;
+void Shrub::setHealth(int health) {
+	this->health = health;
 }
 
 Shrub::~Shrub() {
@@ -80,10 +82,10 @@ Shrub::~Shrub() {
 ////////////        ALIVE        ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-Alive::Alive(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, figureType type, float figureSize): DynamicObject(World, initCord, textr, name, type, figureSize, false) {
+Alive::Alive(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, figureType type, float figureSize) : DynamicObject(World, initCord, textr, name, type, figureSize, false) {
 
-	if (!texture_zone.loadFromFile(textr, sf::IntRect(texture.getSize().x/2, texture.getSize().x / 2, 2, 2))) {
-		Log::error("Texture load in Alive. ");
+	if (!texture_zone.loadFromFile(textr, sf::IntRect(texture.getSize().x / 2, texture.getSize().x / 2, 2, 2))) {
+		throw Log::Exception("Texture load in Alive. ");
 	}
 	texture_zone.setSmooth(true);
 	g_zone.setRadius(radiusZone);
@@ -105,6 +107,7 @@ void Alive::setRadius(float radius) {
 	updateRadiusZone();
 }
 
+#ifdef DEV_MODE
 void Alive::moveRadius(float radiusDelta) {
 	if (radiusZone + radiusDelta >= 1)
 		radiusZone += radiusDelta;
@@ -112,6 +115,7 @@ void Alive::moveRadius(float radiusDelta) {
 		radiusZone = 1;
 	updateRadiusZone();
 }
+#endif
 
 void Alive::setZoneVisible(bool isVisible) {
 	isVisibleZone = isVisible;
@@ -148,15 +152,15 @@ void Alive::blit() {
 	}
 }
 
-bool Alive::decreaseHelth(int delta) {
-	helth -= delta;
-	if (helth <= 0)
+bool Alive::decreaseHealth(int delta) {
+	health -= delta;
+	if (health <= 0)
 		return 0;
 	return 1;
 }
 
-void Alive::setHelth(int helth) {
-	this->helth = helth;
+void Alive::setHealth(int health) {
+	this->health = health;
 }
 
 Alive::~Alive() {

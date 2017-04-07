@@ -1,12 +1,19 @@
+#include <SFML/Graphics.hpp>
+#include <iostream>
+
 #include "window.h"
 #include "log.h"
-#include <SFML/Graphics.hpp>
 #include "phisic.h"
-#include <iostream>
 #include "game_objects.h"
+#include "state.h"
 using namespace std;
 
 int main() {
+
+	Log::clear();
+	Log::log("____________LOG SESSION START__________", true);
+
+	spl::Window window;
 
 	b2Vec2 Gravity(0.f, 0.f);
 	b2World World(Gravity);
@@ -14,22 +21,28 @@ int main() {
 	CollideListener collideListener;
 	World.SetContactListener(&collideListener);
 
+	spl::ControlBox controlBox;
 
-	Log::clear();
-	Log::log("____________LOG SESSION START__________", true);
-
+#ifdef DEV_MODE
 	ScreenLog screenLog;
 	screenLog.setNewLog("FPS", 0);
 	screenLog.setNewLog("collision h1", 1);
 	screenLog.setNewLog("collision h2", 2);
-	screenLog.setNewLog("Mouse: ", 3);	spl::Window window;
+	screenLog.setNewLog("Mouse", 3);
+#endif
 
- 
-    Person h(&World, sf::Vector2f(605, 190), "image/human/human1.png","human1");
-	Person h2(&World, sf::Vector2f(520, 354), "image/human/human2.png","human2");
-	Player player(&World, sf::Vector2f(370, 235), "image/human/player.png","player");
+#ifdef EDITOR_MODE
+	ScreenLog screenLog;
+	screenLog.setNewLog("Mouse", 0);
+#endif
 
-	House house(&World, sf::Vector2f(150, 100), -120,"image/house/house2.png", "image/house/door2.png", "house");
+
+	Person h(&World, sf::Vector2f(605, 190), "image/human/human1.png", "human1");
+	Person h2(&World, sf::Vector2f(520, 354), "image/human/human2.png", "human2");
+	Player player(&World, sf::Vector2f(370, 235), "image/human/player.png", "player", "image/cursor.png");
+	controlBox.setControlObject(&player);
+	controlBox.setControlObject(player.cursor);
+	House house(&World, sf::Vector2f(150, 100), -120, "image/house/house2.png", "image/house/door2.png", "house");
 	House house1(&World, sf::Vector2f(300, 400), 30, "image/house/house.png", "image/house/door.png", "house1");
 	House house2(&World, sf::Vector2f(500, 100), 120, "image/house/house.png", "image/house/door.png", "house2");
 	Fir_tree y1(&World, sf::Vector2f(350, 175), "image/veget/tree.png", "y1");
@@ -40,50 +53,27 @@ int main() {
 	Shrub s2(&World, sf::Vector2f(397, 324), "image/veget/shrub2.png", "sh2");
 	Shrub s3(&World, sf::Vector2f(492, 290), "image/veget/shrub2.png", "sh3");
 
-
+#ifdef DEV_MODE
 	int i = 0;
-	sf::Clock clock;	float speed = 2;
-	while (window.canvas.isOpen()){
-		sf::Event event;
-		
-
-		while (window.canvas.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
-				window.canvas.close();
-		}
-		
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-			player.body_ph->ApplyForceToCenter(b2Vec2(0, -speed), true);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-			player.body_ph->ApplyForceToCenter(b2Vec2(0, speed), true);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-			player.body_ph->ApplyForceToCenter(b2Vec2(speed, 0), true);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-			player.body_ph->ApplyForceToCenter(b2Vec2(-speed, 0), true);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
-			player.moveRadius(1);
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-			player.moveRadius(-1);
-		}
-		
+	sf::Clock clock;
+#endif
+	while (window.canvas.isOpen()) {
 
 		window.view.setCenter(sf::Vector2f(player.body_ph->GetPosition().x*SCALE_BOX, player.body_ph->GetPosition().y*SCALE_BOX));
+
+#ifdef DEV_MODE
 		/////////////// FPS //////////////////
 		if (i > 15) {
-			ScreenLog::setValue(1, to_string((int) (1.f / clock.getElapsedTime().asSeconds() )));
+			ScreenLog::setValue(0, to_string((int)(1.f / clock.getElapsedTime().asSeconds())));
 			i = 0;
 		}
-		else 
+		else
 			i++;
 		clock.restart();
 		///////////////////////////////
-
-		ScreenLog::setValue(3, to_string(sf::Mouse::getPosition(window.canvas).x) + " | " + to_string(sf::Mouse::getPosition(window.canvas).y));
+	//	ScreenLog::setValue(3, to_string(sf::Mouse::getPosition().x) + " | " + to_string(sf::Mouse::getPosition().y));
+#endif
+		controlBox.resulveControl(window);
 
 		World.Step(1 / 60.f, 8, 3);
 		window.updateState();
@@ -99,9 +89,11 @@ int main() {
 		s2.blit();
 		s3.blit();
 		player.blit();
+#ifdef DEV_MODE
 		screenLog.blit();
+#endif
 		window.drawAll();
-}
+	}
 	Log::log("____________LOG SESSION END____________", true);
 	return 0;
 }

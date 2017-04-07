@@ -40,6 +40,12 @@
     <Filter Include="Resource Files\image\human">
       <UniqueIdentifier>{546684ec-1712-43c9-ab85-a5f61842245f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\INIReader">
+      <UniqueIdentifier>{68dc998d-c7e0-4e73-bee6-d55687be25b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\INIReader">
+      <UniqueIdentifier>{9cd6fb03-77ce-4bcf-996e-159e7f3e241b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="window.h">
@@ -59,6 +65,15 @@
     </ClInclude>
     <ClInclude Include="state.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="control.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\cpp\INIReader.h">
+      <Filter>Header Files\INIReader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\ini.h">
+      <Filter>Header Files\INIReader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -138,5 +153,17 @@
     <ClCompile Include="state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="control.cpp">
+      <Filter>Source Files\service</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Game_Lib\inih\ini.c">
+      <Filter>Source Files\INIReader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\Game_Lib\inih\cpp\INIReader.cpp">
+      <Filter>Source Files\INIReader</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="log.txt" />
   </ItemGroup>
 </Project>

@@ -1,11 +1,11 @@
 ﻿#pragma once
-#include "log.h"
 #include <fstream>
 #include <string>
 #include <ctime>
 #include <SFML/Graphics.hpp>
+
+#include "log.h"
 #include "window.h"
-#include "state.h"
 
 using namespace std;
 
@@ -36,17 +36,31 @@ void Log::log(string log, bool time) {
 	file.close();
 }
 
+void Log::warning(string warn, bool time) {
+	ofstream file(logName, ios_base::app);
+	if (!time) {
+		file << "WARNING: " << warn << endl;
+	}
+	else {
+		file << "WARNING|" << getTime() << "|: " << warn << endl;
+	}
+	file.close();
+}
+
 void Log::error(string err, bool time) {
 	ofstream file(logName, ios_base::app);
 	if (!time) {
 		file << "ERROR: " << err << endl;
 	}
 	else {
-		file << "ERROR|"  << getTime() << "|: " << err << endl;
+		file << "ERROR|" << getTime() << "|: " << err << endl;
 	}
 	file.close();
 }
 
+Log::Exception::Exception(string error, bool isTime) {
+	Log::error(error, isTime);
+}
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -59,7 +73,7 @@ sf::Font ScreenLog::font;
 ScreenLog::ScreenLog() {
 	if (!font.loadFromFile("font/arial.ttf"))
 	{
-		Log::error("load screenLog font");
+		throw Log::Exception("load screenLog font");
 	}
 }
 
@@ -83,12 +97,12 @@ void ScreenLog::setValue(int id, string value) {
 			return;
 		}
 	}
-	Log::error("id screen log.");
+	throw Log::Exception("id screen log.");
 }
 
 void ScreenLog::blit() {
 	for (int i = 0; i < logText.size(); i++) {
-		logText[i].text.setPosition(spl::Window::currGlobalViewCord.x + 5- spl::Window::currScreenSize.x/2, 15 * logText[i].id + spl::Window::currGlobalViewCord.y- spl::Window::currScreenSize.y / 2);
+		logText[i].text.setPosition(spl::Window::currGlobalViewCord.x + 5 - spl::Window::screenSize.x / 2, 15 * logText[i].id + spl::Window::currGlobalViewCord.y - spl::Window::screenSize.y / 2);
 		spl::ToDraw td = { &logText[i].text, -1000 };
 		spl::Window::allDrawable.push_back(td);
 	}

@@ -27,10 +27,9 @@ namespace spl {
 		void updateState();
 
 		static sf::Vector2f currGlobalViewCord;
-		static sf::Vector2f currScreenSize;
+		static sf::Vector2f screenSize;
 
 		~Window();
 	};
-
 }
 #endif
