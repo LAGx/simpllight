@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <fstream>
 
 #include "control.h"
 #include "log.h"
@@ -15,16 +16,34 @@ ControlBox::ControlBox() {
 void ControlBox::updateKeyBindings() {
 	INIReader settings("settings.ini");
 
-	if (settings.ParseError() < 0)
-		Log::warning("Can't load 'settings.ini', creating and using default bindings\n");
+	if (settings.ParseError() < 0) {
+		Log::log("Can't load 'settings.ini', creating and using default bindings");
+		saveKeyBindings();
+	}
+	else {
+		keyBindings.moveTop = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveTop", 22);
+		keyBindings.moveBottom = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveBottom", 18);
+		keyBindings.moveLeft = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveLeft", 0);
+		keyBindings.moveRight = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRight", 3);
 
-	keyBindings.moveTop = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveTop", 22);
-	keyBindings.moveBottom = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveBottom", 18);
-	keyBindings.moveLeft = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveLeft", 0);
-	keyBindings.moveRight = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRight", 3);
+		keyBindings.primaryMouseAction = (sf::Mouse::Button) settings.GetInteger("keyBindings", "primaryMouseAction", 0);
+		keyBindings.secondaryMouseAction = (sf::Mouse::Button) settings.GetInteger("keyBindings", "secondaryMouseAction", 1);
+	}
+}
 
-	keyBindings.primaryMouseAction = (sf::Mouse::Button) settings.GetInteger("keyBindings", "moveLeft", 0);
-	keyBindings.secondaryMouseAction = (sf::Mouse::Button) settings.GetInteger("keyBindings", "moveLeft", 0);
+void ControlBox::saveKeyBindings() {
+	ofstream settingsFile("settings.ini", ios_base::app);
+
+	settingsFile << "[keyBindings]" << endl
+		<< "moveTop = " << keyBindings.moveTop << endl
+		<< "moveBottom = " << keyBindings.moveBottom << endl
+		<< "moveLeft = " << keyBindings.moveLeft << endl
+		<< "moveRight = " << keyBindings.moveRight << endl
+		<< "primaryMouseAction = " << keyBindings.primaryMouseAction << endl
+		<< "secondaryMouseAction = " << keyBindings.secondaryMouseAction << endl;
+
+	Log::log("Saved 'settings.ini'");
+	settingsFile.close();
 }
 
 void ControlBox::setControlObject(EventInterface* obj) {

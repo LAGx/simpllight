@@ -38,18 +38,16 @@ namespace spl {
 	private:
 
 		struct KeyBindings {
-			sf::Keyboard::Key moveTop = sf::Keyboard::Unknown;
-			sf::Keyboard::Key moveBottom = sf::Keyboard::Unknown;
-			sf::Keyboard::Key moveLeft = sf::Keyboard::Unknown;
-			sf::Keyboard::Key moveRight = sf::Keyboard::Unknown;
+			sf::Keyboard::Key moveTop = sf::Keyboard::W;
+			sf::Keyboard::Key moveBottom = sf::Keyboard::S;
+			sf::Keyboard::Key moveLeft = sf::Keyboard::A;
+			sf::Keyboard::Key moveRight = sf::Keyboard::D;
 
 			sf::Mouse::Button primaryMouseAction = sf::Mouse::Button::Left;
 			sf::Mouse::Button secondaryMouseAction = sf::Mouse::Button::Right;
-		};
+		} keyBindings;
 
 		std::vector<EventInterface*> controlObjects;
-
-		KeyBindings keyBindings;
 
 		sf::Event event;
 
@@ -58,6 +56,8 @@ namespace spl {
 		ControlBox();
 
 		void updateKeyBindings();
+
+		void saveKeyBindings();
 
 		bool deleteControlObject(EventInterface*);
 
