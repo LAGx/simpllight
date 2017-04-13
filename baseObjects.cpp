@@ -266,7 +266,8 @@ Cursor::Cursor(b2World* World, std::string textr, std::string name) :DynamicObje
 }
 #include <string>
 void Cursor::positionMouse(int x, int y) {
-	body_ph->SetTransform(b2Vec2((x+spl::Window::currGlobalViewCord.x - spl::Window::screenSize.x/2)/SCALE_BOX, (y + spl::Window::currGlobalViewCord.y - spl::Window::screenSize.y / 2) / SCALE_BOX), 0);
+	body_ph->SetTransform(b2Vec2((x/ spl::WindowStateBox::absoluteScale + spl::WindowStateBox::inGameZeroCordRelativeWindow.x) / SCALE_BOX, (y/ spl::WindowStateBox::absoluteScale + spl::WindowStateBox::inGameZeroCordRelativeWindow.y) / SCALE_BOX), 0);
+	BaseObject::g_body.setScale(1/ spl::WindowStateBox::absoluteScale, 1 / spl::WindowStateBox::absoluteScale);
 #ifdef DEV_MODE
 	ScreenLog::setValue(3, std::to_string(x) + " | " + std::to_string(y));
 #endif

@@ -101,8 +101,8 @@ void ScreenLog::setValue(int id, string value) {
 
 void ScreenLog::blit() {
 	for (int i = 0; i < logText.size(); i++) {
-		logText[i].text.setPosition(spl::Window::currGlobalViewCord.x + 5- spl::Window::screenSize.x/2, 15 * logText[i].id + spl::Window::currGlobalViewCord.y- spl::Window::screenSize.y / 2);
-
+		logText[i].text.setPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow.x + 5 / spl::WindowStateBox::absoluteScale, spl::WindowStateBox::inGameZeroCordRelativeWindow.y + 15*logText[i].id / spl::WindowStateBox::absoluteScale);
+		logText[i].text.setScale(sf::Vector2f(1/spl::WindowStateBox::absoluteScale, 1/spl::WindowStateBox::absoluteScale));
 		spl::ToDraw td = { &logText[i].text, -1000 };
 		spl::Window::allDrawable.push_back(td);
 	}

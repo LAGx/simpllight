@@ -19,9 +19,8 @@ Window::Window() {
 	view.setSize(900, 500);
 	view.setCenter(450, 250);
 #endif
-	updateState();
-	sf::Mouse::setPosition(sf::Vector2i(currGlobalViewCord), canvas);
-	canvas.setMouseCursorVisible(false);
+	WindowStateBox::updateWindowStateBox(*this);
+	canvas.setMouseCursorVisible(true);
 	canvas.setFramerateLimit(120);
 	canvas.setView(view);
 }
@@ -42,8 +41,6 @@ void Window::drawAll() {
 
 	canvas.display();
 	allDrawable.clear();
-	screenSize = sf::Vector2f(canvas.getSize());
-	currGlobalViewCord = view.getCenter();
 }
 
 Window::~Window() {
@@ -52,9 +49,24 @@ Window::~Window() {
 
 std::vector<ToDraw> Window::allDrawable;
 
-void Window::updateState() {
-	
+sf::Vector2f WindowStateBox::currScreenSize;
+sf::Vector2f WindowStateBox::currGlobalViewCord;
+sf::Vector2f WindowStateBox::currViewSize;
+float WindowStateBox::absoluteScale;
+
+sf::Vector2f WindowStateBox::inGameZeroCordRelativeWindow;
+
+void spl::WindowStateBox::updateWindowStateBox(Window& window) {
+	WindowStateBox::currScreenSize = sf::Vector2f(window.canvas.getSize());
+	WindowStateBox::currGlobalViewCord = window.view.getCenter();
+	WindowStateBox::currViewSize = window.view.getSize();
+	WindowStateBox::absoluteScale = WindowStateBox::currScreenSize.x / WindowStateBox::currViewSize.x;
+
+	spl::WindowStateBox::update();
 }
 
-sf::Vector2f Window::currGlobalViewCord;
-sf::Vector2f Window::screenSize;
+void spl::WindowStateBox::update() {
+	///cord
+	inGameZeroCordRelativeWindow = currGlobalViewCord - (currViewSize / (float)2);
+
+}

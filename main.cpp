@@ -80,8 +80,8 @@ while (window.canvas.isOpen()){
 #endif
 		controlBox.resulveControl(window);
 
-		World.Step(1 / 60.f, 8, 3);
-		window.updateState();
+		World.Step(1 / 60.f, 8, 3); 
+		spl::WindowStateBox::updateWindowStateBox(window);
 		house.blit();
 		house1.blit();
 		house2.blit();

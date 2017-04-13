@@ -170,6 +170,7 @@ Alive::~Alive() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 Editor::Editor(b2World* World, sf::View &view, std::string textrCur):view(view){
+	speed = 4;
 	cursor = new Cursor(World, textrCur);
 	currPosition = view.getCenter();
 	currSize = view.getSize();
@@ -177,7 +178,11 @@ Editor::Editor(b2World* World, sf::View &view, std::string textrCur):view(view){
 
 void Editor::blit() {
 #include <string>
-	ScreenLog::setValue(4, to_string(speed));
+	try {
+		ScreenLog::setValue(4, to_string(speed));
+	}
+	catch (Log::Exception) {}
+
 	view.setCenter(currPosition);
 	view.setSize(currSize);
 	cursor->blit();
@@ -185,16 +190,16 @@ void Editor::blit() {
 }
 
 inline void Editor::moveTop() {
-	currPosition.y -= speed;
+	currPosition.y -= speed + 1 / spl::WindowStateBox::absoluteScale*2;
 }
 inline void Editor::moveBottom() {
-	currPosition.y += speed;
+	currPosition.y += speed + 1 / spl::WindowStateBox::absoluteScale*2;
 }
 inline void Editor::moveLeft() {
-	currPosition.x -= speed;
+	currPosition.x -= speed + 1/ spl::WindowStateBox::absoluteScale*2;
 }
 inline void Editor::moveRight() {
-	currPosition.x += speed;
+	currPosition.x += speed + 1/ spl::WindowStateBox::absoluteScale*2;
 }
 inline void Editor::l_ctrl() {
 	isPressedContrl = true;
@@ -205,10 +210,9 @@ inline void Editor::useMouse() {}
 
 inline void Editor::wheelMouse(float delta) {
 	if (isPressedContrl)
-		speed -= delta/10;
+		speed += delta/5;
 	else {
-		currSize.x *= (-delta*speed / 10 + 1);
-		currSize.y *= (-delta*speed / 10 + 1);
+		currSize *= (-(delta*speed) / (20*(spl::WindowStateBox::absoluteScale*5+1)) + 1);
 	}
 	isPressedContrl = false;
 }
