@@ -21,9 +21,10 @@ namespace spl {
 	
 	public:
 
+		static void updateWindowStateBox();
 
-		sf::RenderWindow canvas;
-		sf::View view;
+		static sf::RenderWindow canvas;
+		static sf::View view;
 
 		static std::vector<ToDraw> allDrawable;
 
@@ -37,11 +38,9 @@ namespace spl {
 
 	class WindowStateBox {
 	private:
-		static void update();
+
 		
 	public:
-
-		static void updateWindowStateBox(Window& window);
 
 		static sf::Vector2f currScreenSize;
 		static sf::Vector2f currGlobalViewCord;

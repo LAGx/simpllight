@@ -263,12 +263,45 @@ StaticObject::~StaticObject() {
 
 Cursor::Cursor(b2World* World, std::string textr, std::string name) :DynamicObject(World, sf::Vector2f(0, 0), textr, name, circle_T, 1, true) {
 	depthRender = -500;
+	setDrug(0,0);
 }
-#include <string>
+
 void Cursor::positionMouse(int x, int y) {
+	spl::Window::updateWindowStateBox();
 	body_ph->SetTransform(b2Vec2((x/ spl::WindowStateBox::absoluteScale + spl::WindowStateBox::inGameZeroCordRelativeWindow.x) / SCALE_BOX, (y/ spl::WindowStateBox::absoluteScale + spl::WindowStateBox::inGameZeroCordRelativeWindow.y) / SCALE_BOX), 0);
 	BaseObject::g_body.setScale(1/ spl::WindowStateBox::absoluteScale, 1 / spl::WindowStateBox::absoluteScale);
 #ifdef DEV_MODE
-	ScreenLog::setValue(3, std::to_string(x) + " | " + std::to_string(y));
+#include <string>
+	static int i = 0;
+		if (i > 60) {
+			ScreenLog::setValue(3, std::to_string(spl::WindowStateBox::currGlobalViewCord.x + x - 450) + " | " + std::to_string(spl::WindowStateBox::currGlobalViewCord.y + y - 250));
+			ScreenLog::setValue(4, std::to_string(body_ph->GetPosition().x*SCALE_BOX) + " | " + std::to_string(body_ph->GetPosition().y*SCALE_BOX));
+			i = 0;
+		}
+		i++;
 #endif
+}
+
+sf::Vector2f Cursor::getPosition() {
+	return sf::Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////       PHANTOM               ////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+
+PhantomObject::PhantomObject(sf::Vector2f initCord, std::string texture) : BaseObject(initCord, texture) {
+	g_body.setColor(sf::Color(255, 255, 255, 120));
+	depthRender = -200;
+}
+
+
+
+void PhantomObject::setPosition(int x, int y, float angle) {
+	updateTextrPosition(sf::Vector2f(x, y),angle);
+}
+
+sf::Vector3f PhantomObject::getPosition() {
+	return sf::Vector3f(g_body.getPosition().x, g_body.getPosition().y, g_body.getRotation());
 }

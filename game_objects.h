@@ -20,7 +20,7 @@ protected:
 	sf::Texture texture;
 	sf::Sprite g_body;
 
-	void updateTextrPosition(sf::Vector2f newCord, float newAngle);
+	void updateTextrPosition(sf::Vector2f newCord, float newAngle = 0);
 	bool isVisible = true;
 
 public:
@@ -31,6 +31,18 @@ public:
 	virtual void blit();
 
 	virtual ~BaseObject();
+};
+
+
+class PhantomObject:public BaseObject {
+public:
+	
+	PhantomObject(sf::Vector2f initCord, std::string texture);
+
+	void setPosition(int x, int y, float angle = 0);
+
+	sf::Vector3f getPosition();
+
 };
 
 
@@ -194,6 +206,8 @@ class Cursor : public DynamicObject, public spl::EventInterface {
 private:
 	void positionMouse(int x, int y);
 public:
+	sf::Vector2f getPosition();
+
 	Cursor(b2World* World, std::string textr, std::string name = "cursor");
 };
 
@@ -207,6 +221,8 @@ private:
 	sf::Vector2f currPosition;
 
 	sf::View &view;
+
+	PhantomObject *phantom = nullptr;
 protected:
 	void moveTop();
 	void moveBottom();
@@ -219,9 +235,11 @@ protected:
 	void wheelMouse(float delta);
 
 public:
+
 	Cursor *cursor;
 
 	Editor(b2World* World, sf::View &view, std::string textrCur = "None");
+
 
 	void blit();
 

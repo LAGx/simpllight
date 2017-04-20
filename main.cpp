@@ -32,11 +32,6 @@ int main() {
 	screenLog.setNewLog("Tests", 4);
 #endif
 
-#ifdef EDITOR_MODE
-	ScreenLog screenLog;
-	screenLog.setNewLog("Mouse", 0);
-#endif
-
  
     Person h(&World, sf::Vector2f(605, 190), "image/human/human1.png","human1");
 	Person h2(&World, sf::Vector2f(520, 354), "image/human/human2.png","human2");
@@ -78,10 +73,11 @@ while (window.canvas.isOpen()){
 		///////////////////////////////
 	//	ScreenLog::setValue(3, to_string(sf::Mouse::getPosition().x) + " | " + to_string(sf::Mouse::getPosition().y));
 #endif
-		controlBox.resulveControl(window);
 
+
+		controlBox.resulveControl(window);	
 		World.Step(1 / 60.f, 8, 3); 
-		spl::WindowStateBox::updateWindowStateBox(window);
+	
 		house.blit();
 		house1.blit();
 		house2.blit();
@@ -94,12 +90,14 @@ while (window.canvas.isOpen()){
 		s2.blit();
 		s3.blit();
 		edit.blit();
-		//player.blit();
+		//player.blit();	
 #ifdef DEV_MODE
 		screenLog.blit();
-#endif
+#endif	
 		window.drawAll();
+
 }
+
 	Log::log("____________LOG SESSION END____________", true);
 	return 0;
 }

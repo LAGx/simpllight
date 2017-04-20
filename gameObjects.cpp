@@ -179,14 +179,18 @@ Editor::Editor(b2World* World, sf::View &view, std::string textrCur):view(view){
 void Editor::blit() {
 #include <string>
 	try {
-		ScreenLog::setValue(4, to_string(speed));
+	//	ScreenLog::setValue(4, to_string(speed));
 	}
-	catch (Log::Exception) {}
+	catch (Log::Exception e ){}
 
 	view.setCenter(currPosition);
 	view.setSize(currSize);
 	cursor->blit();
 
+	if (phantom != nullptr) {
+		phantom->setPosition(cursor->getPosition().x, cursor->getPosition().y);
+		phantom->blit();
+	}
 }
 
 inline void Editor::moveTop() {
@@ -205,8 +209,20 @@ inline void Editor::l_ctrl() {
 	isPressedContrl = true;
 }
 
-inline void Editor::selectMouse() {}
-inline void Editor::useMouse() {}
+inline void Editor::selectMouse() {
+	if (phantom != nullptr) {
+		delete phantom;
+		phantom = nullptr;
+	}
+}
+inline void Editor::useMouse() {
+	if (phantom == nullptr) {
+		try {
+			phantom = new PhantomObject(sf::Vector2f(0, 0), "image/house/house.png");
+		}
+		catch (Log::Exception e) {}
+	}
+}
 
 inline void Editor::wheelMouse(float delta) {
 	if (isPressedContrl)
@@ -219,4 +235,7 @@ inline void Editor::wheelMouse(float delta) {
 
 Editor::~Editor() {
 	delete cursor;
+	if (phantom != nullptr) {
+		delete phantom;
+	}
 }
