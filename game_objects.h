@@ -215,11 +215,12 @@ public:
 class Editor: public spl::EventInterface {
 private:
 	bool isPressedContrl = false;
+	bool isPressedShift = false;
 	float speed = 1;
 	float delta = 0;
 	sf::Vector2f currSize;
 	sf::Vector2f currPosition;
-
+	float currPfantomAngle = 0;
 	sf::View &view;
 
 	PhantomObject *phantom = nullptr;
@@ -229,6 +230,7 @@ protected:
 	void moveLeft();
 	void moveRight();
 	void l_ctrl();
+	void l_shift();
 
 	void selectMouse();
 	void useMouse();
@@ -240,6 +242,9 @@ public:
 
 	Editor(b2World* World, sf::View &view, std::string textrCur = "None");
 
+	void newFantom(std::string texture);
+	sf::Vector3f getfantomPosition();
+	void deleteFantom();
 
 	void blit();
 

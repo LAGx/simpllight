@@ -26,6 +26,7 @@ void ControlBox::updateKeyBindings() {
 	keyBindings.moveLeft = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveLeft", 0);
 	keyBindings.moveRight = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRight", 3);
 	keyBindings.l_ctrl = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "l_ctrl", 37);
+	keyBindings.l_shift = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "l_shift", 38);
 #ifdef DEV_MODE
 	keyBindings.moveRadiusPlus = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRadiusPlus", 4);
 	keyBindings.moveRadiusMinus = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRadiusMinus", 16);
@@ -57,7 +58,9 @@ for (size_t i = 0; i < controlObjects.size(); i++) {
 
 	if (sf::Keyboard::isKeyPressed(keyBindings.l_ctrl))
 		controlObjects[i]->l_ctrl();
-  
+	if (sf::Keyboard::isKeyPressed(keyBindings.l_shift))
+		controlObjects[i]->l_shift();
+
   #ifdef DEV_MODE
 	if (sf::Keyboard::isKeyPressed(keyBindings.moveRadiusPlus))
 		controlObjects[i]->moveRadiusPlus();

@@ -34,7 +34,9 @@ namespace spl {
 
 		virtual void positionMouse(int x, int y) {} //mouse
 
-		virtual void l_ctrl() {} //mouse
+		virtual void l_ctrl() {} 
+
+		virtual void l_shift() {}
 	};
 
 
@@ -49,6 +51,7 @@ namespace spl {
 			sf::Keyboard::Key moveRight = sf::Keyboard::Unknown;
 
 			sf::Keyboard::Key l_ctrl = sf::Keyboard::Unknown;
+			sf::Keyboard::Key l_shift = sf::Keyboard::Unknown;
 
 			sf::Keyboard::Key moveRadiusMinus = sf::Keyboard::Unknown;
 			sf::Keyboard::Key moveRadiusPlus = sf::Keyboard::Unknown;
