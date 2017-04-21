@@ -75,6 +75,9 @@
     <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\ini.h">
       <Filter>Header Files\INIReader</Filter>
     </ClInclude>
+    <ClInclude Include="interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="font\arial.ttf">
@@ -161,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\Game_Lib\inih\cpp\INIReader.cpp">
       <Filter>Source Files\INIReader</Filter>
+    </ClCompile>
+    <ClCompile Include="interface.cpp">
+      <Filter>Source Files\graphic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

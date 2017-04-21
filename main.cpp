@@ -6,6 +6,7 @@
 #include "phisic.h"
 #include "game_objects.h"
 #include "state.h"
+#include "service.h"
 using namespace std;
 
 int main() {
@@ -14,6 +15,8 @@ int main() {
 	Log::log("____________LOG SESSION START__________", true);
 
 	spl::Window window;
+
+	TextureGenerator::fillShadowCircle(200, 40, sf::Color(0,0,255), "hello.png");
 
 	b2Vec2 Gravity(0.f, 0.f);
 	b2World World(Gravity);

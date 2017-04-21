@@ -121,6 +121,7 @@
     <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\ini.h" />
     <ClInclude Include="control.h" />
     <ClInclude Include="game_objects.h" />
+    <ClInclude Include="interface.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="phisic.h" />
     <ClInclude Include="service.h" />
@@ -153,6 +154,7 @@
     <ClCompile Include="baseObjects.cpp" />
     <ClCompile Include="control.cpp" />
     <ClCompile Include="gameObjects.cpp" />
+    <ClCompile Include="interface.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="phisic.cpp" />
