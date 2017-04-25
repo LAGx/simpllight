@@ -43,13 +43,13 @@ void TextureGenerator::fillShadowRect(int shadowSize, sf::Vector2i size, sf::Col
 		for (x = image.getSize().x - level; x > level; x--) {
 			image.setPixel(x - 1, y - 1, color);
 		}
-		for (y = image.getSize().x - level; y > level; y--) {
-			image.setPixel(x, y - 1, color);
+		for (y = image.getSize().y - level; y > level; y--) {
+			image.setPixel(x , y-1, color);
 		}
 	}
 
-	if (!image.saveToFile("image/tempInterface/" + name))
-		throw Log::Exception("invalid way to save image rect interface " + name);
+	if (!image.saveToFile(name))
+		throw Log::Exception("invalid way to save image rect " + name);
 }
 
 
@@ -63,19 +63,80 @@ void TextureGenerator::fillShadowCircle(int shadowSize, int radiusSize, sf::Colo
 	for (x = 0; x < image.getSize().x; x++) {//by y move
 		for (y = 0; y < image.getSize().y; y++) {//by x move
 			length = getLength(sf::Vector2f(image.getSize().x/2, image.getSize().y / 2), sf::Vector2f(x,y));
+
+			//draw
 			if (length < radiusSize) {
 				image.setPixel(x, y, color);
 			}
-
+			//shadow
 			if ((length >= radiusSize) && (length < (image.getSize().y/2))) {
 				image.setPixel(x, y, sf::Color(0, 0, 0, 220 * (1-(length-radiusSize)/(shadowSize))));
-			}
 
+			}
+			//blur
+			if (length < radiusSize && length >= radiusSize -1) {
+				image.setPixel(x, y, color - sf::Color(200, 200,200, 30));
+			}
 		}
 	}
 
 
+	if (!image.saveToFile(name))
+		throw Log::Exception("invalid way to save image circle" + name);
+}
 
-	if (!image.saveToFile("image/tempInterface/" + name))
-		throw Log::Exception("invalid way to save image circle interface " + name);
+
+void TextureGenerator::conturRect(sf::Vector2i size, int lineWidth, sf::Color color, std::string name) {
+	sf::Image image;
+	image.create(size.x, size.y, sf::Color(255, 0, 0, 0)); //DEBAG change 155 to 0
+
+	int level = 0; int x = 0, y = 0;
+	for (; level < lineWidth; level++) {
+
+		y = level;
+		for (x = level; x < image.getSize().x - level; x++) {
+			image.setPixel(x, y, color);
+		}
+		for (y = level; y < image.getSize().y - level; y++) {
+			image.setPixel(x - 1, y, color);
+		}
+
+		for (x = image.getSize().x - level; x > level; x--) {
+			image.setPixel(x - 1, y - 1, color);
+		}
+		for (y = image.getSize().y- level; y > level; y--) {
+			image.setPixel(x, y-1 , color);
+		}
+	}
+
+	if (!image.saveToFile(name))
+		throw Log::Exception("invalid way to save image contur rect " + name);
+}
+
+void TextureGenerator::conturCircle(int radius, int lineWidth, sf::Color color, std::string name) {
+	sf::Image image;
+
+	image.create(radius *2, radius *2, sf::Color(255, 0, 0, 0)); //DEBAG change 155 to 0
+
+	int x = 0, y = 0;
+	float length = 0;
+
+	for (x = 0; x < image.getSize().x; x++) {//by y move
+		for (y = 0; y < image.getSize().y; y++) {//by x move
+			length = getLength(sf::Vector2f(image.getSize().x / 2, image.getSize().y / 2), sf::Vector2f(x, y));
+
+			//blur
+			if (length-1 < radius && length+1 >= radius  - lineWidth) {
+				image.setPixel(x, y,color- sf::Color(0,0,0, 155));
+			}
+			//draw
+			if (length < radius  && length >= radius -lineWidth) {
+				image.setPixel(x, y, color);
+			}
+		}
+	}
+
+
+	if (!image.saveToFile(name))
+		throw Log::Exception("invalid way to save image contur circle" + name);
 }

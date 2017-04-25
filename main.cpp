@@ -16,7 +16,9 @@ int main() {
 
 	spl::Window window;
 
-	TextureGenerator::fillShadowCircle(200, 40, sf::Color(0,0,255), "hello.png");
+	TextureGenerator gener;
+	gener.conturRect(sf::Vector2i(100,50), 2, sf::Color(0, 200, 200), "image/tempInterface/hello.png");
+	gener.fillShadowRect(20,sf::Vector2i(100, 50), sf::Color(0,100, 100), "image/tempInterface/hello2.png");
 
 	b2Vec2 Gravity(0.f, 0.f);
 	b2World World(Gravity);
@@ -44,7 +46,7 @@ int main() {
 	Editor edit(&World,window.view ,"image/cursor.png");
 	controlBox.setControlObject(&edit);
 	controlBox.setControlObject(edit.cursor);
-
+	/*
 	House house(&World, sf::Vector2f(150, 100), -120,"image/house/house2.png", "image/house/door2.png", "house");
 	House house1(&World, sf::Vector2f(300, 400), 30, "image/house/house.png", "image/house/door.png", "house1");
 	House house2(&World, sf::Vector2f(500, 100), 120, "image/house/house.png", "image/house/door.png", "house2");
@@ -55,6 +57,9 @@ int main() {
 	Shrub s1(&World, sf::Vector2f(207, 250), "image/veget/shrub.png", "sh1");
 	Shrub s2(&World, sf::Vector2f(397, 324), "image/veget/shrub2.png", "sh2");
 	Shrub s3(&World, sf::Vector2f(492, 290), "image/veget/shrub2.png", "sh3");
+	*/
+	BaseObject y1(sf::Vector2f(350, 350), "image/tempInterface/hello.png");
+	BaseObject s1(sf::Vector2f(350, 350), "image/tempInterface/hello2.png");
 
 #ifdef DEV_MODE
 	int i = 0;
@@ -81,7 +86,7 @@ while (window.canvas.isOpen()){
 		controlBox.resulveControl(window);	
 		World.Step(1 / 60.f, 8, 3); 
 	
-		house.blit();
+		/*house.blit();
 		house1.blit();
 		house2.blit();
 		y1.blit();
@@ -92,13 +97,16 @@ while (window.canvas.isOpen()){
 		s1.blit();
 		s2.blit();
 		s3.blit();
-		edit.blit();
+		edit.blit();*/	
+		s1.blit();
+		y1.blit();
+
 		//player.blit();	
 #ifdef DEV_MODE
 		screenLog.blit();
 #endif	
 		window.drawAll();
-
+		
 }
 
 	Log::log("____________LOG SESSION END____________", true);

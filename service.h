@@ -13,9 +13,13 @@ public:
 class TextureGenerator {
 
 public:
-	static void fillShadowRect(int shadowSize, sf::Vector2i size, sf::Color color, std::string name);
+	void fillShadowRect(int shadowSize, sf::Vector2i size, sf::Color color, std::string name);
 
-	static void fillShadowCircle(int shadowSize, int radiusSize, sf::Color color, std::string name);
+	void fillShadowCircle(int shadowSize, int radiusSize, sf::Color color, std::string name);
+
+	void conturRect(sf::Vector2i size,int lineWidth, sf::Color color, std::string name);
+
+	void conturCircle(int radius, int lineWidth, sf::Color color, std::string name);
 
 };
 
