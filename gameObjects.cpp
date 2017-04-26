@@ -177,11 +177,6 @@ Editor::Editor(b2World* World, sf::View &view, std::string textrCur):view(view){
 }
 
 void Editor::blit() {
-#include <string>
-	try {
-	//	ScreenLog::setValue(4, to_string(speed));
-	}
-	catch (Log::Exception e ){}
 
 	view.setCenter(currPosition);
 	view.setSize(currSize);

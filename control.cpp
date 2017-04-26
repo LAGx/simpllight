@@ -18,7 +18,7 @@ void ControlBox::updateKeyBindings() {
 
 
 	if (settings.ParseError() < 0)
-		Log::warning("Can't load 'settings.ini', using default bindings\n");
+		Log::warning("Can't load 'settings.ini', using default bindings");
 
   
 	keyBindings.moveTop = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveTop", 22);

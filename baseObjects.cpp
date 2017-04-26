@@ -262,7 +262,7 @@ StaticObject::~StaticObject() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 Cursor::Cursor(b2World* World, std::string textr, std::string name) :DynamicObject(World, sf::Vector2f(0, 0), textr, name, circle_T, 1, true) {
-	depthRender = -500;
+	depthRender = -1000;
 	setDrug(0,0);
 }
 
@@ -270,16 +270,6 @@ void Cursor::positionMouse(int x, int y) {
 	spl::Window::updateWindowStateBox();
 	body_ph->SetTransform(b2Vec2((x/ spl::WindowStateBox::absoluteScale + spl::WindowStateBox::inGameZeroCordRelativeWindow.x) / SCALE_BOX, (y/ spl::WindowStateBox::absoluteScale + spl::WindowStateBox::inGameZeroCordRelativeWindow.y) / SCALE_BOX), 0);
 	BaseObject::g_body.setScale(1/ spl::WindowStateBox::absoluteScale, 1 / spl::WindowStateBox::absoluteScale);
-#ifdef DEV_MODE
-#include <string>
-	static int i = 0;
-		if (i > 60) {
-			ScreenLog::setValue(3, std::to_string(spl::WindowStateBox::currGlobalViewCord.x + x - 450) + " | " + std::to_string(spl::WindowStateBox::currGlobalViewCord.y + y - 250));
-			ScreenLog::setValue(4, std::to_string(body_ph->GetPosition().x*SCALE_BOX) + " | " + std::to_string(body_ph->GetPosition().y*SCALE_BOX));
-			i = 0;
-		}
-		i++;
-#endif
 }
 
 sf::Vector2f Cursor::getPosition() {

@@ -41,14 +41,13 @@ namespace spl {
 
 		
 	public:
-
 		static sf::Vector2f currScreenSize;
 		static sf::Vector2f currGlobalViewCord;
 		static sf::Vector2f currViewSize;
 		static float absoluteScale;		//increase of gameObject on screen in absoluteScale times
 
 		static sf::Vector2f inGameZeroCordRelativeWindow;
-		
+		static sf::Vector2i mouseCurrPositionRelativeWindow;//need updateing
 	};
 }
 #endif

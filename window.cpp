@@ -60,8 +60,10 @@ sf::Vector2f WindowStateBox::currViewSize;
 float WindowStateBox::absoluteScale;
 
 sf::Vector2f WindowStateBox::inGameZeroCordRelativeWindow;
+sf::Vector2i WindowStateBox::mouseCurrPositionRelativeWindow;
 
 void Window::updateWindowStateBox(){
+	WindowStateBox::mouseCurrPositionRelativeWindow = sf::Mouse::getPosition(canvas);
 	WindowStateBox::currScreenSize = sf::Vector2f(canvas.getSize());
 	WindowStateBox::currGlobalViewCord = view.getCenter();
 	WindowStateBox::currViewSize = view.getSize();
