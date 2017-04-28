@@ -213,6 +213,7 @@ inline void Editor::selectMouse() {
 inline void Editor::useMouse() {
 	newFantom("image/house/house.png");
 }
+
 void Editor::newFantom(std::string texture) {
 	if (phantom == nullptr) {
 		phantom = new PhantomObject(sf::Vector2f(0, 0), texture);

@@ -54,10 +54,11 @@ int main() {
 	Shrub s1(&World, sf::Vector2f(207, 250), "image/veget/shrub.png", "sh1");
 	Shrub s2(&World, sf::Vector2f(397, 324), "image/veget/shrub2.png", "sh2");
 	Shrub s3(&World, sf::Vector2f(492, 290), "image/veget/shrub2.png", "sh3");
-	CellInterface::StyleCell style = { sf::Color(10,60,50), sf::Color(0,255,255), 2, 2, 50, 200, 0.005 };
-	CellInterface inter1(sf::Vector2f(25, 50), sf::Vector2f(10, 10), style, CellInterface::typeCell::round, "Some_id1");
-	CellInterface inter2(sf::Vector2f(47, 50), sf::Vector2f(20, 10), style, CellInterface::typeCell::rect, "Some_id2");
-	CellInterface inter3(sf::Vector2f(69, 50), sf::Vector2f(20, 10), style, CellInterface::typeCell::rect, "Some_id3");
+
+	CellInterface::StyleCell style = { sf::Color(10,60,50), sf::Color(0,255,255), 2, 2, 50, 200, 0.05 };
+	CellInterface inter1(sf::Vector2f(25, 85), sf::Vector2f(5, 0), style, CellInterface::typeCell::round, "Some_id1");
+	CellInterface inter2(sf::Vector2f(47, 90), sf::Vector2f(20, 10), style, CellInterface::typeCell::rect, "Some_id2");
+	CellInterface inter3(sf::Vector2f(69, 90), sf::Vector2f(20, 10), style, CellInterface::typeCell::rect, "Some_id3");
 
 
 #ifdef DEV_MODE

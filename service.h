@@ -22,5 +22,7 @@ public:
 
 };
 
+int DeleteDirectory(const std::string &refcstrRootDirectory, bool bDeleteSubdirectories = true);
+
 #endif
 
