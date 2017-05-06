@@ -147,7 +147,7 @@ void TextureGenerator::conturCircle(int radius, int lineWidth, sf::Color color, 
 
 
 
-int DeleteDirectory(const std::string &refcstrRootDirectory, bool bDeleteSubdirectories = true) {
+int DeleteDirectory(const std::string &refcstrRootDirectory, bool bDeleteSubdirectories) {
 	bool            bSubdirectory = false;       // Flag, indicating whether
 												 // subdirectories have been found
 	HANDLE          hFile;                       // Handle to directory

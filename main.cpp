@@ -55,11 +55,21 @@ int main() {
 	Shrub s2(&World, sf::Vector2f(397, 324), "image/veget/shrub2.png", "sh2");
 	Shrub s3(&World, sf::Vector2f(492, 290), "image/veget/shrub2.png", "sh3");
 
-	CellInterface::StyleCell style = { sf::Color(10,60,50), sf::Color(0,255,255), 2, 2, 50, 200, 0.05 };
-	CellInterface inter1(sf::Vector2f(25, 85), sf::Vector2f(5, 0), style, CellInterface::typeCell::round, "Some_id1");
-	CellInterface inter2(sf::Vector2f(47, 90), sf::Vector2f(20, 10), style, CellInterface::typeCell::rect, "Some_id2");
-	CellInterface inter3(sf::Vector2f(69, 90), sf::Vector2f(20, 10), style, CellInterface::typeCell::rect, "Some_id3");
-
+	CellInterface::StyleCell style = { sf::Color(255,255,255), sf::Color(220,0,200), 10, 10, 50, 200, 0.05 };
+	
+	//CellInterface inter1(sf::Vector2f(25, 85), sf::Vector2f(5, 0), style, CellInterface::typeCell::round, "Some_id1");
+	//CellInterface inter2(sf::Vector2f(47, 90), sf::Vector2f(20, 10), style, CellInterface::typeCell::rect, "Some_id2");
+	//CellInterface inter3(sf::Vector2f(69, 90), sf::Vector2f(20, 10), style, CellInterface::typeCell::rect, "Some_id3");
+	
+	UserInterfaceBox a;
+	a.createStyle("light", style);
+	a.createLayer("pause");
+	a.createLayer("main_menu","light");
+	a.downloadLayerById("pause");
+    a.getCurrLayer()->createNewCell(sf::Vector2f(50, 50), sf::Vector2f(5, 0), CellInterface::typeCell::round, "open");
+	a.downloadLayerById("main_menu");
+	a.getCurrLayer()->createNewCell(sf::Vector2f(50, 50), sf::Vector2f(5, 0), CellInterface::typeCell::round, "cell_1");
+	a.getCurrLayer()->createNewCell(sf::Vector2f(70, 70), sf::Vector2f(10, 25), CellInterface::typeCell::rect, "cell_2", "default");
 
 #ifdef DEV_MODE
 	int i = 0;
@@ -67,6 +77,10 @@ int main() {
 #endif
 
 	while (window.canvas.isOpen()) {
+
+		ScreenLog::setValue(4, UserInterfaceBox::activeCell);
+		if (UserInterfaceBox::activeCell == "cell_1")
+			a.getCurrLayer()->deleteCell("cell_1");
 
 #ifdef DEV_MODE
 		/////////////// FPS //////////////////
@@ -97,15 +111,12 @@ int main() {
 		s2.blit();
 		s3.blit();
 		edit.blit();
-		inter1.blit();
-		inter2.blit();
-		inter3.blit();
+		a.blit();
 		//player.blit();	
 #ifdef DEV_MODE
 		screenLog.blit();
 #endif	
 		window.drawAll();
-
 	}
 
 }

@@ -42,8 +42,8 @@ public:
 		int borderSize = 1;
 		int shadow = 0;
 
-		char deltaTransperActive = 0;//how more transperent base, then 100%
-		char deltaTransperQuiet = 0;
+		unsigned char deltaTransperActive = 0;//how more transperent base, then 100%
+		unsigned char deltaTransperQuiet = 0;
 		float speedChangeTransper = 0;
 	};
 
@@ -70,18 +70,22 @@ public:
 
 class AssemblyLayerInterface {
 
+	CellInterface::StyleCell getStyle(string styleId);
+	void updateAllCellFromFile();
+
 	std::vector<CellInterface*> allCell;
-	string styleId = "None";
+	string styleId = "None";//can be changed only once in constructor
 
 public:
 
-	AssemblyLayerInterface(string id, string mode); //mod "new", "old"
+	AssemblyLayerInterface(string id, string mode, string styleId = "default"); //mod "new", "old"(can`t change style)
 
-	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id);//for creating
-	void createCostumNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::StyleCell& style, CellInterface::typeCell type, std::string id);//for creafting
+	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, string styleId = "default");//for creating//can be using for update
 	void deleteCell(std::string id); //for creating
 
 	string id = "None";
+
+	string getActiveCell();
 
 	void blit();
 
@@ -108,6 +112,8 @@ public:
 
 	void downloadLayerById(string id);
 
+	AssemblyLayerInterface* getCurrLayer();
+
 	void blit();
 
 	~UserInterfaceBox();
@@ -116,4 +122,17 @@ public:
 class InterfaceCreator:protected spl::EventInterface {
 public:
 	
+};
+
+
+class IconAnimated {
+	sf::Texture texture;
+	sf::Sprite sprite;
+public:
+	float speed = 1;
+	bool isPlay = 1;
+
+	//IconAnimated(sf::Vector2f initRatio, string file);
+
+	void blit();
 };
