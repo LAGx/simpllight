@@ -10,8 +10,39 @@ using namespace std;
 
 class BaseObject;
 
-class CellInterface{//TODO text and sprite
+class CellInterface {//TODO text and sprite
 private:
+	class Text {//need testing
+	private:
+		int id;
+		sf::Text text;
+
+		sf::Vector2f posRatio;
+		//sf::Vector2f scaleRatio;
+		int depthRender = 0;
+
+	public:
+		Text(int id, string text, sf::Vector2f posRatio, float scaleRatio, sf::Color textColor, sf::Font &font, CellInterface& cell);
+
+		void setPosition(sf::Vector2f position);
+		void setScale(float scale);
+
+		void setNewText(string text);
+		void setColor(sf::Color color);
+		void setSize(float size);
+
+		int getId();
+		void changeDepthRender(int delta);
+
+		void blit();
+
+	};
+
+
+	sf::Color textColor;
+	sf::Font font;
+	vector<Text* > allText;
+
 	void update();
 	float animationCoef = 0;
 	void animation();
@@ -33,11 +64,12 @@ private:
 	int depthRender = 0;
 
 	bool isVisible = true;
+
 public:
 
 	struct StyleCell {
-		sf::Color baseColor = {0,0,0,255};
-		sf::Color frameColor = {0,0,0};
+		sf::Color baseColor = { 0,0,0,255 };
+		sf::Color frameColor = { 0,0,0 };
 
 		int borderSize = 1;
 		int shadow = 0;
@@ -45,12 +77,19 @@ public:
 		unsigned char deltaTransperActive = 0;//how more transperent base, then 100%
 		unsigned char deltaTransperQuiet = 0;
 		float speedChangeTransper = 0;
+
+		string textFont = "None";
+		sf::Color textColor = {255,255,255};
 	};
 
 	enum typeCell {
 		rect = 0,
 		round
 	};
+
+	//position and scale reletive cell (in %)
+	void textControl(string mod, int id, string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);//mod "new"-new text, "del"-delete text
+	Text* getTextPtr(int id);
 
 	CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, StyleCell& style, typeCell type, std::string id);
 
@@ -80,7 +119,8 @@ public:
 
 	AssemblyLayerInterface(string id, string mode, string styleId = "default"); //mod "new", "old"(can`t change style)
 
-	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, string styleId = "default");//for creating//can be using for update
+	CellInterface* getCellById(string id = "None");
+	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, string styleId = "default");//for creating//can be using for update 
 	void deleteCell(std::string id); //for creating
 
 	string id = "None";
@@ -132,7 +172,7 @@ public:
 	float speed = 1;
 	bool isPlay = 1;
 
-	//IconAnimated(sf::Vector2f initRatio, string file);
+	IconAnimated(sf::Vector2f initRatio, string file);
 
 	void blit();
 };
