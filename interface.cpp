@@ -8,6 +8,8 @@
 #include <windows.h>
 #include <conio.h>
 #include "json.hpp"
+#include <vector>
+
 using json = nlohmann::json;
 #pragma warning(disable : 4996)
 
@@ -48,6 +50,11 @@ CellInterface::CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, Sty
 
 	baseTextr->depthRender = -500;
 	frameTextr->depthRender = -500 - 1;
+
+	if (!font.loadFromFile(style.textFont)){
+		throw Log::Exception("load interface font");
+	}
+	textColor = style.textColor;
 }
 
 void CellInterface::changeDepthRender(int depth) {
@@ -60,6 +67,8 @@ void CellInterface::blit() {
 		update();
 		baseTextr->blit();
 		frameTextr->blit();
+		for (auto text : allText)
+			text->blit();
 	}
 	else {
 		isActive = false;
@@ -113,6 +122,10 @@ void CellInterface::update() {
 		frameTextr->updateTextrPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + positionRelWindow / spl::WindowStateBox::absoluteScale, 0);
 		frameTextr->g_body.setScale(sf::Vector2f(1 / spl::WindowStateBox::absoluteScale, 1 / spl::WindowStateBox::absoluteScale));
 		animation();
+		for (auto text : allText) {
+			text->setPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + positionRelWindow / spl::WindowStateBox::absoluteScale);
+			text->setScale(1 / spl::WindowStateBox::absoluteScale);
+		}
 }
 
 CellInterface::~CellInterface() {
@@ -120,6 +133,96 @@ CellInterface::~CellInterface() {
 		delete baseTextr;
 	if (frameTextr != nullptr)
 		delete frameTextr;
+	for (auto i : allText)
+		delete i;
+}
+
+void CellInterface::textControl(std::string mod, int id, std::string text, sf::Vector2f posRatio, float scaleRatio) {
+	if (mod == "new") {
+		for (std::vector<Text*>::iterator i = allText.begin(); i != allText.end(); i++) {
+			if ((*i)->getId() == id) {
+				delete (*i);
+				allText.erase(i);
+				break;
+			}
+		}
+		allText.push_back(new Text(id, text, posRatio, scaleRatio, textColor, font, *this));
+		allText.back()->changeDepthRender(-501);
+		allText.back()->setColor(textColor);
+	}
+	else if (mod == "del") {
+		for (std::vector<Text*>::iterator i = allText.begin(); i != allText.end(); i++) {
+			if ((*i)->getId() == id) {
+				delete *i;
+				allText.erase(i);
+				goto end;
+			}
+		} 
+		Log::warning("No such text in " + this->id + " cell to delete", true);
+	}
+	else
+		throw Log::Exception("no such mode in CellInterface::textControl",true);
+end:;
+
+
+
+}
+
+CellInterface::Text* CellInterface::getTextPtr(int id) {
+	for (auto text : allText)
+		if (text->getId() == id)
+			return text;
+}
+
+/////////////// TEXT ////////////
+
+CellInterface::Text::Text(int id, std::string text, sf::Vector2f posRatio, float scaleRatio, sf::Color textColor, sf::Font &font, CellInterface& cell) {
+	this->id = id;
+	this->text.setFont(font);
+	this->text.setString(text);
+	this->text.setCharacterSize(scaleRatio* (spl::WindowStateBox::currScreenSize.x/1000));
+	this->text.setFillColor(textColor);
+	this->text.setOutlineColor(textColor - sf::Color(10,10,10));
+
+	this->text.setOrigin(this->text.getCharacterSize() * text.size()/4, this->text.getCharacterSize() / 2);
+
+	if(cell.type == typeCell::rect)
+		this->posRatio = sf::Vector2f((posRatio.x / 100)*cell.sizeCell.x, (posRatio.y / 100)*cell.sizeCell.y);
+	else
+		this->posRatio = sf::Vector2f((posRatio.x / 100)*cell.sizeCell.x, (posRatio.y / 100)*cell.sizeCell.x);
+}
+
+void CellInterface::Text::setPosition(sf::Vector2f position) {
+	text.setPosition(position + posRatio/spl::WindowStateBox::absoluteScale);
+}
+
+void CellInterface::Text::setScale(float scale) {
+	text.setScale(scale, scale);
+}
+
+void CellInterface::Text::setNewText(string text) {
+	this->text.setString(text);
+}
+
+void CellInterface::Text::setColor(sf::Color color) {
+	this->text.setColor(color);
+}
+
+void CellInterface::Text::setSize(float size) {
+	this->text.setCharacterSize(size* (spl::WindowStateBox::currScreenSize.x / 1000));
+}
+
+int CellInterface::Text::getId() {
+	return id;
+}
+
+void CellInterface::Text::changeDepthRender(int delta) {
+	depthRender += delta;
+}
+
+void CellInterface::Text::blit() {
+	spl::ToDraw draw = { &text, depthRender };
+	spl::Window::allDrawable.push_back(draw);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,19 +265,58 @@ void AssemblyLayerInterface::updateAllCellFromFile() {
 	this->styleId = t;
 
 	for (auto element : j) {
-
 		try {
 			if (element["typeObject"] == "CellInterface") {
-				CellInterface* toSaveCell = new CellInterface(sf::Vector2f(element["initRatio"][0], element["initRatio"][1]),
+				CellInterface* toSaveCell = new CellInterface(
+					sf::Vector2f(element["initRatio"][0], element["initRatio"][1]),
 					sf::Vector2f(element["sizeRatio"][0], element["sizeRatio"][1]),
 					getStyle(element["style"]),
 					element["type"],
 					element["id"]);
+
+				if (element["text"].is_object())
+					for (auto exs : element["text"]) {
+						toSaveCell->textControl(
+							"new",
+							exs["id"],
+							exs["content"],
+							sf::Vector2f(exs["posRatio"][0], exs["posRatio"][1]),
+							exs["scale"]);
+					}
 				allCell.push_back(toSaveCell);
+
+				
 			}
 		}catch (domain_error) {}
 	}
 	file.close();
+}
+
+void AssemblyLayerInterface::textControl(string cellId, string mod, int idText, string text, sf::Vector2f posRatio, float scaleRatio) {
+
+	ifstream file("game_data/interface/" + this->id + ".json");
+	if (!file.is_open())
+		throw Log::Exception("no such id file", true);
+	json j;
+	j << file;
+
+	if (mod == "new") {
+		j[cellId]["text"][to_string(idText)]["id"] = idText;
+		j[cellId]["text"][to_string(idText)]["content"] = text;
+		j[cellId]["text"][to_string(idText)]["posRatio"] = { posRatio.x , posRatio.y };
+		j[cellId]["text"][to_string(idText)]["scale"] = scaleRatio;
+	}
+	else if(mod == "del") {
+		j[cellId]["text"].erase(to_string(idText));
+	}
+	file.close();
+	ofstream file_o("game_data/interface/" + this->id + ".json");
+	if (!file_o.is_open())
+		throw Log::Exception("no such id file", true);
+
+	file_o << j;
+	file_o.close();
+	updateAllCellFromFile();
 }
 
 void AssemblyLayerInterface::createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, string styleId) {
@@ -207,7 +349,6 @@ void AssemblyLayerInterface::createNewCell(sf::Vector2f initRatio, sf::Vector2f 
 	updateAllCellFromFile();
 }
 
-
 CellInterface::StyleCell AssemblyLayerInterface::getStyle(string styleId) {
 	ifstream file("game_data/interface/styles.json");
 	if (!file.is_open())
@@ -224,13 +365,16 @@ CellInterface::StyleCell AssemblyLayerInterface::getStyle(string styleId) {
 			j[styleId]["shadow"],
 			j[styleId]["deltaTransperActive"],
 			j[styleId]["deltaTransperQuiet"],
-			j[styleId]["speedChangeTransper"]
+			j[styleId]["speedChangeTransper"],
+			j[styleId]["font"],
+			sf::Color(j[styleId]["textColor"][0],j[styleId]["textColor"][1], j[styleId]["textColor"][2])
 		};
 
 		return style;
 	}
 	else
 		throw Log::Exception("no such style id");
+	file.close();
 }
 
 string AssemblyLayerInterface::getActiveCell() {
@@ -238,6 +382,13 @@ string AssemblyLayerInterface::getActiveCell() {
 		if (allCell[i]->isActive)
 			return allCell[i]->id;
 	return "None";
+}
+
+CellInterface* AssemblyLayerInterface::getCellById(string id) {
+	for (int i = 0; i < allCell.size(); i++)
+		if (allCell[i]->id == id)
+			return allCell[i];
+	throw Log::Exception("no such cell id",true);
 }
 
 void AssemblyLayerInterface::deleteCell(std::string id) {
@@ -283,10 +434,9 @@ UserInterfaceBox::UserInterfaceBox() {
 	if (!CreateDirectory("image\\tempInterface", NULL))
 		Log::warning("no directory tempInterface 2", true);
 
-	CellInterface::StyleCell style = { sf::Color(10,60,50), sf::Color(0,255,255), 2, 2, 50, 200, 0.05};
+	CellInterface::StyleCell style = { sf::Color(10,60,50), sf::Color(0,255,255), 2, 2, 50, 200, 0.05, "font/arial.ttf", sf::Color(255,255,255)};
 	createStyle("default",style); 
 }
-
 
 void UserInterfaceBox::createStyle(string id, CellInterface::StyleCell& style) {
 	json jStyle;
@@ -303,6 +453,8 @@ void UserInterfaceBox::createStyle(string id, CellInterface::StyleCell& style) {
 	jStyle[id]["deltaTransperActive"] = style.deltaTransperActive;
 	jStyle[id]["deltaTransperQuiet"] = style.deltaTransperQuiet;
 	jStyle[id]["speedChangeTransper"] = style.speedChangeTransper;
+	jStyle[id]["font"] = style.textFont;
+	jStyle[id]["textColor"] = { style.frameColor.r,style.frameColor.g, style.frameColor.b};
 
 	ofstream outStreamFile("game_data/interface/styles.json");
 	if (!outStreamFile.is_open())
@@ -313,17 +465,21 @@ void UserInterfaceBox::createStyle(string id, CellInterface::StyleCell& style) {
 }
 
 void UserInterfaceBox::createLayer(string id, string styleId) {
-	if (currInterfaceLayer != nullptr)
-		delete currInterfaceLayer;
-	currInterfaceLayer = new AssemblyLayerInterface(id, "new", styleId);
+	this->fastAccessLayer.push_back(new AssemblyLayerInterface(id, "new", styleId));
+	currInterfaceLayer = fastAccessLayer.back();
 	activeLayer = id;
 }
 
 void UserInterfaceBox::downloadLayerById(string id) {
-	if (currInterfaceLayer != nullptr)
-		delete currInterfaceLayer;
-
-	currInterfaceLayer = new AssemblyLayerInterface(id, "old");
+	for (std::vector<AssemblyLayerInterface*>::iterator i = fastAccessLayer.begin(); i != fastAccessLayer.end(); i++) {
+		if ((*i)->id == id) {
+			currInterfaceLayer = (*i);
+			activeLayer = id;
+			return;
+		}
+	}
+	this->fastAccessLayer.push_back(new AssemblyLayerInterface(id, "old"));
+	currInterfaceLayer = fastAccessLayer.back();
 	activeLayer = id;
 }
 
@@ -339,8 +495,9 @@ AssemblyLayerInterface* UserInterfaceBox::getCurrLayer() {
 }
 
 UserInterfaceBox::~UserInterfaceBox() {
-	if (currInterfaceLayer != nullptr)
-		delete currInterfaceLayer;
+	for (auto i : fastAccessLayer)
+		delete i;
+	fastAccessLayer.clear();
 }
 
 

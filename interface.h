@@ -12,13 +12,13 @@ class BaseObject;
 
 class CellInterface {//TODO text and sprite
 private:
-	class Text {//need testing
+	class Text {
+
 	private:
 		int id;
 		sf::Text text;
 
 		sf::Vector2f posRatio;
-		//sf::Vector2f scaleRatio;
 		int depthRender = 0;
 
 	public:
@@ -122,6 +122,8 @@ public:
 	CellInterface* getCellById(string id = "None");
 	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, string styleId = "default");//for creating//can be using for update 
 	void deleteCell(std::string id); //for creating
+	void textControl(string cellId, string mod, int idText, string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);
+
 
 	string id = "None";
 
@@ -135,6 +137,7 @@ public:
 
 class UserInterfaceBox {
 protected:
+	std::vector<AssemblyLayerInterface*> fastAccessLayer;
 
 	AssemblyLayerInterface* currInterfaceLayer = nullptr;
 	

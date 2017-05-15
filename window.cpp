@@ -20,7 +20,7 @@ Window::Window() {
 	view.setCenter(450, 250);
 #endif
 	updateWindowStateBox();
-	canvas.setMouseCursorVisible(true);
+	canvas.setMouseCursorVisible(false);
 	canvas.setFramerateLimit(120);
 	canvas.setView(view);
 }

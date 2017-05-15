@@ -62,14 +62,15 @@ int main() {
 	//CellInterface inter3(sf::Vector2f(69, 90), sf::Vector2f(20, 10), style, CellInterface::typeCell::rect, "Some_id3");
 	
 	UserInterfaceBox a;
-	a.createStyle("light", style);
-	a.createLayer("pause");
-	a.createLayer("main_menu","light");
-	a.downloadLayerById("pause");
-    a.getCurrLayer()->createNewCell(sf::Vector2f(50, 50), sf::Vector2f(5, 0), CellInterface::typeCell::round, "open");
+//	a.createStyle("light", style);
+//	a.createLayer("pause");
+	//a.createLayer("main_menu");
+	//a.downloadLayerById("pause");
+  //  a.getCurrLayer()->createNewCell(sf::Vector2f(50, 50), sf::Vector2f(5, 0), CellInterface::typeCell::round, "open");
 	a.downloadLayerById("main_menu");
-	a.getCurrLayer()->createNewCell(sf::Vector2f(50, 50), sf::Vector2f(5, 0), CellInterface::typeCell::round, "cell_1");
-	a.getCurrLayer()->createNewCell(sf::Vector2f(70, 70), sf::Vector2f(10, 25), CellInterface::typeCell::rect, "cell_2", "default");
+	//a.getCurrLayer()->createNewCell(sf::Vector2f(50, 50), sf::Vector2f(5, 0), CellInterface::typeCell::round, "cell_1");
+	//a.getCurrLayer()->createNewCell(sf::Vector2f(30, 70), sf::Vector2f(30, 25), CellInterface::typeCell::rect, "cell_2", "default");
+	a.getCurrLayer()->textControl("cell_2", "del", 2);//, "health2", sf::Vector2f(2,40), 20);
 
 #ifdef DEV_MODE
 	int i = 0;
@@ -79,8 +80,8 @@ int main() {
 	while (window.canvas.isOpen()) {
 
 		ScreenLog::setValue(4, UserInterfaceBox::activeCell);
-		if (UserInterfaceBox::activeCell == "cell_1")
-			a.getCurrLayer()->deleteCell("cell_1");
+	//	if (UserInterfaceBox::activeCell == "cell_1")
+	//		a.getCurrLayer()->deleteCell("cell_1");
 
 #ifdef DEV_MODE
 		/////////////// FPS //////////////////

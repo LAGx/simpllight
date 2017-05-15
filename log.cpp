@@ -70,8 +70,7 @@ std::vector<ScreenLog::lgT> ScreenLog::logText;
 sf::Font ScreenLog::font;
 
 ScreenLog::ScreenLog() {
-	if (!font.loadFromFile("font/arial.ttf"))
-	{
+	if (!font.loadFromFile("font/arial.ttf")){
 		throw Log::Exception("load screenLog font");
 	}
 }
