@@ -175,7 +175,7 @@ CellInterface::Text* CellInterface::getTextPtr(int id) {
 			return text;
 }
 
-void CellInterface::setItem(InterfaceItem *item) {
+void CellInterface::setItem(BaseObject *item) {
 	this->item = nullptr;
 	this->item = item;
 }

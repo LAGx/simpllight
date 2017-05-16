@@ -9,7 +9,6 @@
 #include "state.h"
 #include "interface.h"
 
-class CellInterface;
 enum figureType {
 	circle_T = 1,
 	tringle_T,
@@ -18,7 +17,7 @@ enum figureType {
 	intnugon_T
 };
 
-
+class CellInterface;
 
 class BaseObject {
 	friend CellInterface;
@@ -97,7 +96,6 @@ public:
 class House :public StaticObject {
 public:
 	StaticObject *door;
-
 
 	//shadow size 10
 	//door shadow 4

@@ -1,17 +1,19 @@
+
+#ifndef _INTERFACE_
+#define _INTERFACE_
+
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
 #include "game_objects.h"
 #include "service.h"
-#include "control.h"
-#include "items.h"
 
 using namespace std;
 
 class BaseObject;
 
-class CellInterface {//TODO text and sprite
+class CellInterface {
 private:
 	class Text {
 
@@ -38,8 +40,9 @@ private:
 		void blit();
 
 	};
+	
 
-	InterfaceItem *item = nullptr;//can be created outside
+
 
 	sf::Color textColor;
 	sf::Font font;
@@ -49,6 +52,7 @@ private:
 	float animationCoef = 0;
 	void animation();
 
+	BaseObject* item = nullptr; //can be created outside
 
 	void phisicCollideDetecting();
 
@@ -89,11 +93,11 @@ public:
 		round
 	};
 
-	//position and scale reletive cell (in %)
+//	position and scale reletive cell (in %)
 	void textControl(string mod, int id, string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);//mod "new"-new text, "del"-delete text
 	Text* getTextPtr(int id);
 
-	void setItem(InterfaceItem *item);
+	void setItem(BaseObject* item);
 	void removeItem();
 
 	CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, StyleCell& style, typeCell type, std::string id);
@@ -167,24 +171,5 @@ public:
 	~UserInterfaceBox();
 };
 
-class InterfaceCreator:protected spl::EventInterface {
-public:
-	
-};
 
-
-class IconAnimated {
-	sf::Texture texture;
-	sf::Sprite sprite;
-	int depthRender = 0;
-
-public:
-	float speed = 1;
-	bool isPlay = 1;
-
-	IconAnimated(sf::Vector2i sizeToCut, , string file);
-
-
-
-	void blit();
-};
+#endif
