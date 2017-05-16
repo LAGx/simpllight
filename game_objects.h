@@ -34,6 +34,8 @@ public:
 
 	BaseObject(sf::Vector2f initCord, std::string texture);
 
+	BaseObject();
+
 	virtual void blit();
 
 	virtual ~BaseObject();
@@ -278,4 +280,7 @@ public:
 
 	~Player();
 };
+
+
+
 #endif

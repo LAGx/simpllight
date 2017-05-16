@@ -5,6 +5,7 @@
 #include "game_objects.h"
 #include "service.h"
 #include "control.h"
+#include "items.h"
 
 using namespace std;
 
@@ -38,11 +39,12 @@ private:
 
 	};
 
+	InterfaceItem *item = nullptr;//can be created outside
 
 	sf::Color textColor;
 	sf::Font font;
 	vector<Text* > allText;
-
+	
 	void update();
 	float animationCoef = 0;
 	void animation();
@@ -90,6 +92,9 @@ public:
 	//position and scale reletive cell (in %)
 	void textControl(string mod, int id, string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);//mod "new"-new text, "del"-delete text
 	Text* getTextPtr(int id);
+
+	void setItem(InterfaceItem *item);
+	void removeItem();
 
 	CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, StyleCell& style, typeCell type, std::string id);
 
@@ -171,11 +176,15 @@ public:
 class IconAnimated {
 	sf::Texture texture;
 	sf::Sprite sprite;
+	int depthRender = 0;
+
 public:
 	float speed = 1;
 	bool isPlay = 1;
 
-	IconAnimated(sf::Vector2f initRatio, string file);
+	IconAnimated(sf::Vector2i sizeToCut, , string file);
+
+
 
 	void blit();
 };

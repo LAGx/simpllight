@@ -69,6 +69,7 @@ void CellInterface::blit() {
 		frameTextr->blit();
 		for (auto text : allText)
 			text->blit();
+		
 	}
 	else {
 		isActive = false;
@@ -172,6 +173,15 @@ CellInterface::Text* CellInterface::getTextPtr(int id) {
 	for (auto text : allText)
 		if (text->getId() == id)
 			return text;
+}
+
+void CellInterface::setItem(InterfaceItem *item) {
+	this->item = nullptr;
+	this->item = item;
+}
+
+void CellInterface::removeItem(){
+	item = nullptr;
 }
 
 /////////////// TEXT ////////////

@@ -8,6 +8,7 @@
 #include "state.h"
 #include "service.h"
 #include "interface.h"
+#include "items.h"
 using namespace std;
 
 int main() {

@@ -78,6 +78,9 @@
     <ClInclude Include="interface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="items.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="font\arial.ttf">
@@ -167,6 +170,9 @@
     </ClCompile>
     <ClCompile Include="interface.cpp">
       <Filter>Source Files\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
+      <Filter>Source Files\game_objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

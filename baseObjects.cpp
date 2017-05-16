@@ -23,6 +23,9 @@ BaseObject::BaseObject(Vector2f initCord, string textr) {
 	g_body.setPosition(initCord);
 }
 
+BaseObject::BaseObject() {	//empty//for inheritance
+	isVisible = false;
+}
 
 void BaseObject::updateTextrPosition(Vector2f newCord, float newAngle) {
 	g_body.setPosition(newCord);
