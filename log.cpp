@@ -1,11 +1,11 @@
 ﻿#pragma once
 #include <fstream>
 #include <string>
-#include <ctime>
 #include <SFML/Graphics.hpp>
 
 #include "log.h"
 #include "window.h"
+#include "service.h"
 
 using namespace std;
 
@@ -16,22 +16,13 @@ void Log::clear() {
 	file.close();
 }
 
-string Log::getTime() { //day|hour:min:sec
-	time_t rawtime = time(0);
-	struct tm timeinfo;
-	localtime_s(&timeinfo, &rawtime);
-
-	string date = to_string(timeinfo.tm_mday) + "|" + to_string(timeinfo.tm_hour) + ":" + to_string(timeinfo.tm_min) + ":" + to_string(timeinfo.tm_sec);
-	return date;
-}
-
 void Log::log(string log, bool time) {
 	ofstream file(logName, ios_base::app);
 	if (!time) {
 		file << "LOG: " << log << endl;
 	}
 	else {
-		file << "LOG|" << getTime() << "|: " << log << endl;
+		file << "LOG|" << spl::Time::getTime(spl::Time::day_HourMinSec) << "|: " << log << endl;
 	}
 	file.close();
 }
@@ -42,7 +33,7 @@ void Log::warning(string warn, bool time) {
 		file << "WARNING: " << warn << endl;
 	}
 	else {
-		file << "WARNING|" << getTime() << "|: " << warn << endl;
+		file << "WARNING|" << spl::Time::getTime(spl::Time::day_HourMinSec) << "|: " << warn << endl;
 	}
 	file.close();
 }
@@ -53,7 +44,7 @@ void Log::error(string err, bool time) {
 		file << "ERROR: " << err << endl;
 	}
 	else {
-		file << "ERROR|" << getTime() << "|: " << err << endl;
+		file << "ERROR|" << spl::Time::getTime(spl::Time::day_HourMinSec) << "|: " << err << endl;
 	}
 	file.close();
 }

@@ -5,28 +5,25 @@
 #include <vector>
 #include <fstream>
 #include <SFML/Graphics.hpp>
-using namespace std;
 
 class Log {
 private:
-	static string getTime(); //day|hour:min:sec
-
 	static std::string logName;
 
-	static void error(string err, bool time = false);
+	static void error(std::string err, bool time = false);
 
 public:
 
 	class Exception {
 	public:
-		Exception(string error, bool isTime = false);
+		Exception(std::string error, bool isTime = false);
 	};
 
 	static void clear();
 
-	static void log(string log, bool time = false);
+	static void log(std::string log, bool time = false);
 
-	static void warning(string warn, bool time = false);
+	static void warning(std::string warn, bool time = false);
 
 };
 
@@ -34,19 +31,19 @@ class ScreenLog {
 private:
 	struct lgT {
 		int id = 0;
-		string name;
+		std::string name;
 		sf::Text text;
 	};
 
 	static sf::Font font;
-	static vector<lgT> logText;
+	static std::vector<lgT> logText;
 
 public:
 
 	ScreenLog();
-	void setNewLog(string name, int id = 0);
+	void setNewLog(std::string name, int id = 0);
 
-	static void setValue(int id, string value = "None");
+	static void setValue(int id, std::string value = "None");
 
 	void blit();
 };

@@ -40,33 +40,24 @@
     <Filter Include="Resource Files\image\human">
       <UniqueIdentifier>{546684ec-1712-43c9-ab85-a5f61842245f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\INIReader">
+      <UniqueIdentifier>{9cd6fb03-77ce-4bcf-996e-159e7f3e241b}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\INIReader">
       <UniqueIdentifier>{68dc998d-c7e0-4e73-bee6-d55687be25b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\INIReader">
-      <UniqueIdentifier>{9cd6fb03-77ce-4bcf-996e-159e7f3e241b}</UniqueIdentifier>
+    <Filter Include="Header Files\service">
+      <UniqueIdentifier>{7bc75a7a-3ec8-4722-a3ec-db10243cf4f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="game_objects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="phisic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="service.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="state.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="control.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\cpp\INIReader.h">
@@ -74,6 +65,24 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\ini.h">
       <Filter>Header Files\INIReader</Filter>
+    </ClInclude>
+    <ClInclude Include="game_objects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="INIWriter.h">
+      <Filter>Header Files\INIReader</Filter>
+    </ClInclude>
+    <ClInclude Include="control.h">
+      <Filter>Header Files\service</Filter>
+    </ClInclude>
+    <ClInclude Include="log.h">
+      <Filter>Header Files\service</Filter>
+    </ClInclude>
+    <ClInclude Include="objectsFactory.h">
+      <Filter>Header Files\service</Filter>
+    </ClInclude>
+    <ClInclude Include="service.h">
+      <Filter>Header Files\service</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -162,8 +171,19 @@
     <ClCompile Include="..\..\..\..\..\..\..\Game_Lib\inih\cpp\INIReader.cpp">
       <Filter>Source Files\INIReader</Filter>
     </ClCompile>
+    <ClCompile Include="objectsFactory.cpp">
+      <Filter>Source Files\service</Filter>
+    </ClCompile>
+    <ClCompile Include="INIWriter.cpp">
+      <Filter>Source Files\INIReader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="log.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

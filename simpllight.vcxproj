@@ -120,6 +120,8 @@
     <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\cpp\INIReader.h" />
     <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\ini.h" />
     <ClInclude Include="control.h" />
+    <ClInclude Include="INIWriter.h" />
+    <ClInclude Include="objectsFactory.h" />
     <ClInclude Include="game_objects.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="phisic.h" />
@@ -153,6 +155,8 @@
     <ClCompile Include="baseObjects.cpp" />
     <ClCompile Include="control.cpp" />
     <ClCompile Include="gameObjects.cpp" />
+    <ClCompile Include="INIWriter.cpp" />
+    <ClCompile Include="objectsFactory.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="phisic.cpp" />
@@ -162,6 +166,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="log.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

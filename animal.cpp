@@ -46,13 +46,13 @@ void Person::PAIForce() {
 		body_ph->ApplyForceToCenter(PAIvec, true);
 	}
 	else {
-		PAIiter = Rand::intRand(60, 240);
+		PAIiter = spl::Rand::intRand(60, 240);
 		PAIdelta = 0;
 		b2Vec2 temp(0, 0);
-		float x = Rand::intRand(0, 10), y = Rand::intRand(0, 10);
+		float x = spl::Rand::intRand(0, 10), y = spl::Rand::intRand(0, 10);
 		temp.Set(x, y);
 		temp.Normalize();
-		if (Rand::intRand(0, 1))
+		if (spl::Rand::intRand(0, 1))
 			PAIvec = -speed*temp;
 		else
 			PAIvec = speed*temp;

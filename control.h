@@ -3,6 +3,7 @@
 
 #pragma once
 #include <vector>
+#include <string>
 #include <SFML/Graphics.hpp>
 
 #include "state.h"
@@ -12,7 +13,6 @@
 namespace spl {
 
 	class EventInterface {
-
 	public:
 
 		virtual void moveTop() {} //for player
@@ -22,6 +22,8 @@ namespace spl {
 		virtual void moveLeft() {} //for player
 
 		virtual void moveRight() {} //for player
+
+		virtual void apply() {}
 
 		virtual void primaryMouseAction() {} //mouse
 
@@ -37,16 +39,47 @@ namespace spl {
 	class ControlBox {
 	private:
 
+		/*class Console {
+		public:
+
+			#define cendl '\n'
+
+			~Console() {
+				history.clear();
+			}
+
+			void hide();
+
+			void show();
+
+			void renderAll();
+
+			template<class T>
+			void render(T &in);
+
+			template<class T> 
+			Console &operator<<(T &in);
+		private:
+			void clear();
+			void saveHistory(); //Saving available console history to file "consoleLog.txt"
+		//	void listenCommand();
+
+			template <class T> 
+			Console &operator>>(std::string &in);
+
+			std::string history;
+		};*/
+
 		struct KeyBindings {
 			sf::Keyboard::Key moveTop = sf::Keyboard::W;
 			sf::Keyboard::Key moveBottom = sf::Keyboard::S;
 			sf::Keyboard::Key moveLeft = sf::Keyboard::A;
 			sf::Keyboard::Key moveRight = sf::Keyboard::D;
+			sf::Keyboard::Key apply = sf::Keyboard::F;
+			sf::Keyboard::Key console = sf::Keyboard::Tilde;
 
 			sf::Mouse::Button primaryMouseAction = sf::Mouse::Button::Left;
 			sf::Mouse::Button secondaryMouseAction = sf::Mouse::Button::Right;
-			sf::Mouse::Wheel verticalMouseWheel = sf::Mouse::Wheel::VerticalWheel;
-			sf::Mouse::Wheel horizontalMouseWheel = sf::Mouse::Wheel::HorizontalWheel;
 		} keyBindings;
 
 		std::vector<EventInterface*> controlObjects;
@@ -54,6 +87,8 @@ namespace spl {
 		sf::Event event;
 
 	public:
+
+		//static Console *console;
 
 		ControlBox();
 
