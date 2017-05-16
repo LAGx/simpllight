@@ -47,7 +47,7 @@ Window::~Window() {
 
 }
 
-
+sf::Clock Window::clock;
 sf::RenderWindow Window::canvas;
 sf::View Window::view;
 

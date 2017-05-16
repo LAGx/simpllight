@@ -27,6 +27,7 @@ namespace spl {
 		static sf::View view;
 
 		static std::vector<ToDraw> allDrawable;
+		static sf::Clock clock;
 
 		Window();
 

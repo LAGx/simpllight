@@ -8,6 +8,7 @@
 #include <vector>
 #include "game_objects.h"
 #include "service.h"
+#include "item.h"
 
 using namespace std;
 
@@ -52,7 +53,7 @@ private:
 	float animationCoef = 0;
 	void animation();
 
-	BaseObject* item = nullptr; //can be created outside
+	InterfaceItem* item = nullptr; //can be created outside
 
 	void phisicCollideDetecting();
 
@@ -97,7 +98,7 @@ public:
 	void textControl(string mod, int id, string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);//mod "new"-new text, "del"-delete text
 	Text* getTextPtr(int id);
 
-	void setItem(BaseObject* item);
+	void setItem(InterfaceItem* item);
 	void removeItem();
 
 	CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, StyleCell& style, typeCell type, std::string id);

@@ -8,6 +8,7 @@
 #include "state.h"
 #include "service.h"
 #include "interface.h"
+#include "item.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ int main() {
 
 	CollideListener collideListener;
 	World.SetContactListener(&collideListener);
-
+	BaseItem::setGlobalImage("image/sprites/player.png");
 	spl::ControlBox controlBox;
 
 #ifdef DEV_MODE
