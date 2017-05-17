@@ -48,8 +48,9 @@ CellInterface::CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, Sty
 	this->baseTextr  = new BaseObject(sf::Vector2f(0,0), "image/tempInterface/" + id + "_base.png");
 	this->frameTextr = new BaseObject(sf::Vector2f(0,0), "image/tempInterface/" + id + "_frame.png");
 
-	baseTextr->depthRender = -500;
-	frameTextr->depthRender = -500 - 1;
+	baseTextr->depthRender = -1000;
+	depthRender = -1000;
+	frameTextr->depthRender = -1000 - 10;
 
 	if (!font.loadFromFile(style.textFont)){
 		throw Log::Exception("load interface font");
@@ -60,6 +61,7 @@ CellInterface::CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, Sty
 void CellInterface::changeDepthRender(int depth) {
 	baseTextr->depthRender += depth;
 	frameTextr->depthRender += depth;
+	depthRender += depth;
 }
 
 void CellInterface::blit() {
@@ -69,8 +71,12 @@ void CellInterface::blit() {
 		frameTextr->blit();
 		for (auto text : allText)
 			text->blit();
-		if (item != nullptr)
-			item->blitInCell();
+		if (item != nullptr) {
+			if(type == typeCell::rect)
+				item->blit(positionRelWindow, sizeCell.y);
+			else
+				item->blit(positionRelWindow, sizeCell.x*2);
+		}
 	}
 	else {
 		isActive = false;
@@ -149,7 +155,7 @@ void CellInterface::textControl(std::string mod, int id, std::string text, sf::V
 			}
 		}
 		allText.push_back(new Text(id, text, posRatio, scaleRatio, textColor, font, *this));
-		allText.back()->changeDepthRender(-501);
+		allText.back()->changeDepthRender(-1005);
 		allText.back()->setColor(textColor);
 	}
 	else if (mod == "del") {
@@ -179,10 +185,37 @@ CellInterface::Text* CellInterface::getTextPtr(int id) {
 void CellInterface::setItem(InterfaceItem *item) {
 	this->item = nullptr;
 	this->item = item;
+	this->item->setDepthRender(depthRender-3);
 }
 
 void CellInterface::removeItem(){
 	item = nullptr;
+}
+///////////BaseObgect////////////////
+CellInterface::BaseObject::BaseObject(sf::Vector2f initCord, string textr) {
+	if (!texture.loadFromFile(textr)) {
+		throw Log::Exception("Texture load in CellInterface::BaseObject from " + textr, true);
+	}
+	texture.setSmooth(true);
+	g_body.setTexture(texture);
+	g_body.setOrigin(sf::Vector2f(texture.getSize().x / 2, texture.getSize().y / 2));
+	g_body.setPosition(initCord);
+}
+
+CellInterface::BaseObject::BaseObject() {	//empty//for inheritance
+	isVisible = false;
+}
+
+void CellInterface::BaseObject::updateTextrPosition(sf::Vector2f newCord, float newAngle) {
+	g_body.setPosition(newCord);
+	g_body.setRotation(newAngle);
+}
+
+void CellInterface::BaseObject::blit() {
+	if (isVisible) {
+		spl::ToDraw draw = { &g_body, depthRender };
+		spl::Window::allDrawable.push_back(draw);
+	}
 }
 
 /////////////// TEXT ////////////

@@ -265,7 +265,7 @@ StaticObject::~StaticObject() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 Cursor::Cursor(b2World* World, std::string textr, std::string name) :DynamicObject(World, sf::Vector2f(0, 0), textr, name, circle_T, 1, true) {
-	depthRender = -1000;
+	depthRender = -2000;
 	setDrug(0,0);
 }
 

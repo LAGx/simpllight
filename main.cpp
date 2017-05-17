@@ -55,7 +55,7 @@ int main() {
 
 	Shrub s1(&World, sf::Vector2f(207, 250), "image/veget/shrub.png", "sh1");
 	Shrub s2(&World, sf::Vector2f(397, 324), "image/veget/shrub2.png", "sh2");
-	Shrub s3(&World, sf::Vector2f(492, 290), "image/veget/shrub2.png", "sh3");
+	Shrub s3(&World, sf::Vector2f(492, 290), "image/sprites/sprite_test_m.png", "sh3");
 
 	CellInterface::StyleCell style = { sf::Color(255,255,255), sf::Color(220,0,200), 10, 10, 50, 200, 0.05 };
 	
@@ -70,10 +70,19 @@ int main() {
 	//a.downloadLayerById("pause");
   //  a.getCurrLayer()->createNewCell(sf::Vector2f(50, 50), sf::Vector2f(5, 0), CellInterface::typeCell::round, "open");
 	a.downloadLayerById("main_menu");
-	//a.getCurrLayer()->createNewCell(sf::Vector2f(50, 50), sf::Vector2f(5, 0), CellInterface::typeCell::round, "cell_1");
-	//a.getCurrLayer()->createNewCell(sf::Vector2f(30, 70), sf::Vector2f(30, 25), CellInterface::typeCell::rect, "cell_2", "default");
-	a.getCurrLayer()->textControl("cell_2", "del", 2);//, "health2", sf::Vector2f(2,40), 20);
+	a.getCurrLayer()->createNewCell(sf::Vector2f(50, 50), sf::Vector2f(2, 2), CellInterface::typeCell::rect, "cell_1");
+	a.getCurrLayer()->createNewCell(sf::Vector2f(10, 10), sf::Vector2f(10, 10), CellInterface::typeCell::rect, "pic");
+	a.getCurrLayer()->createNewCell(sf::Vector2f(30, 70), sf::Vector2f(8, 10), CellInterface::typeCell::rect, "cell_2", "default");
 
+	a.getCurrLayer()->textControl("cell_2", "del", 1);//, "health2", sf::Vector2f(2,40), 20);
+	InterfaceItem *item = new InterfaceItem("money", sf::Vector2i(0,0));
+	item->setLocalImage("image/sprites/sprite_test_m.png");
+	item->set_isPlaying(true);
+	item->setSpeedAnimations(1000/20);
+	item->setSpriteParameters(sf::Vector2i(0, 0), sf::Vector2i(32*8, 32));
+	//a.getCurrLayer()->getCellById("pic")->setItem(item);
+	//a.getCurrLayer()->getCellById("cell_1")->setItem(item);
+	a.getCurrLayer()->getCellById("cell_2")->setItem(item);
 #ifdef DEV_MODE
 	int i = 0;
 	sf::Clock clock;

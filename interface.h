@@ -6,13 +6,12 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
-#include "game_objects.h"
 #include "service.h"
 #include "item.h"
 
 using namespace std;
 
-class BaseObject;
+class BaseClass;
 
 class CellInterface {
 private:
@@ -41,6 +40,25 @@ private:
 		void blit();
 
 	};
+
+	class BaseObject {//gvnocod becouse of circular include
+	public:
+		sf::Texture texture;
+		sf::Sprite g_body;
+
+		void updateTextrPosition(sf::Vector2f newCord, float newAngle = 0);
+		bool isVisible = true;
+
+		int depthRender = 0;
+
+		BaseObject(sf::Vector2f initCord, std::string texture);
+
+		BaseObject();
+
+		void blit();
+
+	};
+
 	
 
 
@@ -53,12 +71,12 @@ private:
 	float animationCoef = 0;
 	void animation();
 
-	InterfaceItem* item = nullptr; //can be created outside
+	InterfaceItem* item = nullptr; //have to be created outside
 
 	void phisicCollideDetecting();
 
-	BaseObject *baseTextr;
-	BaseObject *frameTextr;
+	CellInterface::BaseObject *baseTextr;
+	CellInterface::BaseObject *frameTextr;
 
 	enum typeCell;
 	typeCell type;

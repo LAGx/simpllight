@@ -7,7 +7,6 @@
 #include <string>
 #include "control.h"
 #include "state.h"
-#include "interface.h"
 
 enum figureType {
 	circle_T = 1,
@@ -17,10 +16,7 @@ enum figureType {
 	intnugon_T
 };
 
-class CellInterface;
-
 class BaseObject {
-	friend CellInterface;
 protected:
 	sf::Texture texture;
 	sf::Sprite g_body;

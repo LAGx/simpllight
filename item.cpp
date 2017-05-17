@@ -1,19 +1,21 @@
 #include "item.h"
 #include "log.h"
-
+#include <cmath>
 
 sf::Texture* BaseItem::itemTexture = nullptr;
 
-BaseItem::BaseItem(string name, sf::Vector2i startPos, sf::Vector2i size, string file = "None") {
-	name = name;
-	if(file != "None")
+BaseItem::BaseItem(string name, sf::Vector2i startPos, sf::Vector2i size, string file) {
+	this->name = name;
+    if(file != "None")
 		setLocalImage(file);
-	void setSpriteParameters(sf::Vector2i startPos, sf::Vector2i size);
+	setVisible(true);
+	setSpriteParameters(startPos, size);
 }
 
 void BaseItem::setGlobalImage(string file) {
 	static bool flag = false;
 	itemTexture = new sf::Texture;
+	itemTexture->setSmooth(true);
 	if (!itemTexture->loadFromFile(file)) {
 		throw Log::Exception("can`t load texture itemImage from " + file, true);
 		flag = true;
@@ -22,24 +24,26 @@ void BaseItem::setGlobalImage(string file) {
 		throw Log::Exception("unallawed redefinition of itemImage", true);
 }
 
-
 void BaseItem::setLocalImage(string file) {
 	if (!texture.loadFromFile(file))
 		throw Log::Exception("can`t load texture itemImage from " + file, true);
+	texture.setSmooth(true);
 	g_body.setTexture(texture);
 	isLocalTexture = true;
 }
 
 void BaseItem::setSpriteParameters(sf::Vector2i startPos, sf::Vector2i size) {
-	if (!(size.y%size.x))
+	if (!(size.x % size.y))
 		Log::warning("BaseItem::setSpriteParameterst, sprite can`t divide by square", true);
 	if (isLocalTexture) {
+		texture.loadFromImage(texture.copyToImage(), sf::IntRect(startPos, size));
 		g_body.setTexture(texture);
 	}
 	else {
 		texture.loadFromImage(itemTexture->copyToImage(), sf::IntRect(startPos, size));
 		g_body.setTexture(texture);
 	}
+	g_body.setTextureRect(sf::IntRect(0, 0, texture.getSize().y, texture.getSize().y));
 }
 
 void BaseItem::setVisible(bool isVisible) {
@@ -49,26 +53,32 @@ void BaseItem::setVisible(bool isVisible) {
 void BaseItem::set_isPlaying(bool isPlaying) {
 	this->isPlaying = isPlaying;
 	if (!isPlaying) {
-		g_body.setTextureRect(sf::IntRect(0,0, texture.getSize().x, texture.getSize().x));
+		g_body.setTextureRect(sf::IntRect(0,0, texture.getSize().y, texture.getSize().y));
 	}
 }
 
-void BaseItem::setSpeedAnimations(bool speed) {
+void BaseItem::setSpeedAnimations(float speed) {
 	speedAnimations = speed;
 }
 
 void BaseItem::animation(){
 	if (isPlaying) {
-		if (lastTime - spl::Window::clock.getElapsedTime().asMilliseconds() > speedAnimations) {
-			if (cursor < (texture.getSize().y / texture.getSize().x)) {
-				g_body.setTextureRect(sf::IntRect(cursor*texture.getSize().x, 0, texture.getSize().x, texture.getSize().x));
+		if (std::fabs(spl::Window::clock.getElapsedTime().asMilliseconds()-lastTime) > speedAnimations) {
+			if (cursor < (texture.getSize().x / texture.getSize().y)) {
+				g_body.setTextureRect(sf::IntRect(cursor*texture.getSize().y, 0, texture.getSize().y, texture.getSize().y));
 				cursor++;
 			}
-			else
+			else {
 				cursor = 0;
+				return;
+			}
 			lastTime = spl::Window::clock.getElapsedTime().asMilliseconds();
 		}
 	}
+}
+
+void BaseItem::setDepthRender(int depth) {
+	depthRender = depth;
 }
 
 void BaseItem::deleteGloabImage() {
@@ -77,6 +87,18 @@ void BaseItem::deleteGloabImage() {
 
 ///////////////////////////////////////////////////////////
 
-InterfaceItem::InterfaceItem(string name):BaseItem(name, ){//make standart size and frames
 
+InterfaceItem::InterfaceItem(string name, sf::Vector2i startPos):BaseItem(name, startPos, sf::Vector2i(32*8,32)){//make standart size and frames
 }
+
+
+void InterfaceItem::blit(sf::Vector2f pos, float size_to_spread_Y){
+	if (isVisible) {
+		animation();
+	    g_body.setScale(sf::Vector2f((size_to_spread_Y / 40) / spl::WindowStateBox::absoluteScale, (size_to_spread_Y/40) / spl::WindowStateBox::absoluteScale));
+		updateTextrPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + sf::Vector2f(pos.x-16*(size_to_spread_Y / 40), pos.y-16 * (size_to_spread_Y / 40)) / spl::WindowStateBox::absoluteScale);
+		BaseObject::blit();
+	}
+}
+
+

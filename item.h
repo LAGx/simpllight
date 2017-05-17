@@ -7,21 +7,23 @@
 using namespace std;
 
 class BaseItem :public BaseObject {
-protected:
-	static sf::Texture* itemTexture;
-	int speedAnimations = 300; //delay
-	bool isPlaying = false;
-	string name = "None";
+private:
 	bool isLocalTexture = false;
 	char cursor = 0;
 	float lastTime;
+protected:
+	static sf::Texture* itemTexture;
+	float speedAnimations = 300; //delay
+	bool isPlaying = true;
+	string name = "None";
 public:
 
-	BaseItem(string name, sf::Vector2i startPos, sf::Vector2i size, string file="None");
+	BaseItem(string name, sf::Vector2i startPos = { 0,0 }, sf::Vector2i size = {1,1}, string file = "None");
 
 	void setVisible(bool isVisible);
 	void set_isPlaying(bool isPlaying);
-	void setSpeedAnimations(bool speed);
+	void setSpeedAnimations(float speed);
+	void setDepthRender(int depth);
 
 	static void setGlobalImage(string file);
 	static void deleteGloabImage();
@@ -29,23 +31,22 @@ public:
 	void setSpriteParameters(sf::Vector2i startPos, sf::Vector2i size);//square sprites with side size.x//
 
 	void animation();
-	virtual void blit() = 0;
+	//virtual void blit() = 0;
 };
 
 
 class WorldItem;
 
-class InterfaceItem :public BaseItem, protected spl::EventInterface {
+class InterfaceItem :public BaseItem{//icons have to be 64x64, 4 lines * x frames 
 private:
 
 public:
 
-	InterfaceItem(string name);
+	InterfaceItem(string name, sf::Vector2i startPos);
 
-	WorldItem* convertToWorldItem();
+	WorldItem* convertToWorldItem(sf::Vector2f posToPut);
 
-	void blit();
-	void blitInCell(float scale_Rel_Y);
+	void blit(sf::Vector2f pos = {0,0}, float scale_Rel_Y = 1);
 };
 
 
@@ -54,7 +55,11 @@ private:
 
 
 public:
+
+
 	InterfaceItem* convertToInterfaceItem();
+
+	void blit();
 };
 
 #endif
