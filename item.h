@@ -57,6 +57,8 @@ private:
 public:
 
 
+
+
 	InterfaceItem* convertToInterfaceItem();
 
 	void blit();

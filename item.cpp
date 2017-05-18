@@ -33,8 +33,6 @@ void BaseItem::setLocalImage(string file) {
 }
 
 void BaseItem::setSpriteParameters(sf::Vector2i startPos, sf::Vector2i size) {
-	if (!(size.x % size.y))
-		Log::warning("BaseItem::setSpriteParameterst, sprite can`t divide by square", true);
 	if (isLocalTexture) {
 		texture.loadFromImage(texture.copyToImage(), sf::IntRect(startPos, size));
 		g_body.setTexture(texture);
@@ -88,15 +86,15 @@ void BaseItem::deleteGloabImage() {
 ///////////////////////////////////////////////////////////
 
 
-InterfaceItem::InterfaceItem(string name, sf::Vector2i startPos):BaseItem(name, startPos, sf::Vector2i(32*8,32)){//make standart size and frames
+InterfaceItem::InterfaceItem(string name, sf::Vector2i startPos):BaseItem(name, startPos, sf::Vector2i(64*16,64)){//make standart size and frames
 }
 
 
 void InterfaceItem::blit(sf::Vector2f pos, float size_to_spread_Y){
 	if (isVisible) {
 		animation();
-	    g_body.setScale(sf::Vector2f((size_to_spread_Y / 40) / spl::WindowStateBox::absoluteScale, (size_to_spread_Y/40) / spl::WindowStateBox::absoluteScale));
-		updateTextrPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + sf::Vector2f(pos.x-16*(size_to_spread_Y / 40), pos.y-16 * (size_to_spread_Y / 40)) / spl::WindowStateBox::absoluteScale);
+	    g_body.setScale(sf::Vector2f((size_to_spread_Y / (g_body.getTextureRect().height+0)) / spl::WindowStateBox::absoluteScale, (size_to_spread_Y/ (g_body.getTextureRect().height +0 )) / spl::WindowStateBox::absoluteScale));
+		updateTextrPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + sf::Vector2f(pos.x- g_body.getTextureRect().height / 2 *(size_to_spread_Y /( g_body.getTextureRect().height + 6)), pos.y- g_body.getTextureRect().height /2 * (size_to_spread_Y / (g_body.getTextureRect().height + 6))) / spl::WindowStateBox::absoluteScale);
 		BaseObject::blit();
 	}
 }

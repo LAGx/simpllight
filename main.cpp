@@ -55,7 +55,7 @@ int main() {
 
 	Shrub s1(&World, sf::Vector2f(207, 250), "image/veget/shrub.png", "sh1");
 	Shrub s2(&World, sf::Vector2f(397, 324), "image/veget/shrub2.png", "sh2");
-	Shrub s3(&World, sf::Vector2f(492, 290), "image/sprites/sprite_test_m.png", "sh3");
+	Shrub s3(&World, sf::Vector2f(492, 290), "image/veget/shrub2.png", "sh3");
 
 	CellInterface::StyleCell style = { sf::Color(255,255,255), sf::Color(220,0,200), 10, 10, 50, 200, 0.05 };
 	
@@ -76,10 +76,10 @@ int main() {
 
 	a.getCurrLayer()->textControl("cell_2", "del", 1);//, "health2", sf::Vector2f(2,40), 20);
 	InterfaceItem *item = new InterfaceItem("money", sf::Vector2i(0,0));
-	item->setLocalImage("image/sprites/sprite_test_m.png");
+	item->setLocalImage("image/sprites/sprite_new.png");
 	item->set_isPlaying(true);
-	item->setSpeedAnimations(1000/20);
-	item->setSpriteParameters(sf::Vector2i(0, 0), sf::Vector2i(32*8, 32));
+	item->setSpeedAnimations(1000/25);
+	item->setSpriteParameters(sf::Vector2i(0, 0), sf::Vector2i(64*16, 64));
 	//a.getCurrLayer()->getCellById("pic")->setItem(item);
 	//a.getCurrLayer()->getCellById("cell_1")->setItem(item);
 	a.getCurrLayer()->getCellById("cell_2")->setItem(item);
