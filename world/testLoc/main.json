@@ -1,0 +1,84 @@
+[
+{
+	"name" : "house",
+	"type" : "House",
+	"initCord" : [150, 100],
+	"angle" : -120,
+	"textureHouse" : "image/house/house2.png",
+	"textureDoor" : "image/house/door2.png"
+},
+{
+	"name" : "house1",
+	"type" : "House",
+	"initCord" : [300, 400],
+	"angle" : 30,
+	"textureHouse" : "image/house/house.png",
+	"textureDoor" : "image/house/door.png"
+},
+{
+	"name" : "house2",
+	"type" : "House",
+	"initCord" : [500, 100],
+	"angle" : 120,
+	"textureHouse" : "image/house/house.png",
+	"textureDoor" : "image/house/door.png"
+},
+{
+	"name" : "y1",
+	"type" : "Fir_tree",
+	"initCord" : [350, 175],
+	"texture" : "image/veget/tree.png",
+	"health" : 100
+},
+{
+	"name" : "y2",
+	"type" : "Fir_tree",
+	"initCord" : [127,419],
+	"texture" : "image/veget/tree.png",
+	"health" : 100
+},
+{
+	"name" : "y3",
+	"type" : "Fir_tree",
+	"initCord" : [107, 316],
+	"texture" : "image/veget/tree.png",
+	"health" : 100
+},
+{
+	"name" : "sh1",
+	"type" : "Shrub",
+	"initCord" : [207, 250],
+	"texture" : "image/veget/shrub.png",
+	"health" : 100
+},
+{
+	"name" : "sh2",
+	"type" : "Shrub",
+	"initCord" : [397, 324],
+	"texture" : "image/veget/shrub2.png",
+	"health" : 100
+},
+{
+	"name" : "sh3",
+	"type" : "Shrub",
+	"initCord" : [492, 290],
+	"texture" : "image/veget/shrub2.png",
+	"health" : 100
+},
+{
+	"name" : "human1",
+	"type" : "Person",
+	"initCord" : [605, 190],
+	"texture" : "image/human/human1.png",
+	"health" : 100
+},
+{
+	"name" : "human2",
+	"type" : "Person",
+	"initCord" : [520, 354],
+	"texture" : "image/human/human2.png",
+	"health" : 100
+}
+]
+	
+	

@@ -9,7 +9,7 @@
 #include "control.h"
 #include "state.h"
 
-enum figureType {
+enum class figureType {
 	circle_T = 1,
 	tringle_T,
 	rect_T,
@@ -20,6 +20,8 @@ enum figureType {
 class BaseObject {
 protected:
 	sf::Texture texture;
+	std::string texturePath;
+
 	sf::Sprite g_body;
 
 	void updateTextrPosition(sf::Vector2f newCord, float newAngle);
@@ -29,6 +31,16 @@ public:
 	int depthRender = 0;
 
 	BaseObject(sf::Vector2f initCord, std::string texture);
+
+	const sf::Vector2f getCoordinates() const;
+
+	const float &getRotation() const;
+
+	const std::string &getTexturePath() const;
+
+	virtual void freezeObject();
+
+	virtual void unFreezeObject();
 
 	virtual void blit();
 
@@ -42,17 +54,21 @@ private:
 
 protected:
 
-	void setDrug(float linear, float angular);
+	void setDrag(float linear, float angular);
 
 public:
-
-	std::string name = "None";
 
 	b2Body *body_ph;
 
 	//can be load only square texture. for rect сan be not square
 	//figureSize - radius of figure. for rect it`s shadow size
-	DynamicObject(b2World* World, sf::Vector2f initCord, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);
+	DynamicObject(b2World* World, sf::Vector2f initCord, std::string texture, figureType type, float figureSize = 0, bool isSensor = false);
+
+	const sf::Vector2f getCoordinates() const;
+
+	void freezeObject();
+
+	void unFreezeObject();
 
 	void blit();
 
@@ -65,12 +81,16 @@ protected:
 	b2Body *body_ph;
 public:
 
-	std::string name = "None";
-
 	//can be load only square texture. for rect сan be not square
 	//figureSize - radius of figure. for rect it`s shadow size
 	//angle in degree. 
-	StaticObject(b2World* World, sf::Vector2f initCord, float angle, std::string texture, std::string name, figureType type, float figureSize = 0, bool isSensor = false);
+	StaticObject(b2World* World, sf::Vector2f initCord, float angle, std::string texture, figureType type, float figureSize = 0, bool isSensor = false);
+
+	const sf::Vector2f getCoordinates() const;
+
+	void freezeObject();
+
+	void unFreezeObject();
 
 	~StaticObject();
 };
@@ -80,26 +100,30 @@ class House :public StaticObject {
 public:
 	StaticObject *door;
 
-
 	//shadow size 10
 	//door shadow 4
-	House(b2World* World, sf::Vector2f initCord, float angle, std::string textureHouse, std::string textureDoor, std::string name);
+	House(b2World* World, sf::Vector2f initCord, float angle, std::string textureHouse, std::string textureDoor);
 
 	void blit();
+
+	void freezeObject();
+
+	void unFreezeObject();
 
 	~House();
 };
 
 class Fir_tree :public StaticObject {
 private:
-	int health = 100;
+	int health;
 public:
 
 	//texture 40x40. size - 17
-	Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+	Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, int health);
 
 	void setHealth(int health);
 	bool decreaseHealth(int delta = 0); //1 - if health >= 0
+	const int &getHealth() const;
 
 	~Fir_tree();
 };
@@ -107,14 +131,15 @@ public:
 
 class Shrub :public StaticObject {
 private:
-	int health = 100;
+	int health;
 public:
 
 	//sahdow size 15, rect trtigger
-	Shrub(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+	Shrub(b2World* World, sf::Vector2f initCord, std::string textr, int health);
 
 	void setHealth(int health);
 	bool decreaseHealth(int delta = 0); //1 - if health >= 0
+	const int &getHealth() const;
 
 	~Shrub();
 };
@@ -137,14 +162,20 @@ private:
 protected:
 	float radiusSpeed = 1;
 	float speed = 1;
-	int health = 100;
+	int health;
 
 public:
 
-	Alive(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, figureType type, float figureSize);
+	Alive(b2World* World, sf::Vector2f initCord, std::string textr, figureType type, float figureSize, int health);
 
 	void setHealth(int health);
 	bool decreaseHealth(int delta = 0); //1 - if health >= 0
+	const int &getHealth() const;
+
+	void freezeObject();
+
+	void unFreezeObject();
+
 
 	void setRadius(float radius = 0);
 
@@ -167,7 +198,7 @@ protected:
 public:
 
 	//Human texture have to be a single color with shadow(10 px) 32x32. 
-	Human(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+	Human(b2World* World, sf::Vector2f initCord, std::string textr, int health);
 
 	~Human();
 };
@@ -181,11 +212,8 @@ private:
 	b2Vec2 PAIvec;
 	int PAIdelta = 0;
 	int PAIiter = 0;
-
-protected:
-
 public:
-	Person(b2World* World, sf::Vector2f initCord, std::string textr, std::string name);
+	Person(b2World* World, sf::Vector2f initCord, std::string textr, int health);
 
 	void blit();
 
@@ -196,7 +224,7 @@ class Cursor : public DynamicObject, public spl::EventInterface {
 private:
 	void positionMouse(int x, int y);
 public:
-	Cursor(b2World* World, std::string textr, std::string name = "cursor");
+	Cursor(b2World* World, std::string textr);
 };
 
 
@@ -208,12 +236,15 @@ protected:
 	void moveBottom();
 	void moveLeft();
 	void moveRight();
+	void haste();
 
 	void update();
 public:
-	Cursor *cursor;
+	Cursor *cursor = nullptr;
 
-	Player(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, std::string textrCur = "None");
+	Player(b2World* World, sf::Vector2f initCord, int health, std::string textr, std::string textrCur = "None");
+
+	void freezeObject();
 
 	void blit();
 

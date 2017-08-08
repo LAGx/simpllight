@@ -14,18 +14,28 @@ using namespace sf;
 ////////////        HOUSE          //////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-House::House(b2World* World, Vector2f initCord, float angle, string textureHouse, string textureDoor, string name) :StaticObject(World, initCord, angle, textureHouse, name, rect_T, 10, false) {
+House::House(b2World* World, Vector2f initCord, float angle, string textureHouse, string textureDoor) :StaticObject(World, initCord, angle, textureHouse, figureType::rect_T, 10, false) {
 	depthRender = -100;
 	Vector2f doorCord(initCord);
 	doorCord.x = doorCord.x + ((texture.getSize().y) / 2 - 10) * sin(angle / DEG_BOX);
 	doorCord.y = doorCord.y - ((texture.getSize().y) / 2 - 10) * cos(angle / DEG_BOX);
-	door = new StaticObject(World, doorCord, angle, textureDoor, name + "_d", rect_T, 4, true);
+	door = new StaticObject(World, doorCord, angle, textureDoor, figureType::rect_T, 4, true);
 	door->depthRender = depthRender - 1;
 }
 
 void House::blit() {
 	door->blit();
 	BaseObject::blit();
+}
+
+void House::freezeObject() {
+	StaticObject::freezeObject();
+	door->freezeObject();
+}
+
+void House::unFreezeObject() {
+	StaticObject::unFreezeObject();
+	door->unFreezeObject();
 }
 
 House::~House() {
@@ -37,7 +47,7 @@ House::~House() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-Fir_tree::Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name) :StaticObject(World, initCord, 0, textr, name, tringle_T, 17, false) {
+Fir_tree::Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, int health) :StaticObject(World, initCord, 0, textr, figureType::tringle_T, 17, false) {
 }
 
 bool Fir_tree::decreaseHealth(int delta) {
@@ -45,6 +55,11 @@ bool Fir_tree::decreaseHealth(int delta) {
 	if (health <= 0)
 		return 0;
 	return 1;
+}
+
+const int &Fir_tree::getHealth() const
+{
+	return health;
 }
 
 void Fir_tree::setHealth(int health) {
@@ -59,7 +74,7 @@ Fir_tree::~Fir_tree() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-Shrub::Shrub(b2World* World, sf::Vector2f initCord, std::string textr, std::string name) :StaticObject(World, initCord, 0, textr, name, rect_T, 15, true) {
+Shrub::Shrub(b2World* World, sf::Vector2f initCord, std::string textr, int health) :StaticObject(World, initCord, 0, textr, figureType::rect_T, 15, true) {
 	g_body.setColor(sf::Color(255, 255, 255, 175));
 	depthRender = -200;
 }
@@ -69,6 +84,11 @@ bool Shrub::decreaseHealth(int delta) {
 	if (health <= 0)
 		return 0;
 	return 1;
+}
+
+const int &Shrub::getHealth() const
+{
+	return health;
 }
 
 void Shrub::setHealth(int health) {
@@ -82,7 +102,7 @@ Shrub::~Shrub() {
 ////////////        ALIVE        ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-Alive::Alive(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, figureType type, float figureSize) : DynamicObject(World, initCord, textr, name, type, figureSize, false) {
+Alive::Alive(b2World* World, sf::Vector2f initCord, std::string textr, figureType type, float figureSize, int health) : DynamicObject(World, initCord, textr, type, figureSize, false) {
 
 	if (!texture_zone.loadFromFile(textr, sf::IntRect(texture.getSize().x / 2, texture.getSize().x / 2, 2, 2))) {
 		throw Log::Exception("Texture load in Alive. ");
@@ -159,14 +179,27 @@ bool Alive::decreaseHealth(int delta) {
 	return 1;
 }
 
+const int &Alive::getHealth() const
+{
+	return health;
+}
+
+void Alive::freezeObject()
+{
+	DynamicObject::freezeObject();
+	isVisibleZone = false;
+}
+
+void Alive::unFreezeObject()
+{
+	DynamicObject::unFreezeObject();
+	isVisibleZone = true;
+}
+
+
 void Alive::setHealth(int health) {
 	this->health = health;
 }
 
 Alive::~Alive() {
 }
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-////////////        HUMAN        ////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
-

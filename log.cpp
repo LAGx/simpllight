@@ -22,7 +22,7 @@ void Log::log(string log, bool time) {
 		file << "LOG: " << log << endl;
 	}
 	else {
-		file << "LOG|" << spl::Time::getTime(spl::Time::day_HourMinSec) << "|: " << log << endl;
+		file << "LOG|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << log << endl;
 	}
 	file.close();
 }
@@ -33,7 +33,7 @@ void Log::warning(string warn, bool time) {
 		file << "WARNING: " << warn << endl;
 	}
 	else {
-		file << "WARNING|" << spl::Time::getTime(spl::Time::day_HourMinSec) << "|: " << warn << endl;
+		file << "WARNING|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << warn << endl;
 	}
 	file.close();
 }
@@ -44,7 +44,7 @@ void Log::error(string err, bool time) {
 		file << "ERROR: " << err << endl;
 	}
 	else {
-		file << "ERROR|" << spl::Time::getTime(spl::Time::day_HourMinSec) << "|: " << err << endl;
+		file << "ERROR|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << err << endl;
 	}
 	file.close();
 }
@@ -82,7 +82,7 @@ void ScreenLog::setNewLog(string name, int id) {
 }
 
 void ScreenLog::setValue(int id, string value) {
-	for (int i = 0; i < logText.size(); i++) {
+	for (size_t i = 0; i < logText.size(); i++) {
 		if (logText[i].id == id) {
 			logText[i].text.setString(logText[i].name + ": " + value);
 			return;
@@ -92,7 +92,7 @@ void ScreenLog::setValue(int id, string value) {
 }
 
 void ScreenLog::blit() {
-	for (int i = 0; i < logText.size(); i++) {
+	for (size_t i = 0; i < logText.size(); i++) {
 		logText[i].text.setPosition(spl::Window::currGlobalViewCord.x + 5 - spl::Window::screenSize.x / 2, 15 * logText[i].id + spl::Window::currGlobalViewCord.y - spl::Window::screenSize.y / 2);
 		spl::ToDraw td = { &logText[i].text, -1000 };
 		spl::Window::allDrawable.push_back(td);

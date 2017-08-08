@@ -34,6 +34,7 @@ void ControlBox::updateKeyBindings() {
 		keyBindings.moveBottom = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveBottom", 18);
 		keyBindings.moveLeft = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveLeft", 0);
 		keyBindings.moveRight = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRight", 3);
+		keyBindings.haste = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "haste", 38);
 		keyBindings.apply = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "apply", 5);
 		keyBindings.console = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "console", 54);
 
@@ -53,6 +54,7 @@ void ControlBox::saveKeyBindings() {
 	settings["keyBindings"]["secondaryMouseAction"] = keyBindings.secondaryMouseAction;
 	settings["keyBindings"]["apply"] = keyBindings.apply;
 	settings["keyBindings"]["console"] = keyBindings.console;
+	settings["keyBindings"]["haste"] = keyBindings.haste;
 
 	settings.saveToFile("settings.ini");
 
@@ -80,14 +82,15 @@ void ControlBox::resulveControl(Window &window) {
 			controlObjects[i]->moveRight();
 		if (sf::Keyboard::isKeyPressed(keyBindings.apply))
 			controlObjects[i]->apply();
-		if (sf::Keyboard::isKeyPressed(keyBindings.console))
+		//if (sf::Keyboard::isKeyPressed(keyBindings.console))
 			//console->show();
+		if (sf::Keyboard::isKeyPressed(keyBindings.haste))
+			controlObjects[i]->haste();
 
 		if (sf::Mouse::isButtonPressed(keyBindings.primaryMouseAction))
 			controlObjects[i]->primaryMouseAction();
 		if (sf::Mouse::isButtonPressed(keyBindings.secondaryMouseAction))
 			controlObjects[i]->secondaryMouseAction();
-
 
 		controlObjects[i]->positionMouse(sf::Mouse::getPosition(window.canvas).x, sf::Mouse::getPosition(window.canvas).y);
 		if (event.type == sf::Event::MouseWheelScrolled) {

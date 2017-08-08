@@ -3,6 +3,7 @@
 
 #pragma once
 #include <string>
+#include <SFML\Graphics.hpp>
 
 namespace spl {
 
@@ -14,13 +15,18 @@ namespace spl {
 	class Time {
 	public:
 
-		enum TimeMode
+		enum class TimeMode
 		{
-			day_HourMinSec = 0
+			Day_HourMinSec = 0, //day|hour:min:sec
+			Day_HourMin, //day|hour:min
+			HourMinSec, // hour:min:sec
+			HourMin //hour:min
 		};
 
-		static std::string getTime(TimeMode mode); //day|hour:min:sec
+		static std::string getTime(TimeMode mode);
 	};
 
+	template<class T>
+	T getLength(sf::Vector2<T> vec1, sf::Vector2<T> vec2 = { 0 , 0 });
 }
 #endif

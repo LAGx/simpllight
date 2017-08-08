@@ -12,7 +12,7 @@ using namespace spl;
 Window::Window() {
 #ifdef GAME_MODE
 	FreeConsole();
-	canvas.create(sf::VideoMode().getDesktopMode(), "simpllight", sf::Style::None); // Try to fullscreen
+	canvas.create(sf::VideoMode().getDesktopMode(), "simpllight", sf::Style::Fullscreen); // Trying to fullscreen
 	view.setSize(sf::VideoMode().getDesktopMode().width, sf::VideoMode().getDesktopMode().height);
 	view.setCenter(sf::VideoMode().getDesktopMode().width / 2, sf::VideoMode().getDesktopMode().height / 2);
 #else

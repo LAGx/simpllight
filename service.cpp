@@ -2,12 +2,13 @@
 #include <random>
 #include <string>
 #include <ctime>
+#include <cmath>
 
 #include "service.h"
 #include "log.h"
 
 ///////////////////////////////////////
-// -------------  RAND  ------------ //
+// -------------  Rand  ------------ //
 ///////////////////////////////////////
 
 unsigned int spl::Rand::intRand(int min, int max) {
@@ -19,22 +20,38 @@ unsigned int spl::Rand::intRand(int min, int max) {
 
 
 ///////////////////////////////////////
-// -------------  TIME  ------------ //
+// -------------  Time  ------------ //
 ///////////////////////////////////////
 
 std::string spl::Time::getTime(TimeMode mode)
 {
+	time_t rawtime;
+	rawtime = time(0);
+	tm timeinfo;
+	localtime_s(&timeinfo, &rawtime);
+
 	switch (mode)
 	{
-	case spl::Time::day_HourMinSec:
-		time_t rawtime;
-		rawtime = time(0);
-		struct tm timeinfo;
-		localtime_s(&timeinfo, &rawtime);
-
+	case spl::Time::TimeMode::Day_HourMinSec:
 		return std::to_string(timeinfo.tm_mday) + "|" + std::to_string(timeinfo.tm_hour) + ":" + std::to_string(timeinfo.tm_min) + ":" + std::to_string(timeinfo.tm_sec);
-	default:
-		throw Log::Exception("choise time time");
-		break;
+	
+	case spl::Time::TimeMode::Day_HourMin:
+		return std::to_string(timeinfo.tm_mday) + "|" + std::to_string(timeinfo.tm_hour) + ":" + std::to_string(timeinfo.tm_min);
+	
+	case spl::Time::TimeMode::HourMinSec:
+		return std::to_string(timeinfo.tm_hour) + ":" + std::to_string(timeinfo.tm_min) + ":" + std::to_string(timeinfo.tm_sec);
+	
+	case spl::Time::TimeMode::HourMin:
+		return std::to_string(timeinfo.tm_hour) + ":" + std::to_string(timeinfo.tm_min);
 	}
+}
+
+///////////////////////////////////////
+// -----------  Vectors  ----------- //
+///////////////////////////////////////
+
+template<class T>
+T spl::getLength(sf::Vector2<T> vec1, sf::Vector2<T> vec2)
+{
+	return sqrt((vec2.x - vec1.x)*(vec2.x - vec1.x) + (vec2.y - vec1.y)*(vec2.y - vec1.y));
 }

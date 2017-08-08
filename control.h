@@ -23,6 +23,8 @@ namespace spl {
 
 		virtual void moveRight() {} //for player
 
+		virtual void haste() {} //for player
+
 		virtual void apply() {}
 
 		virtual void primaryMouseAction() {} //mouse
@@ -75,6 +77,7 @@ namespace spl {
 			sf::Keyboard::Key moveBottom = sf::Keyboard::S;
 			sf::Keyboard::Key moveLeft = sf::Keyboard::A;
 			sf::Keyboard::Key moveRight = sf::Keyboard::D;
+			sf::Keyboard::Key haste = sf::Keyboard::LShift;
 			sf::Keyboard::Key apply = sf::Keyboard::F;
 			sf::Keyboard::Key console = sf::Keyboard::Tilde;
 

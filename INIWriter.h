@@ -17,7 +17,11 @@ private: // force declaration
 	class INIsectionMap;
 public:
 
-	enum INIbooleanType
+	/*!
+	@brief  enum class that contain boolean types which uses for
+	changing how bool variables type will be looks in file
+	*/
+	enum class INIbooleanType
 	{
 		INI_true_false,
 		INI_True_False,
@@ -33,9 +37,11 @@ public:
 
 	INIWriter();
 
+	INIWriter(INIbooleanType boolType);
+
 	void clear();
 
-	void saveToFile(const string &fileName, int iosMode = std::ios::app);
+	void saveToFile(const string &fileName, int iosMode = std::ios::trunc);
 
 	void setBooleanType(INIbooleanType type);
 

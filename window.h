@@ -13,8 +13,6 @@ namespace spl {
 	};
 
 	class Window {
-	private:
-
 	public:
 		sf::RenderWindow canvas;
 		sf::View view;

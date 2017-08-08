@@ -10,11 +10,16 @@ using namespace std;
 /////////  INIWriter  /////////
 ///////////////////////////////
 
-INIWriter::INIbooleanType INIWriter::boolType = INIWriter::INI_true_false;
+INIWriter::INIbooleanType INIWriter::boolType = INIWriter::INIbooleanType::INI_true_false;
 
 INIWriter::INIWriter() {
-	boolType = INI_true_false;
+	boolType = INIbooleanType::INI_true_false;
 }
+
+INIWriter::INIWriter(INIbooleanType boolType)
+{
+	this->boolType = boolType;
+}                                                                                                                                                                                                                                                                                                                                                                             
 
 void INIWriter::saveToFile(const string &fileName, int iosMode)
 {
@@ -22,9 +27,12 @@ void INIWriter::saveToFile(const string &fileName, int iosMode)
 
 	for (auto &i : INImap) {
 		file << '[' << i.first << ']' << endl;
+
 		for (auto &j : i.second.sectionMap) {
 			file << j.first << " = " << j.second.str << endl;
 		}
+
+		file << endl;
 	}
 
 	file.close();
@@ -134,34 +142,34 @@ INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operato
 		switch (boolType)
 		{
 		default:
-		case INIWriter::INI_true_false:
+		case INIWriter::INIbooleanType::INI_true_false:
 			str = "true";
 			break;
-		case INIWriter::INI_True_False:
+		case INIWriter::INIbooleanType::INI_True_False:
 			str = "True";
 			break;
-		case INIWriter::INI_TRUE_FALSE:
+		case INIWriter::INIbooleanType::INI_TRUE_FALSE:
 			str = "TRUE";
 			break;
-		case INIWriter::INI_yes_no:
+		case INIWriter::INIbooleanType::INI_yes_no:
 			str = "yes";
 			break;
-		case INIWriter::INI_Yes_No:
+		case INIWriter::INIbooleanType::INI_Yes_No:
 			str = "Yes";
 			break;
-		case INIWriter::INI_YES_NO:
+		case INIWriter::INIbooleanType::INI_YES_NO:
 			str = "YES";
 			break;
-		case INIWriter::INI_on_off:
+		case INIWriter::INIbooleanType::INI_on_off:
 			str = "on";
 			break;
-		case INIWriter::INI_On_Off:
+		case INIWriter::INIbooleanType::INI_On_Off:
 			str = "On";
 			break;
-		case INIWriter::INI_ON_OFF:
+		case INIWriter::INIbooleanType::INI_ON_OFF:
 			str = "ON";
 			break;
-		case INIWriter::INI_1_0:
+		case INIWriter::INIbooleanType::INI_1_0:
 			str = "1";
 			break;
 		}
@@ -169,34 +177,34 @@ INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operato
 		switch (boolType)
 		{
 		default:
-		case INIWriter::INI_true_false:
+		case INIWriter::INIbooleanType::INI_true_false:
 			str = "false";
 			break;
-		case INIWriter::INI_True_False:
+		case INIWriter::INIbooleanType::INI_True_False:
 			str = "False";
 			break;
-		case INIWriter::INI_TRUE_FALSE:
+		case INIWriter::INIbooleanType::INI_TRUE_FALSE:
 			str = "FALSE";
 			break;
-		case INIWriter::INI_yes_no:
+		case INIWriter::INIbooleanType::INI_yes_no:
 			str = "no";
 			break;
-		case INIWriter::INI_Yes_No:
+		case INIWriter::INIbooleanType::INI_Yes_No:
 			str = "No";
 			break;
-		case INIWriter::INI_YES_NO:
+		case INIWriter::INIbooleanType::INI_YES_NO:
 			str = "NO";
 			break;
-		case INIWriter::INI_on_off:
+		case INIWriter::INIbooleanType::INI_on_off:
 			str = "off";
 			break;
-		case INIWriter::INI_On_Off:
+		case INIWriter::INIbooleanType::INI_On_Off:
 			str = "Off";
 			break;
-		case INIWriter::INI_ON_OFF:
+		case INIWriter::INIbooleanType::INI_ON_OFF:
 			str = "OFF";
 			break;
-		case INIWriter::INI_1_0:
+		case INIWriter::INIbooleanType::INI_1_0:
 			str = "0";
 			break;
 		}
