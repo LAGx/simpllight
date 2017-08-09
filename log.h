@@ -19,6 +19,8 @@ public:
 		Exception(std::string error, bool isTime = false);
 	};
 
+	static void startSession();
+
 	static void clear();
 
 	static void log(std::string log, bool time = false);

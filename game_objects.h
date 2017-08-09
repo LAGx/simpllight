@@ -34,7 +34,7 @@ public:
 
 	const sf::Vector2f getCoordinates() const;
 
-	const float &getRotation() const;
+	const float getRotation() const;
 
 	const std::string &getTexturePath() const;
 

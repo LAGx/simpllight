@@ -28,5 +28,25 @@ namespace spl {
 
 	template<class T>
 	T getLength(sf::Vector2<T> vec1, sf::Vector2<T> vec2 = { 0 , 0 });
+
+	/*!
+	@brief return path to special folder, 
+	for example "Documents" or "Startup Directory"
+
+	@param[in] csidl  identificator for folder that you want to find
+
+	@throw Log::Exception if can't get folder path
+
+	@return std::string path
+	*/
+	std::string getSpecialFolderPath(int csidl);
+
+	/*!
+	@brief creating folder in the specific path,
+	can create all needed folders
+
+	@param[in] path  full path to folder that you want to create
+	*/
+	void createFolder(std::string path);
 }
 #endif

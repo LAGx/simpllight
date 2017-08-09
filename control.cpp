@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <ShlObj.h>
 
 #include "control.h"
 #include "log.h"
@@ -23,7 +24,7 @@ ControlBox::ControlBox() {
 }
 
 void ControlBox::updateKeyBindings() {
-	INIReader settings("settings.ini");
+	INIReader settings(getSpecialFolderPath(CSIDL_PERSONAL) + "\\simpllight\\settings.ini");
 
 	if (settings.ParseError() < 0) {
 		Log::log("Can't load 'settings.ini', creating and using default bindings");
@@ -56,7 +57,9 @@ void ControlBox::saveKeyBindings() {
 	settings["keyBindings"]["console"] = keyBindings.console;
 	settings["keyBindings"]["haste"] = keyBindings.haste;
 
-	settings.saveToFile("settings.ini");
+	string path = getSpecialFolderPath(CSIDL_PERSONAL);
+	createFolder(path + "\\simpllight");
+	settings.saveToFile(path + "\\simpllight\\settings.ini");
 
 	Log::log("Saved 'settings.ini'");
 }

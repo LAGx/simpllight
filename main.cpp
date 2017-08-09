@@ -7,12 +7,13 @@
 #include "game_objects.h"
 #include "state.h"
 #include "world.h"
+#include "service.h"
 
 using namespace std;
 
 int main() {
 
-	Log::clear();
+	Log::startSession();
 	Log::log("____________LOG SESSION START__________", true);
 
 	spl::Window window;

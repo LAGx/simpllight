@@ -32,7 +32,7 @@ const sf::Vector2f BaseObject::getCoordinates() const
 	return Vector2f(g_body.getPosition().x*SCALE_BOX, g_body.getPosition().y*SCALE_BOX);
 }
 
-const float &BaseObject::getRotation() const
+const float BaseObject::getRotation() const
 {
 	return g_body.getRotation();
 }

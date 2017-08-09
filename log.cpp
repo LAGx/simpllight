@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <SFML/Graphics.hpp>
+#include <ShlObj.h>
 
 #include "log.h"
 #include "window.h"
@@ -9,7 +10,15 @@
 
 using namespace std;
 
-string Log::logName = "log.txt";
+string Log::logName;
+
+void Log::startSession()
+{
+	string path = spl::getSpecialFolderPath(CSIDL_PERSONAL);
+	spl::createFolder(path + "\\simpllight");
+	logName = path + "\\simpllight\\log.txt";
+	clear();
+}
 
 void Log::clear() {
 	ofstream file(logName, ios_base::trunc);

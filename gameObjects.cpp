@@ -118,6 +118,8 @@ Alive::Alive(b2World* World, sf::Vector2f initCord, std::string textr, figureTyp
 	z_fixt.isSensor = true;
 	z_fixt.shape = &z_shape;
 	zoneFixt = body_ph->CreateFixture(&z_fixt);
+
+	this->health = health;
 }
 
 void Alive::setRadius(float radius) {

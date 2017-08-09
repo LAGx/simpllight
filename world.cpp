@@ -6,6 +6,7 @@
 
 #include "log.h"
 #include "INIReader.h"
+#include "INIWriter.h"
 
 using json = nlohmann::json;
 
@@ -24,7 +25,7 @@ World::World(spl::Window *window)
 
 void World::loadLocation(std::string locationName, bool isLoadPlayer)
 {
-	INIReader locationSettings(locationName + "/locationSettings.ini");
+	INIReader locationSettings(locationName + "\\locationSettings.ini");
 
 	// Checking for bad location type
 	short *locationType = new short;
@@ -120,6 +121,20 @@ void World::loadLocation(std::string locationName, bool isLoadPlayer)
 
 void World::saveLocation(std::string locationName)
 {
+	INIWriter locSettings;
+	locSettings["settings"]["type"] = (int)currLocType;
+	if (player != nullptr) {
+		if (player->cursor != nullptr)
+			locSettings["settings"]["cursor"] = true;
+		else
+			locSettings["settings"]["cursor"] = false;
+	}
+	else {
+		locSettings["settings"]["cursor"] = false;
+	}
+
+	locSettings.saveToFile(locationName + "\\locationSettings.ini"); // !!!!!!!!!
+
 	json *jsonTmp = new json;
 	std::ofstream *file = new std::ofstream;
 
@@ -186,7 +201,7 @@ void World::saveLocation(std::string locationName)
 		jsonI++;
 	}
 
-	file->open(locationName + "/main.json", std::ios::trunc);
+	file->open(locationName + "\\main.json", std::ios::trunc);
 	*file << std::setw(4) << *jsonTmp << std::endl;
 	file->close();
 	jsonTmp->clear();
@@ -212,7 +227,7 @@ void World::saveLocation(std::string locationName)
 			{ "health" , player->getHealth() }
 		};
 
-		file->open(locationName + "/player.json", std::ios::trunc);
+		file->open(locationName + "\\player.json", std::ios::trunc);
 		*file << std::setw(4) << *jsonTmp << std::endl;
 		file->close();
 	}
@@ -288,7 +303,7 @@ void World::loadFromFile(std::string locationFolder, bool isLoadPlayer)
 {
 	json *jsonTmp = new json;
 
-	std::ifstream mainFile(locationFolder + "/main.json");
+	std::ifstream mainFile(locationFolder + "\\main.json");
 	if (!mainFile.is_open())
 		throw Log::Exception("can`t load location file: " + locationFolder + "/main.json");
 
@@ -320,21 +335,21 @@ void World::loadFromFile(std::string locationFolder, bool isLoadPlayer)
 
 	// Processing objects that needs control
 	if (isLoadPlayer) {
-		std::ifstream locationPlayerFile(locationFolder + "/player.json");
+		std::ifstream locationPlayerFile(locationFolder + "\\player.json");
 		if (!locationPlayerFile.is_open())
 			throw Log::Exception("can`t load location file: " + locationFolder + "/player.json");
 
 		*jsonTmp << locationPlayerFile;
 		locationPlayerFile.close();
 
-		std::ifstream mainPlayerFile(locationFolder + "/player.json");
+		std::ifstream mainPlayerFile(locationFolder + "\\player.json");
 		if (!mainPlayerFile.is_open())
 			throw Log::Exception("can`t load location file: " + locationFolder + "/player.json");
 
 		*jsonTmp << mainPlayerFile;
 		mainPlayerFile.close();
 
-		INIReader locationSettings(locationFolder + "/locationSettings.ini");
+		INIReader locationSettings(locationFolder + "\\locationSettings.ini");
 		bool *cursor = new bool;
 		*cursor = locationSettings.GetBoolean("settings", "cursor", false);
 
@@ -344,7 +359,7 @@ void World::loadFromFile(std::string locationFolder, bool isLoadPlayer)
 			control->setControlObject(player->cursor);
 		}
 		else {
-			player = new Player(world, sf::Vector2f((*jsonTmp)[0]["initCord"][0], (*jsonTmp)[0]["initCord"][1]), (*jsonTmp)[1]["health"], (*jsonTmp)[0]["texture"]);
+			player = new Player(world, sf::Vector2f((*jsonTmp)[0]["initCord"][0], (*jsonTmp)[0]["initCord"][1]), (*jsonTmp)[0]["health"], (*jsonTmp)[0]["texture"]);
 			control->setControlObject(player);
 		}
 

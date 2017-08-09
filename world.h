@@ -23,8 +23,6 @@ public:
 
 	World(spl::Window *window);
 
-	~World();
-
 	void loadLocation(std::string locationName, bool isLoadPlayer = "true");
 
 	void saveLocation(std::string locationName);
@@ -34,6 +32,8 @@ public:
 	void setStep(float32 timeStep, int32 velocityIterations, int32 positionIterations);
 
 	void blit();
+
+	~World();
 
 private:
 	void loadFromFile(std::string locationFolder, bool isLoadPlayer);
