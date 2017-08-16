@@ -1,7 +1,7 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
-
 #include "state.h"
+
+#include <string>
+#include <SFML/Graphics.hpp>
 
 std::string State::current_state = "None";
 

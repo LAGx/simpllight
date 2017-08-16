@@ -1,7 +1,11 @@
 #include "phisic.h"
 #include "log.h"
+
+#include <Box2D\BOX2D.H>
+
 #include "game_objects.h"
 #include "state.h"
+#include "world.h"
 
 void CollideListener::BeginContact(b2Contact* contact) {
 	void *dataA = contact->GetFixtureA()->GetBody()->GetUserData();

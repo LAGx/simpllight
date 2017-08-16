@@ -4,9 +4,8 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
-#include "state.h"
 #include "window.h"
 
 
@@ -85,7 +84,7 @@ namespace spl {
 			sf::Mouse::Button secondaryMouseAction = sf::Mouse::Button::Right;
 		} keyBindings;
 
-		std::vector<EventInterface*> controlObjects;
+		std::vector<spl::EventInterface*> controlObjects;
 
 		sf::Event event;
 
@@ -99,9 +98,9 @@ namespace spl {
 
 		void saveKeyBindings();
 
-		bool deleteControlObject(EventInterface*);
+		bool deleteControlObject(spl::EventInterface*);
 
-		void setControlObject(EventInterface*);
+		void setControlObject(spl::EventInterface*);
 
 		void resulveControl(spl::Window &window);
 	};

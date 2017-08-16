@@ -1,18 +1,15 @@
-#include <SFML/Graphics.hpp>
-#include <fstream>
-#include <string>
-#include <iostream>
-#include <ShlObj.h>
-
 #include "control.h"
+
+#include <SFML/Window.hpp>
+
 #include "log.h"
-#include "state.h"
 #include "INIReader.h"
 #include "INIWriter.h"
-#include "window.h"
 #include "service.h"
 
-using namespace spl;
+using ControlBox = spl::ControlBox;
+using string = std::string;
+using Folders = spl::Folders;
 
 
 ///////////////////////////////////////
@@ -24,7 +21,7 @@ ControlBox::ControlBox() {
 }
 
 void ControlBox::updateKeyBindings() {
-	INIReader settings(getSpecialFolderPath(CSIDL_PERSONAL) + "\\simpllight\\settings.ini");
+	INIReader settings(Folders::getSpecialFolderPath(Folders::myDocuments) + "\\simpllight\\settings.ini");
 
 	if (settings.ParseError() < 0) {
 		Log::log("Can't load 'settings.ini', creating and using default bindings");
@@ -57,18 +54,18 @@ void ControlBox::saveKeyBindings() {
 	settings["keyBindings"]["console"] = keyBindings.console;
 	settings["keyBindings"]["haste"] = keyBindings.haste;
 
-	string path = getSpecialFolderPath(CSIDL_PERSONAL);
-	createFolder(path + "\\simpllight");
+	string path = Folders::getSpecialFolderPath(Folders::myDocuments);
+	Folders::createFolder(path + "\\simpllight");
 	settings.saveToFile(path + "\\simpllight\\settings.ini");
 
 	Log::log("Saved 'settings.ini'");
 }
 
-void ControlBox::setControlObject(EventInterface* obj) {
+void ControlBox::setControlObject(spl::EventInterface* obj) {
 	controlObjects.push_back(obj);
 }
 
-void ControlBox::resulveControl(Window &window) {
+void ControlBox::resulveControl(spl::Window &window) {
 	while (window.canvas.pollEvent(event)) {
 		if (event.type == sf::Event::Closed)
 			window.canvas.close();
@@ -103,7 +100,7 @@ void ControlBox::resulveControl(Window &window) {
 	}
 }
 
-bool ControlBox::deleteControlObject(EventInterface* obj) {
+bool ControlBox::deleteControlObject(spl::EventInterface* obj) {
 	for (size_t i = 0; i < controlObjects.size(); i++) {
 
 		if (controlObjects[i] == obj) {

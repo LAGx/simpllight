@@ -5,10 +5,6 @@
 #include <string>
 #include <fstream>
 #include <map>
-#include <vector>
-#include <list>
-
-using namespace std;
 
 
 class INIWriter
@@ -19,7 +15,7 @@ public:
 
 	/*!
 	@brief  enum class that contain boolean types which uses for
-	changing how bool variables type will be looks in file
+	changing how bool variables will be looks in file
 	*/
 	enum class INIbooleanType
 	{
@@ -41,11 +37,11 @@ public:
 
 	void clear();
 
-	void saveToFile(const string &fileName, int iosMode = std::ios::trunc);
+	void saveToFile(const std::string &fileName, int iosMode = std::ios::trunc);
 
 	void setBooleanType(INIbooleanType type);
 
-	INIsectionMap &operator[](const string &section);
+	INIsectionMap &operator[](const std::string &section);
 	INIsectionMap &operator[](const char *section);
 
 	INIsectionMap &operator[](long section);
@@ -58,7 +54,7 @@ private:
 		class INIstring;
 	public:
 
-		INIWriter::INIsectionMap::INIstring &operator[](const string &name);
+		INIWriter::INIsectionMap::INIstring &operator[](const std::string &name);
 		INIWriter::INIsectionMap::INIstring &operator[](const char *name);
 
 		INIWriter::INIsectionMap::INIstring &operator[](long name);
@@ -69,7 +65,7 @@ private:
 		{
 		public:
 
-			INIstring operator=(const string &val);
+			INIstring operator=(const std::string &val);
 			INIstring operator=(const char *val);
 
 			INIstring operator=(long val);
@@ -81,17 +77,17 @@ private:
 			INIstring operator=(bool val);
 
 		private:
-			string str;
-			friend void INIWriter::saveToFile(const string &fileName, int iosMode);
+			std::string str;
+			friend void INIWriter::saveToFile(const std::string &fileName, int iosMode);
 		};
 
-		friend void INIWriter::saveToFile(const string &fileName, int iosMode);
-		map<string, INIstring> sectionMap;
+		friend void INIWriter::saveToFile(const std::string &fileName, int iosMode);
+		std::map<std::string, INIstring> sectionMap;
 
 	};
 
-	map<string, INIsectionMap> INImap;
-	ofstream file;
+	std::map<std::string, INIsectionMap> INImap;
+	std::ofstream file;
 	static INIbooleanType boolType;
 };
 #endif

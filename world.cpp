@@ -1,14 +1,22 @@
 #include "world.h"
 
 #include <json.hpp>
+#include <Box2D\BOX2D.H>
 #include <string>
 #include <fstream>
+#include <SFML\System\Vector2.hpp>
 
 #include "log.h"
 #include "INIReader.h"
 #include "INIWriter.h"
+#include "service.h"
+#include "window.h"
+#include "control.h"
+#include "game_objects.h"
 
 using json = nlohmann::json;
+using Folders = spl::Folders;
+using string = std::string;
 
 
 World::World(spl::Window *window)

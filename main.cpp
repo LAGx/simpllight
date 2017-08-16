@@ -1,20 +1,14 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
+#include <SFML/System/Clock.hpp>
+#include <string>
 
 #include "window.h"
 #include "log.h"
-#include "phisic.h"
-#include "game_objects.h"
 #include "state.h"
 #include "world.h"
-#include "service.h"
-
-using namespace std;
 
 int main() {
 
 	Log::startSession();
-	Log::log("____________LOG SESSION START__________", true);
 
 	spl::Window window;
 
@@ -26,11 +20,8 @@ int main() {
 	screenLog.setNewLog("Mouse", 3);
 #endif
 
-	World world(&window);
-	world.loadLocation("world/testLoc"); //!!!!
-
 #ifdef DEV_MODE
-	int i = 0;
+	unsigned short i = 0;
 	sf::Clock clock;
 #endif
 
@@ -43,7 +34,7 @@ int main() {
 		// --- FPS --- //
 	#ifdef DEV_MODE
 		if (i > 15) {
-			ScreenLog::setValue(0, to_string((int)(1.f / clock.getElapsedTime().asSeconds())));
+			ScreenLog::setValue(0, std::to_string((int)(1.f / clock.getElapsedTime().asSeconds())));
 			i = 0;
 		}
 		else {
@@ -61,6 +52,7 @@ int main() {
 		window.drawAll();
 	}
 
-	Log::log("____________LOG SESSION END____________", true);
+
+	Log::finishSession();
 	return 0;
 }

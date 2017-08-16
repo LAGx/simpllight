@@ -2,12 +2,12 @@
 #define _GAME_OBJECTS_
 
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <SFML\Graphics.hpp>
+#include <SFML\System\Vector2.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
 
 #include "control.h"
-#include "state.h"
 
 enum class figureType {
 	circle_T = 1,
@@ -79,6 +79,7 @@ public:
 class StaticObject :public BaseObject {
 protected:
 	b2Body *body_ph;
+
 public:
 
 	//can be load only square texture. for rect сan be not square

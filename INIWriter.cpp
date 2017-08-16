@@ -3,8 +3,6 @@
 #include <fstream>
 #include <string>
 
-using namespace std;
-
 
 ///////////////////////////////
 /////////  INIWriter  /////////
@@ -21,18 +19,18 @@ INIWriter::INIWriter(INIbooleanType boolType)
 	this->boolType = boolType;
 }                                                                                                                                                                                                                                                                                                                                                                             
 
-void INIWriter::saveToFile(const string &fileName, int iosMode)
+void INIWriter::saveToFile(const std::string &fileName, int iosMode)
 {
 	file.open(fileName, iosMode);
 
 	for (auto &i : INImap) {
-		file << '[' << i.first << ']' << endl;
+		file << '[' << i.first << ']' << std::endl;
 
 		for (auto &j : i.second.sectionMap) {
-			file << j.first << " = " << j.second.str << endl;
+			file << j.first << " = " << j.second.str << std::endl;
 		}
 
-		file << endl;
+		file << std::endl;
 	}
 
 	file.close();
@@ -48,7 +46,7 @@ void INIWriter::clear()
 	INImap.clear();
 }
 
-INIWriter::INIsectionMap &INIWriter::operator[](const string &section)
+INIWriter::INIsectionMap &INIWriter::operator[](const std::string &section)
 {
 	return INImap[section];
 }
@@ -60,12 +58,12 @@ INIWriter::INIsectionMap &INIWriter::operator[](const char *section)
 
 INIWriter::INIsectionMap &INIWriter::operator[](long section)
 {
-	return INImap[to_string(section)];
+	return INImap[std::to_string(section)];
 }
 
 INIWriter::INIsectionMap &INIWriter::operator[](int section)
 {
-	return INImap[to_string(section)];
+	return INImap[std::to_string(section)];
 }
 
 
@@ -74,7 +72,7 @@ INIWriter::INIsectionMap &INIWriter::operator[](int section)
 ///////  INIsectionMap  ///////
 ///////////////////////////////
 
-INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](const string &name)
+INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](const std::string &name)
 {
 	return sectionMap[name];
 }
@@ -86,12 +84,12 @@ INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](const 
 
 INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](long name)
 {
-	return sectionMap[to_string(name)];
+	return sectionMap[std::to_string(name)];
 }
 
 INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](int name)
 {
-	return sectionMap[to_string(name)];
+	return sectionMap[std::to_string(name)];
 }
 
 
@@ -100,7 +98,7 @@ INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](int na
 /////////  INIstring  /////////
 ///////////////////////////////
 
-INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(const string &val)
+INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(const std::string &val)
 {
 	str = val;
 	return *this;
@@ -114,25 +112,25 @@ INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operato
 
 INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(long val)
 {
-	str = to_string(val);
+	str = std::to_string(val);
 	return *this;
 }
 
 INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(int val)
 {
-	str = to_string(val);
+	str = std::to_string(val);
 	return *this;
 }
 
 INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(double val)
 {
-	str = to_string(val);
+	str = std::to_string(val);
 	return *this;
 }
 
 INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(float val)
 {
-	str = to_string(val);
+	str = std::to_string(val);
 	return *this;
 }
 

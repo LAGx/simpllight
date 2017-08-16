@@ -1,20 +1,23 @@
-#include <SFML/Graphics.hpp>
-#include <Box2D/Box2D.h>
-
 #include "game_objects.h"
+
+#include <SFML/Graphics.hpp>
+#include <SFML\System\Vector2.hpp>
+#include <Box2D/Box2D.h>
+#include <string>
+
 #include "phisic.h"
 #include "log.h"
 #include "window.h"
 #include "state.h"
 
-using namespace std;
-using namespace sf;
+using Vector2f = sf::Vector2f;
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        HOUSE          //////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-House::House(b2World* World, Vector2f initCord, float angle, string textureHouse, string textureDoor) :StaticObject(World, initCord, angle, textureHouse, figureType::rect_T, 10, false) {
+House::House(b2World* World, sf::Vector2f initCord, float angle, std::string textureHouse, std::string textureDoor) :StaticObject(World, initCord, angle, textureHouse, figureType::rect_T, 10, false) {
 	depthRender = -100;
 	Vector2f doorCord(initCord);
 	doorCord.x = doorCord.x + ((texture.getSize().y) / 2 - 10) * sin(angle / DEG_BOX);
@@ -109,7 +112,7 @@ Alive::Alive(b2World* World, sf::Vector2f initCord, std::string textr, figureTyp
 	}
 	texture_zone.setSmooth(true);
 	g_zone.setRadius(radiusZone);
-	g_zone.setFillColor(Color(230, 255, 255, 30));
+	g_zone.setFillColor(sf::Color(230, 255, 255, 30));
 	g_zone.setTexture(&texture_zone);
 
 	b2CircleShape z_shape;
@@ -129,6 +132,9 @@ void Alive::setRadius(float radius) {
 	updateRadiusZone();
 }
 
+//////
+// Should we remove it?
+//////
 #ifdef DEV_MODE
 void Alive::moveRadius(float radiusDelta) {
 	if (radiusZone + radiusDelta >= 1)
@@ -160,7 +166,7 @@ void Alive::update() {
 	updateZonePos(Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX));
 }
 
-void Alive::updateZonePos(Vector2f cord) {
+void Alive::updateZonePos(sf::Vector2f cord) {
 	g_zone.setPosition(Vector2f(cord.x - radiusZone, cord.y - radiusZone));
 }
 
@@ -197,7 +203,6 @@ void Alive::unFreezeObject()
 	DynamicObject::unFreezeObject();
 	isVisibleZone = true;
 }
-
 
 void Alive::setHealth(int health) {
 	this->health = health;

@@ -1,72 +1,79 @@
-﻿#pragma once
+﻿#include "log.h"
+
 #include <fstream>
 #include <string>
+#include <vector>
 #include <SFML/Graphics.hpp>
-#include <ShlObj.h>
 
-#include "log.h"
 #include "window.h"
 #include "service.h"
 
-using namespace std;
+using string = std::string;
+using Folders = spl::Folders;
 
 string Log::logName;
 
 void Log::startSession()
 {
-	string path = spl::getSpecialFolderPath(CSIDL_PERSONAL);
-	spl::createFolder(path + "\\simpllight");
+	string path = Folders::getSpecialFolderPath(Folders::myDocuments);
+	Folders::createFolder(path + "\\simpllight");
 	logName = path + "\\simpllight\\log.txt";
 	clear();
+	Log::log("____________LOG SESSION START__________", true);
 }
 
 void Log::clear() {
-	ofstream file(logName, ios_base::trunc);
+	std::ofstream file(logName, std::ios_base::trunc);
 	file.close();
 }
 
-void Log::log(string log, bool time) {
-	ofstream file(logName, ios_base::app);
+void Log::log(std::string log, bool time) {
+	std::ofstream file(logName, std::ios_base::app);
 	if (!time) {
-		file << "LOG: " << log << endl;
+		file << "LOG: " << log << std::endl;
 	}
 	else {
-		file << "LOG|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << log << endl;
+		file << "LOG|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << log << std::endl;
 	}
 	file.close();
 }
 
-void Log::warning(string warn, bool time) {
-	ofstream file(logName, ios_base::app);
+void Log::warning(std::string warn, bool time) {
+	std::ofstream file(logName, std::ios_base::app);
 	if (!time) {
-		file << "WARNING: " << warn << endl;
+		file << "WARNING: " << warn << std::endl;
 	}
 	else {
-		file << "WARNING|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << warn << endl;
+		file << "WARNING|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << warn << std::endl;
 	}
 	file.close();
 }
 
-void Log::error(string err, bool time) {
-	ofstream file(logName, ios_base::app);
+void Log::finishSession()
+{
+	Log::log("____________LOG SESSION END____________", true);
+}
+
+void Log::error(std::string err, bool time) {
+	std::ofstream file(logName, std::ios_base::app);
 	if (!time) {
-		file << "ERROR: " << err << endl;
+		file << "ERROR: " << err << std::endl;
 	}
 	else {
-		file << "ERROR|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << err << endl;
+		file << "ERROR|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << err << std::endl;
 	}
 	file.close();
 }
 
-Log::Exception::Exception(string error, bool isTime) {
+Log::Exception::Exception(std::string error, bool isTime) {
 	Log::error(error, isTime);
 }
 
 
-////////////////////////////////////////////////////////////////////////
-////
-////               SCREEN LOG
-//////////////////////////////////////////////////////////////////////
+///////////////////////////////////////
+// ----------  ScreenLog  ---------- //
+///////////////////////////////////////
+
 std::vector<ScreenLog::lgT> ScreenLog::logText;
 sf::Font ScreenLog::font;
 
@@ -77,7 +84,7 @@ ScreenLog::ScreenLog() {
 	}
 }
 
-void ScreenLog::setNewLog(string name, int id) {
+void ScreenLog::setNewLog(std::string name, int id) {
 
 	lgT st;
 	st.name = name;
@@ -90,7 +97,7 @@ void ScreenLog::setNewLog(string name, int id) {
 	logText.push_back(st);
 }
 
-void ScreenLog::setValue(int id, string value) {
+void ScreenLog::setValue(int id, std::string value) {
 	for (size_t i = 0; i < logText.size(); i++) {
 		if (logText[i].id == id) {
 			logText[i].text.setString(logText[i].name + ": " + value);

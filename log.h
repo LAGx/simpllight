@@ -1,9 +1,10 @@
+#pragma once
 #ifndef _LOG_
 #define _LOG_
 
+
 #include <string>
 #include <vector>
-#include <fstream>
 #include <SFML/Graphics.hpp>
 
 class Log {
@@ -27,6 +28,8 @@ public:
 
 	static void warning(std::string warn, bool time = false);
 
+	static void finishSession();
+
 };
 
 class ScreenLog {
@@ -43,6 +46,7 @@ private:
 public:
 
 	ScreenLog();
+
 	void setNewLog(std::string name, int id = 0);
 
 	static void setValue(int id, std::string value = "None");

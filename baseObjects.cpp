@@ -1,22 +1,23 @@
-#include <SFML/Graphics.hpp>
+#include "game_objects.h"
+
+#include <SFML/System/Vector2.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
 
-#include "game_objects.h"
 #include "phisic.h"
 #include "log.h"
 #include "window.h"
 #include "state.h"
 
-using namespace std;
-using namespace sf;
+using Vector2f = sf::Vector2f;
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        BASE OBJECT       ///////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-BaseObject::BaseObject(Vector2f initCord, string textr) {
+BaseObject::BaseObject(sf::Vector2f initCord, std::string textr) {
 	if (!texture.loadFromFile(textr)) {
 		throw Log::Exception("Texture load in BaseObject from " + textr, true);
 	}
@@ -37,7 +38,7 @@ const float BaseObject::getRotation() const
 	return g_body.getRotation();
 }
 
-const string &BaseObject::getTexturePath() const
+const std::string &BaseObject::getTexturePath() const
 {
 	return texturePath;
 }
@@ -52,12 +53,10 @@ void BaseObject::unFreezeObject()
 	isVisible = true;
 }
 
-
-void BaseObject::updateTextrPosition(Vector2f newCord, float newAngle) {
+void BaseObject::updateTextrPosition(sf::Vector2f newCord, float newAngle) {
 	g_body.setPosition(newCord);
 	g_body.setRotation(newAngle);
 }
-
 
 void BaseObject::blit() {
 
@@ -75,7 +74,7 @@ BaseObject::~BaseObject() {
 ////////////        DYNAMIC OBJECT       ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, figureType type, float figureSize, bool isSensor) :BaseObject(initCord, textr) {
+DynamicObject::DynamicObject(b2World* World, sf::Vector2f initCord, std::string textr, figureType type, float figureSize, bool isSensor) :BaseObject(initCord, textr) {
 
 	if ((texture.getSize().x - texture.getSize().y) && type != figureType::rect_T)
 		throw Log::Exception("Texture " + textr + " have to be square.");
@@ -165,7 +164,7 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, fi
 
 const sf::Vector2f DynamicObject::getCoordinates() const
 {
-	return sf::Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX);
+	return Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX);
 }
 
 void DynamicObject::freezeObject()
@@ -198,7 +197,6 @@ void DynamicObject::blit() {
 }
 
 DynamicObject::~DynamicObject() {
-
 }
 
 
@@ -206,7 +204,7 @@ DynamicObject::~DynamicObject() {
 ////////////        STATIC OBJECT        ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-StaticObject::StaticObject(b2World* World, Vector2f initCord, float angle, string textr, figureType type, float figureSize, bool isSensor) :BaseObject(initCord, textr) {
+StaticObject::StaticObject(b2World* World, sf::Vector2f initCord, float angle, std::string textr, figureType type, float figureSize, bool isSensor) :BaseObject(initCord, textr) {
 
 	if ((texture.getSize().x - texture.getSize().y) && type != figureType::rect_T)
 		throw Log::Exception("Texture " + textr + " have to be square.");
@@ -295,7 +293,7 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord, float angle, strin
 
 const sf::Vector2f StaticObject::getCoordinates() const
 {
-	return sf::Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX);
+	return Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX);
 }
 
 void StaticObject::freezeObject()
@@ -311,7 +309,6 @@ void StaticObject::unFreezeObject()
 }
 
 StaticObject::~StaticObject() {
-
 }
 
 

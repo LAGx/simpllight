@@ -175,13 +175,7 @@
       <Filter>Source Files\INI R/W</Filter>
     </ClCompile>
     <ClCompile Include="world.cpp">
-      <Filter>Source Files\game_objects</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="log.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

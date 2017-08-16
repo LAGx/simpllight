@@ -8,6 +8,8 @@
 
 #include "game_objects.h"
 #include "phisic.h"
+#include "window.h"
+#include "control.h"
 
 class World {
 public:

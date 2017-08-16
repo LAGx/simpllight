@@ -1,18 +1,16 @@
+#include "game_objects.h"
+
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 
-#include "game_objects.h"
 #include "service.h"
-#include "state.h"
 
-using namespace std;
-using namespace sf;
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        HUMAN                ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-Human::Human(b2World* World, Vector2f initCord, string textr, int health) :Alive(World, initCord, textr, figureType::rect_T, 10, health) {
+Human::Human(b2World* World, sf::Vector2f initCord, std::string textr, int health) :Alive(World, initCord, textr, figureType::rect_T, 10, health) {
 	setDrag(3, 2);
 }
 
@@ -23,7 +21,7 @@ Human::~Human() {
 ////////////        PERSON               ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-Person::Person(b2World* World, Vector2f initCord, string textr, int health) :Human(World, initCord, textr, health) {
+Person::Person(b2World* World, sf::Vector2f initCord, std::string textr, int health) :Human(World, initCord, textr, health) {
 }
 
 
@@ -68,7 +66,7 @@ Person::~Person() {
 ////////////        PLAYER               ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-Player::Player(b2World* World, Vector2f initCord, int health, string textr, string textrCur) :Human(World, initCord, textr, health) {
+Player::Player(b2World* World, sf::Vector2f initCord, int health, std::string textr, std::string textrCur) :Human(World, initCord, textr, health) {
 	if (textrCur != "None")
 		cursor = new Cursor(World, textrCur);
 	speed = 2;
@@ -79,7 +77,6 @@ void Player::freezeObject()
 	DynamicObject::freezeObject();
 	speed = 0;
 }
-
 
 void Player::blit() {
 	if (cursor != nullptr)

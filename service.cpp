@@ -1,12 +1,15 @@
-#include <iostream>
+#include "service.h"
+
 #include <random>
 #include <string>
 #include <ctime>
 #include <cmath>
 #include <ShlObj.h>
 
-#include "service.h"
 #include "log.h"
+
+using string = std::string;
+
 
 ///////////////////////////////////////
 // -------------  Rand  ------------ //
@@ -47,6 +50,7 @@ std::string spl::Time::getTime(TimeMode mode)
 	}
 }
 
+
 ///////////////////////////////////////
 // -----------  Vectors  ----------- //
 ///////////////////////////////////////
@@ -57,16 +61,17 @@ T spl::getLength(sf::Vector2<T> vec1, sf::Vector2<T> vec2)
 	return sqrt((vec2.x - vec1.x)*(vec2.x - vec1.x) + (vec2.y - vec1.y)*(vec2.y - vec1.y));
 }
 
+
 ///////////////////////////////////////
-// ------------  Paths  ------------ //
+// -----------  Folders  ----------- //
 ///////////////////////////////////////
 
-std::string spl::getSpecialFolderPath(int csidl)
+std::string spl::Folders::getSpecialFolderPath(foldersCSIDL csidl)
 {
 	LPITEMIDLIST pidl;
 	LPMALLOC pShellMalloc;
 	char szDir[MAX_PATH];
-	std::string result("None");
+	string result("None");
 
 	if (SUCCEEDED(SHGetMalloc(&pShellMalloc))) {
 		if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, csidl, &pidl))) {
@@ -84,7 +89,7 @@ std::string spl::getSpecialFolderPath(int csidl)
 		return result;
 }
 
-void spl::createFolder(std::string path)
+void spl::Folders::createFolder(std::string path)
 {
 	SHCreateDirectoryEx(NULL, path.c_str(), NULL);
 }
