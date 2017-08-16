@@ -76,6 +76,9 @@ namespace spl {
 		*/
 		static void createFolder(std::string path);
 
+		static void copyFolder(std::string from, std::string to);
+
+		static void deleteFolder(std::string path);
 	};
 
 	template<class T>

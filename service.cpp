@@ -93,3 +93,14 @@ void spl::Folders::createFolder(std::string path)
 {
 	SHCreateDirectoryEx(NULL, path.c_str(), NULL);
 }
+
+void spl::Folders::copyFolder(std::string from, std::string to)
+{
+	string command = "\"xcopy " + from + ' ' + to + " /E /Y /Q\"";
+	system(command.c_str());
+}
+
+void spl::Folders::deleteFolder(std::string path)
+{
+	system(("\"rmdir /S /Q " + path + " \"").c_str());
+}

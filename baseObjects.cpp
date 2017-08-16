@@ -85,6 +85,7 @@ DynamicObject::DynamicObject(b2World* World, sf::Vector2f initCord, std::string 
 	b_bdef.angularDamping = 1;
 	b_bdef.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX);
 	body_ph = World->CreateBody(&b_bdef);
+	world = World;
 
 	b2FixtureDef b_fixture;
 	b2PolygonShape b_shape;
@@ -197,6 +198,7 @@ void DynamicObject::blit() {
 }
 
 DynamicObject::~DynamicObject() {
+	world->DestroyBody(body_ph);
 }
 
 
@@ -213,6 +215,7 @@ StaticObject::StaticObject(b2World* World, sf::Vector2f initCord, float angle, s
 	b_bdef.type = b2_staticBody;
 	b_bdef.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX);
 	body_ph = World->CreateBody(&b_bdef);
+	world = World;
 
 	b2FixtureDef b_fixture;
 	b2PolygonShape b_shape;
@@ -309,6 +312,7 @@ void StaticObject::unFreezeObject()
 }
 
 StaticObject::~StaticObject() {
+	world->DestroyBody(body_ph);
 }
 
 

@@ -53,8 +53,9 @@ private:
 	void update();
 
 protected:
-
 	void setDrag(float linear, float angular);
+
+	b2World *world;
 
 public:
 
@@ -80,6 +81,7 @@ class StaticObject :public BaseObject {
 protected:
 	b2Body *body_ph;
 
+	b2World *world;
 public:
 
 	//can be load only square texture. for rect сan be not square
