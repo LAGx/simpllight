@@ -21,7 +21,7 @@ INIWriter::INIWriter(INIbooleanType boolType)
 
 void INIWriter::saveToFile(const std::string &fileName, int iosMode)
 {
-	file.open(fileName, iosMode);
+	std::ofstream file(fileName, iosMode);
 
 	for (auto &i : INImap) {
 		file << '[' << i.first << ']' << std::endl;
@@ -44,6 +44,26 @@ void INIWriter::setBooleanType(INIbooleanType type)
 void INIWriter::clear()
 {
 	INImap.clear();
+}
+
+std::ofstream &operator<<(std::ofstream &ofstr, const INIWriter &ini)
+{
+	for (auto &i : ini.INImap) {
+		ofstr << '[' << i.first << ']' << std::endl;
+
+		for (auto &j : i.second.sectionMap) {
+			ofstr << j.first << " = " << j.second.str << std::endl;
+		}
+
+		ofstr << std::endl;
+	}
+
+	return ofstr;
+}
+
+std::ofstream &operator>>(const INIWriter &ini, std::ofstream &ofstr)
+{
+	return ofstr << ini;
 }
 
 INIWriter::INIsectionMap &INIWriter::operator[](const std::string &section)

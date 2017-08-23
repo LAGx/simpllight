@@ -41,6 +41,9 @@ public:
 
 	void setBooleanType(INIbooleanType type);
 
+	friend std::ofstream &operator<<(std::ofstream& ofstr, const INIWriter& ini);
+	friend std::ofstream &operator>>(const INIWriter& ini, std::ofstream& ofstr);
+
 	INIsectionMap &operator[](const std::string &section);
 	INIsectionMap &operator[](const char *section);
 
@@ -61,6 +64,8 @@ private:
 		INIWriter::INIsectionMap::INIstring &operator[](int name);
 
 	private:
+		friend std::ofstream &operator<<(std::ofstream& ofstr, const INIWriter& ini);
+
 		class INIstring
 		{
 		public:
@@ -78,16 +83,15 @@ private:
 
 		private:
 			std::string str;
+			friend std::ofstream &operator<<(std::ofstream& ofstr, const INIWriter& ini);
 			friend void INIWriter::saveToFile(const std::string &fileName, int iosMode);
 		};
 
 		friend void INIWriter::saveToFile(const std::string &fileName, int iosMode);
 		std::map<std::string, INIstring> sectionMap;
-
 	};
 
 	std::map<std::string, INIsectionMap> INImap;
-	std::ofstream file;
 	static INIbooleanType boolType;
 };
 #endif
