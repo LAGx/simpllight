@@ -50,12 +50,15 @@ public:
 	INIsectionMap &operator[](long section);
 	INIsectionMap &operator[](int section);
 
+	~INIWriter();
+
 private:
 	class INIsectionMap
 	{
 	private: // force declaration
 		class INIstring;
 	public:
+		INIsectionMap(INIbooleanType *type);
 
 		INIWriter::INIsectionMap::INIstring &operator[](const std::string &name);
 		INIWriter::INIsectionMap::INIstring &operator[](const char *name);
@@ -63,12 +66,16 @@ private:
 		INIWriter::INIsectionMap::INIstring &operator[](long name);
 		INIWriter::INIsectionMap::INIstring &operator[](int name);
 
+		~INIsectionMap();
+
 	private:
 		friend std::ofstream &operator<<(std::ofstream& ofstr, const INIWriter& ini);
 
 		class INIstring
 		{
 		public:
+
+			INIstring(INIbooleanType *type);
 
 			INIstring operator=(const std::string &val);
 			INIstring operator=(const char *val);
@@ -82,16 +89,20 @@ private:
 			INIstring operator=(bool val);
 
 		private:
-			std::string str;
+			std::string str; 
+			INIbooleanType *boolType;
+
 			friend std::ofstream &operator<<(std::ofstream& ofstr, const INIWriter& ini);
 			friend void INIWriter::saveToFile(const std::string &fileName, int iosMode);
 		};
 
 		friend void INIWriter::saveToFile(const std::string &fileName, int iosMode);
-		std::map<std::string, INIstring> sectionMap;
+
+		INIbooleanType *boolType;
+		std::map<std::string, INIstring*> sectionMap;
 	};
 
-	std::map<std::string, INIsectionMap> INImap;
-	static INIbooleanType boolType;
+	std::map<std::string, INIsectionMap*> INImap;
+	INIbooleanType *boolType;
 };
 #endif

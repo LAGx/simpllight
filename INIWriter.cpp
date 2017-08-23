@@ -8,15 +8,14 @@
 /////////  INIWriter  /////////
 ///////////////////////////////
 
-INIWriter::INIbooleanType INIWriter::boolType = INIWriter::INIbooleanType::INI_true_false;
-
 INIWriter::INIWriter() {
-	boolType = INIbooleanType::INI_true_false;
+	boolType = new INIbooleanType;
+	*boolType = INIbooleanType::INI_true_false;
 }
 
 INIWriter::INIWriter(INIbooleanType boolType)
 {
-	this->boolType = boolType;
+	*this->boolType = boolType;
 }                                                                                                                                                                                                                                                                                                                                                                             
 
 void INIWriter::saveToFile(const std::string &fileName, int iosMode)
@@ -26,8 +25,8 @@ void INIWriter::saveToFile(const std::string &fileName, int iosMode)
 	for (auto &i : INImap) {
 		file << '[' << i.first << ']' << std::endl;
 
-		for (auto &j : i.second.sectionMap) {
-			file << j.first << " = " << j.second.str << std::endl;
+		for (auto &j : i.second->sectionMap) {
+			file << j.first << " = " << j.second->str << std::endl;
 		}
 
 		file << std::endl;
@@ -38,7 +37,7 @@ void INIWriter::saveToFile(const std::string &fileName, int iosMode)
 
 void INIWriter::setBooleanType(INIbooleanType type)
 {
-	boolType = type;
+	*boolType = type;
 }
 
 void INIWriter::clear()
@@ -51,8 +50,8 @@ std::ofstream &operator<<(std::ofstream &ofstr, const INIWriter &ini)
 	for (auto &i : ini.INImap) {
 		ofstr << '[' << i.first << ']' << std::endl;
 
-		for (auto &j : i.second.sectionMap) {
-			ofstr << j.first << " = " << j.second.str << std::endl;
+		for (auto &j : i.second->sectionMap) {
+			ofstr << j.first << " = " << j.second->str << std::endl;
 		}
 
 		ofstr << std::endl;
@@ -68,22 +67,33 @@ std::ofstream &operator>>(const INIWriter &ini, std::ofstream &ofstr)
 
 INIWriter::INIsectionMap &INIWriter::operator[](const std::string &section)
 {
-	return INImap[section];
+	INImap[section] = new INIsectionMap(boolType);
+	return *INImap[section];
 }
 
 INIWriter::INIsectionMap &INIWriter::operator[](const char *section)
 {
-	return INImap[section];
+	INImap[section] = new INIsectionMap(boolType);
+	return *INImap[section];
 }
 
 INIWriter::INIsectionMap &INIWriter::operator[](long section)
 {
-	return INImap[std::to_string(section)];
+	INImap[std::to_string(section)] = new INIsectionMap(boolType);
+	return *INImap[std::to_string(section)];
 }
 
 INIWriter::INIsectionMap &INIWriter::operator[](int section)
 {
-	return INImap[std::to_string(section)];
+	INImap[std::to_string(section)] = new INIsectionMap(boolType);
+	return *INImap[std::to_string(section)];
+}
+
+INIWriter::~INIWriter()
+{
+	for (auto &i : INImap)
+		delete i.second;
+	delete boolType;
 }
 
 
@@ -92,24 +102,39 @@ INIWriter::INIsectionMap &INIWriter::operator[](int section)
 ///////  INIsectionMap  ///////
 ///////////////////////////////
 
+INIWriter::INIsectionMap::INIsectionMap(INIbooleanType *type)
+{
+	boolType = type;
+}
+
 INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](const std::string &name)
 {
-	return sectionMap[name];
+	sectionMap[name] = new INIstring(boolType);
+	return *sectionMap[name];
 }
 
 INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](const char *name)
 {
-	return sectionMap[name];
+	sectionMap[name] = new INIstring(boolType);
+	return *sectionMap[name];
 }
 
 INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](long name)
 {
-	return sectionMap[std::to_string(name)];
+	sectionMap[std::to_string(name)] = new INIstring(boolType);
+	return *sectionMap[std::to_string(name)];
 }
 
 INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](int name)
 {
-	return sectionMap[std::to_string(name)];
+	sectionMap[std::to_string(name)] = new INIstring(boolType);
+	return *sectionMap[std::to_string(name)];
+}
+
+INIWriter::INIsectionMap::~INIsectionMap()
+{
+	for (auto &i : sectionMap)
+		delete i.second;
 }
 
 
@@ -117,6 +142,11 @@ INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](int na
 ///////////////////////////////
 /////////  INIstring  /////////
 ///////////////////////////////
+
+INIWriter::INIsectionMap::INIstring::INIstring(INIbooleanType *type)
+{
+	boolType = type;
+}
 
 INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(const std::string &val)
 {
@@ -157,7 +187,7 @@ INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operato
 INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(bool val)
 {
 	if (val)
-		switch (boolType)
+		switch (*boolType)
 		{
 		default:
 		case INIWriter::INIbooleanType::INI_true_false:
@@ -192,7 +222,7 @@ INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operato
 			break;
 		}
 	else
-		switch (boolType)
+		switch (*boolType)
 		{
 		default:
 		case INIWriter::INIbooleanType::INI_true_false:
