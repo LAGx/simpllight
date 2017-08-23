@@ -67,25 +67,29 @@ std::ofstream &operator>>(const INIWriter &ini, std::ofstream &ofstr)
 
 INIsectionMap &INIWriter::operator[](const std::string &section)
 {
-	INImap[section] = new INIsectionMap(boolType);
+	if (INImap[section] == nullptr)
+		INImap[section] = new INIsectionMap(boolType);
 	return *INImap[section];
 }
 
 INIsectionMap &INIWriter::operator[](const char *section)
 {
-	INImap[section] = new INIsectionMap(boolType);
+	if (INImap[section] == nullptr)
+		INImap[section] = new INIsectionMap(boolType);
 	return *INImap[section];
 }
 
 INIsectionMap &INIWriter::operator[](long section)
 {
-	INImap[std::to_string(section)] = new INIsectionMap(boolType);
+	if (INImap[std::to_string(section)] == nullptr)
+		INImap[std::to_string(section)] = new INIsectionMap(boolType);
 	return *INImap[std::to_string(section)];
 }
 
 INIsectionMap &INIWriter::operator[](int section)
 {
-	INImap[std::to_string(section)] = new INIsectionMap(boolType);
+	if (INImap[std::to_string(section)] == nullptr)
+		INImap[std::to_string(section)] = new INIsectionMap(boolType);
 	return *INImap[std::to_string(section)];
 }
 
@@ -109,25 +113,29 @@ INIsectionMap::INIsectionMap(INIWriter::INIbooleanType *type)
 
 INIstring &INIsectionMap::operator[](const std::string &name)
 {
-	sectionMap[name] = new INIstring(boolType);
+	if (sectionMap[name] == nullptr)
+		sectionMap[name] = new INIstring(boolType);
 	return *sectionMap[name];
 }
 
 INIstring &INIsectionMap::operator[](const char *name)
 {
-	sectionMap[name] = new INIstring(boolType);
+	if (sectionMap[name] == nullptr)
+		sectionMap[name] = new INIstring(boolType);
 	return *sectionMap[name];
 }
 
 INIstring &INIsectionMap::operator[](long name)
 {
-	sectionMap[std::to_string(name)] = new INIstring(boolType);
+	if (sectionMap[std::to_string(name)] == nullptr)
+		sectionMap[std::to_string(name)] = new INIstring(boolType);
 	return *sectionMap[std::to_string(name)];
 }
 
 INIstring &INIsectionMap::operator[](int name)
 {
-	sectionMap[std::to_string(name)] = new INIstring(boolType);
+	if (sectionMap[std::to_string(name)] == nullptr)
+		sectionMap[std::to_string(name)] = new INIstring(boolType);
 	return *sectionMap[std::to_string(name)];
 }
 
@@ -189,7 +197,6 @@ INIstring INIstring::operator=(bool val)
 	if (val)
 		switch (*boolType)
 		{
-		default:
 		case INIWriter::INIbooleanType::INI_true_false:
 			str = "true";
 			break;
@@ -224,7 +231,6 @@ INIstring INIstring::operator=(bool val)
 	else
 		switch (*boolType)
 		{
-		default:
 		case INIWriter::INIbooleanType::INI_true_false:
 			str = "false";
 			break;
