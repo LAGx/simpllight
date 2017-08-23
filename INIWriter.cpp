@@ -65,25 +65,25 @@ std::ofstream &operator>>(const INIWriter &ini, std::ofstream &ofstr)
 	return ofstr << ini;
 }
 
-INIWriter::INIsectionMap &INIWriter::operator[](const std::string &section)
+INIsectionMap &INIWriter::operator[](const std::string &section)
 {
 	INImap[section] = new INIsectionMap(boolType);
 	return *INImap[section];
 }
 
-INIWriter::INIsectionMap &INIWriter::operator[](const char *section)
+INIsectionMap &INIWriter::operator[](const char *section)
 {
 	INImap[section] = new INIsectionMap(boolType);
 	return *INImap[section];
 }
 
-INIWriter::INIsectionMap &INIWriter::operator[](long section)
+INIsectionMap &INIWriter::operator[](long section)
 {
 	INImap[std::to_string(section)] = new INIsectionMap(boolType);
 	return *INImap[std::to_string(section)];
 }
 
-INIWriter::INIsectionMap &INIWriter::operator[](int section)
+INIsectionMap &INIWriter::operator[](int section)
 {
 	INImap[std::to_string(section)] = new INIsectionMap(boolType);
 	return *INImap[std::to_string(section)];
@@ -102,36 +102,36 @@ INIWriter::~INIWriter()
 ///////  INIsectionMap  ///////
 ///////////////////////////////
 
-INIWriter::INIsectionMap::INIsectionMap(INIbooleanType *type)
+INIsectionMap::INIsectionMap(INIWriter::INIbooleanType *type)
 {
 	boolType = type;
 }
 
-INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](const std::string &name)
+INIstring &INIsectionMap::operator[](const std::string &name)
 {
 	sectionMap[name] = new INIstring(boolType);
 	return *sectionMap[name];
 }
 
-INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](const char *name)
+INIstring &INIsectionMap::operator[](const char *name)
 {
 	sectionMap[name] = new INIstring(boolType);
 	return *sectionMap[name];
 }
 
-INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](long name)
+INIstring &INIsectionMap::operator[](long name)
 {
 	sectionMap[std::to_string(name)] = new INIstring(boolType);
 	return *sectionMap[std::to_string(name)];
 }
 
-INIWriter::INIsectionMap::INIstring &INIWriter::INIsectionMap::operator[](int name)
+INIstring &INIsectionMap::operator[](int name)
 {
 	sectionMap[std::to_string(name)] = new INIstring(boolType);
 	return *sectionMap[std::to_string(name)];
 }
 
-INIWriter::INIsectionMap::~INIsectionMap()
+INIsectionMap::~INIsectionMap()
 {
 	for (auto &i : sectionMap)
 		delete i.second;
@@ -143,48 +143,48 @@ INIWriter::INIsectionMap::~INIsectionMap()
 /////////  INIstring  /////////
 ///////////////////////////////
 
-INIWriter::INIsectionMap::INIstring::INIstring(INIbooleanType *type)
+INIstring::INIstring(INIWriter::INIbooleanType *type)
 {
 	boolType = type;
 }
 
-INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(const std::string &val)
+INIstring INIstring::operator=(const std::string &val)
 {
 	str = val;
 	return *this;
 }
 
-INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(const char *val)
+INIstring INIstring::operator=(const char *val)
 {
 	str = val;
 	return *this;
 }
 
-INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(long val)
+INIstring INIstring::operator=(long val)
 {
 	str = std::to_string(val);
 	return *this;
 }
 
-INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(int val)
+INIstring INIstring::operator=(int val)
 {
 	str = std::to_string(val);
 	return *this;
 }
 
-INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(double val)
+INIstring INIstring::operator=(double val)
 {
 	str = std::to_string(val);
 	return *this;
 }
 
-INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(float val)
+INIstring INIstring::operator=(float val)
 {
 	str = std::to_string(val);
 	return *this;
 }
 
-INIWriter::INIsectionMap::INIstring INIWriter::INIsectionMap::INIstring::operator=(bool val)
+INIstring INIstring::operator=(bool val)
 {
 	if (val)
 		switch (*boolType)
