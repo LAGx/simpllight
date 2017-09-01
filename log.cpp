@@ -1,72 +1,79 @@
-﻿#pragma once
+﻿#include "log.h"
+
 #include <fstream>
 #include <string>
-#include <ctime>
+#include <vector>
 #include <SFML/Graphics.hpp>
 
-#include "log.h"
 #include "window.h"
+#include "service.h"
 
-using namespace std;
+using string = std::string;
+using Folders = spl::Folders;
 
-string Log::logName = "log.txt";
+string Log::logName;
+
+void Log::startSession()
+{
+	string path = Folders::getSpecialFolderPath(Folders::myDocuments);
+	Folders::createFolder(path + "\\simpllight");
+	logName = path + "\\simpllight\\log.txt";
+	clear();
+	Log::log("____________LOG SESSION START__________", true);
+}
 
 void Log::clear() {
-	ofstream file(logName, ios_base::trunc);
+	std::ofstream file(logName, std::ios_base::trunc);
 	file.close();
 }
 
-string Log::getTime() { //day|hour:min:sec
-	time_t rawtime = time(0);
-	struct tm timeinfo;
-	localtime_s(&timeinfo, &rawtime);
-
-	string date = to_string(timeinfo.tm_mday) + "|" + to_string(timeinfo.tm_hour) + ":" + to_string(timeinfo.tm_min) + ":" + to_string(timeinfo.tm_sec);
-	return date;
-}
-
-void Log::log(string log, bool time) {
-	ofstream file(logName, ios_base::app);
+void Log::log(std::string log, bool time) {
+	std::ofstream file(logName, std::ios_base::app);
 	if (!time) {
-		file << "LOG: " << log << endl;
+		file << "LOG: " << log << std::endl;
 	}
 	else {
-		file << "LOG|" << getTime() << "|: " << log << endl;
+		file << "LOG|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << log << std::endl;
 	}
 	file.close();
 }
 
-void Log::warning(string warn, bool time) {
-	ofstream file(logName, ios_base::app);
+void Log::warning(std::string warn, bool time) {
+	std::ofstream file(logName, std::ios_base::app);
 	if (!time) {
-		file << "WARNING: " << warn << endl;
+		file << "WARNING: " << warn << std::endl;
 	}
 	else {
-		file << "WARNING|" << getTime() << "|: " << warn << endl;
+		file << "WARNING|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << warn << std::endl;
 	}
 	file.close();
 }
 
-void Log::error(string err, bool time) {
-	ofstream file(logName, ios_base::app);
+void Log::finishSession()
+{
+	Log::log("____________LOG SESSION END____________", true);
+}
+
+void Log::error(std::string err, bool time) {
+	std::ofstream file(logName, std::ios_base::app);
 	if (!time) {
-		file << "ERROR: " << err << endl;
+		file << "ERROR: " << err << std::endl;
 	}
 	else {
-		file << "ERROR|" << getTime() << "|: " << err << endl;
+		file << "ERROR|" << spl::Time::getTime(spl::Time::TimeMode::Day_HourMinSec) << "|: " << err << std::endl;
 	}
 	file.close();
 }
 
-Log::Exception::Exception(string error, bool isTime) {
+Log::Exception::Exception(std::string error, bool isTime) {
 	Log::error(error, isTime);
 }
 
 
-////////////////////////////////////////////////////////////////////////
-////
-////               SCREEN LOG
-//////////////////////////////////////////////////////////////////////
+///////////////////////////////////////
+// ----------  ScreenLog  ---------- //
+///////////////////////////////////////
+
 std::vector<ScreenLog::lgT> ScreenLog::logText;
 sf::Font ScreenLog::font;
 
@@ -77,7 +84,7 @@ ScreenLog::ScreenLog() {
 	}
 }
 
-void ScreenLog::setNewLog(string name, int id) {
+void ScreenLog::setNewLog(std::string name, int id) {
 
 	lgT st;
 	st.name = name;
@@ -90,8 +97,8 @@ void ScreenLog::setNewLog(string name, int id) {
 	logText.push_back(st);
 }
 
-void ScreenLog::setValue(int id, string value) {
-	for (int i = 0; i < logText.size(); i++) {
+void ScreenLog::setValue(int id, std::string value) {
+	for (size_t i = 0; i < logText.size(); i++) {
 		if (logText[i].id == id) {
 			logText[i].text.setString(logText[i].name + ": " + value);
 			return;
@@ -101,7 +108,7 @@ void ScreenLog::setValue(int id, string value) {
 }
 
 void ScreenLog::blit() {
-	for (int i = 0; i < logText.size(); i++) {
+	for (size_t i = 0; i < logText.size(); i++) {
 		logText[i].text.setPosition(spl::Window::currGlobalViewCord.x + 5 - spl::Window::screenSize.x / 2, 15 * logText[i].id + spl::Window::currGlobalViewCord.y - spl::Window::screenSize.y / 2);
 		spl::ToDraw td = { &logText[i].text, -1000 };
 		spl::Window::allDrawable.push_back(td);

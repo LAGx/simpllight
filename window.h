@@ -3,6 +3,7 @@
 
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML\System\Vector2.hpp>
 #include <vector>
 
 namespace spl {
@@ -13,8 +14,6 @@ namespace spl {
 	};
 
 	class Window {
-	private:
-
 	public:
 		sf::RenderWindow canvas;
 		sf::View view;

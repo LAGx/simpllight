@@ -120,6 +120,8 @@
     <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\cpp\INIReader.h" />
     <ClInclude Include="..\..\..\..\..\..\..\Game_Lib\inih\ini.h" />
     <ClInclude Include="control.h" />
+    <ClInclude Include="INIWriter.h" />
+    <ClInclude Include="world.h" />
     <ClInclude Include="game_objects.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="phisic.h" />
@@ -150,18 +152,17 @@
     <ClCompile Include="..\..\..\..\..\..\..\Game_Lib\inih\cpp\INIReader.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\Game_Lib\inih\ini.c" />
     <ClCompile Include="animal.cpp" />
-    <ClCompile Include="baseObjects.cpp" />
+    <ClCompile Include="base_objects.cpp" />
     <ClCompile Include="control.cpp" />
-    <ClCompile Include="gameObjects.cpp" />
+    <ClCompile Include="game_objects.cpp" />
+    <ClCompile Include="INIWriter.cpp" />
+    <ClCompile Include="world.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="phisic.cpp" />
     <ClCompile Include="service.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="log.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,35 +1,62 @@
-#include <SFML/Graphics.hpp>
-#include <Box2D/Box2D.h>
-
 #include "game_objects.h"
+
+#include <SFML/System/Vector2.hpp>
+#include <Box2D/Box2D.h>
+#include <string>
+
 #include "phisic.h"
 #include "log.h"
 #include "window.h"
 #include "state.h"
-using namespace std;
-using namespace sf;
+
+using Vector2f = sf::Vector2f;
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        BASE OBJECT       ///////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-BaseObject::BaseObject(Vector2f initCord, string textr) {
+BaseObject::BaseObject(sf::Vector2f initCord, std::string textr) {
 	if (!texture.loadFromFile(textr)) {
 		throw Log::Exception("Texture load in BaseObject from " + textr, true);
 	}
 	texture.setSmooth(true);
+	texturePath = textr;
 	g_body.setTexture(texture);
 	g_body.setOrigin(Vector2f(texture.getSize().x / 2, texture.getSize().y / 2));
 	g_body.setPosition(initCord);
 }
 
+const sf::Vector2f BaseObject::getCoordinates() const
+{
+	return Vector2f(g_body.getPosition().x*SCALE_BOX, g_body.getPosition().y*SCALE_BOX);
+}
 
-void BaseObject::updateTextrPosition(Vector2f newCord, float newAngle) {
+const float BaseObject::getRotation() const
+{
+	return g_body.getRotation();
+}
+
+const std::string &BaseObject::getTexturePath() const
+{
+	return texturePath;
+}
+
+void BaseObject::freezeObject()
+{
+	isVisible = false;
+}
+
+void BaseObject::unFreezeObject()
+{
+	isVisible = true;
+}
+
+void BaseObject::updateTextrPosition(sf::Vector2f newCord, float newAngle) {
 	g_body.setPosition(newCord);
 	g_body.setRotation(newAngle);
 }
-
 
 void BaseObject::blit() {
 
@@ -47,11 +74,9 @@ BaseObject::~BaseObject() {
 ////////////        DYNAMIC OBJECT       ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, string name, figureType type, float figureSize, bool isSensor) :BaseObject(initCord, textr) {
+DynamicObject::DynamicObject(b2World* World, sf::Vector2f initCord, std::string textr, figureType type, float figureSize, bool isSensor) :BaseObject(initCord, textr) {
 
-	this->name = name;
-
-	if ((texture.getSize().x - texture.getSize().y) && type != 3)
+	if ((texture.getSize().x - texture.getSize().y) && type != figureType::rect_T)
 		throw Log::Exception("Texture " + textr + " have to be square.");
 
 	b2BodyDef b_bdef;
@@ -60,6 +85,7 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 	b_bdef.angularDamping = 1;
 	b_bdef.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX);
 	body_ph = World->CreateBody(&b_bdef);
+	world = World;
 
 	b2FixtureDef b_fixture;
 	b2PolygonShape b_shape;
@@ -68,12 +94,12 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 	float x = texture.getSize().x;
 	float y = texture.getSize().y;
 	switch (type) {
-	case 1: {
+	case figureType::circle_T: {
 		c_shape.m_radius = figureSize / SCALE_BOX;
 		b_fixture.shape = &c_shape;
 		break;
 	}
-	case 2: {
+	case figureType::tringle_T: {
 		vec[0].Set(0, -figureSize);
 		vec[1].Set(figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
 		vec[2].Set(-figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
@@ -85,7 +111,7 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 		b_fixture.shape = &b_shape;
 		break;
 	}
-	case 3: {
+	case figureType::rect_T: {
 		vec[0].Set(-x / 2 + figureSize, y / 2 - figureSize);
 		vec[1].Set(-x / 2 + figureSize, -y / 2 + figureSize);
 		vec[2].Set(x / 2 - figureSize, -y / 2 + figureSize);
@@ -98,7 +124,7 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 		b_fixture.shape = &b_shape;
 		break;
 	}
-	case 4: {
+	case figureType::pentagon_T: {
 		vec[0].Set(0, figureSize);
 		vec[1].Set(-figureSize / sqrt(1 + tan(18.f / DEG_BOX)*tan(18.f / DEG_BOX)), (tan(18.f / DEG_BOX)*figureSize) / sqrt(1 + tan(18.f / DEG_BOX)*tan(18.f / DEG_BOX)));
 		vec[2].Set(-figureSize / sqrt(1 + tan(54.f / DEG_BOX)*tan(54.f / DEG_BOX)), (-tan(54.f / DEG_BOX)*figureSize) / sqrt(1 + tan(54.f / DEG_BOX)*tan(54.f / DEG_BOX)));
@@ -112,7 +138,7 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 		b_fixture.shape = &b_shape;
 		break;
 	}
-	case 5: {
+	case figureType::intnugon_T: {
 		vec[0].Set(0, figureSize);
 		vec[1].Set(-figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
 		vec[2].Set(-figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (-tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
@@ -137,8 +163,24 @@ DynamicObject::DynamicObject(b2World* World, Vector2f initCord, string textr, st
 	body_ph->SetUserData(this);
 }
 
+const sf::Vector2f DynamicObject::getCoordinates() const
+{
+	return Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX);
+}
 
-void DynamicObject::setDrug(float linear, float angular) {
+void DynamicObject::freezeObject()
+{
+	BaseObject::freezeObject();
+	body_ph->SetActive(false);
+}
+
+void DynamicObject::unFreezeObject()
+{
+	BaseObject::unFreezeObject();
+	body_ph->SetActive(true);
+}
+
+void DynamicObject::setDrag(float linear, float angular) {
 	body_ph->SetLinearDamping(linear);
 	body_ph->SetAngularDamping(angular);
 }
@@ -156,7 +198,7 @@ void DynamicObject::blit() {
 }
 
 DynamicObject::~DynamicObject() {
-
+	world->DestroyBody(body_ph);
 }
 
 
@@ -164,17 +206,16 @@ DynamicObject::~DynamicObject() {
 ////////////        STATIC OBJECT        ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-StaticObject::StaticObject(b2World* World, Vector2f initCord, float angle, string textr, string name, figureType type, float figureSize, bool isSensor) :BaseObject(initCord, textr) {
+StaticObject::StaticObject(b2World* World, sf::Vector2f initCord, float angle, std::string textr, figureType type, float figureSize, bool isSensor) :BaseObject(initCord, textr) {
 
-	this->name = name;
-
-	if ((texture.getSize().x - texture.getSize().y) && type != 3)
+	if ((texture.getSize().x - texture.getSize().y) && type != figureType::rect_T)
 		throw Log::Exception("Texture " + textr + " have to be square.");
 
 	b2BodyDef b_bdef;
 	b_bdef.type = b2_staticBody;
 	b_bdef.position.Set(initCord.x / SCALE_BOX, initCord.y / SCALE_BOX);
 	body_ph = World->CreateBody(&b_bdef);
+	world = World;
 
 	b2FixtureDef b_fixture;
 	b2PolygonShape b_shape;
@@ -183,12 +224,12 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord, float angle, strin
 	float x = texture.getSize().x;
 	float y = texture.getSize().y;
 	switch (type) {
-	case 1: {
+	case figureType::circle_T: {
 		c_shape.m_radius = figureSize / SCALE_BOX;
 		b_fixture.shape = &c_shape;
 		break;
 	}
-	case 2: {
+	case figureType::tringle_T: {
 		vec[0].Set(0, -figureSize);
 		vec[1].Set(figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
 		vec[2].Set(-figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
@@ -200,7 +241,7 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord, float angle, strin
 		b_fixture.shape = &b_shape;
 		break;
 	}
-	case 3: {
+	case figureType::rect_T: {
 		vec[0].Set(-x / 2 + figureSize, y / 2 - figureSize);
 		vec[1].Set(-x / 2 + figureSize, -y / 2 + figureSize);
 		vec[2].Set(x / 2 - figureSize, -y / 2 + figureSize);
@@ -213,7 +254,7 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord, float angle, strin
 		b_fixture.shape = &b_shape;
 		break;
 	}
-	case 4: {
+	case figureType::pentagon_T: {
 		vec[0].Set(0, figureSize);
 		vec[1].Set(-figureSize / sqrt(1 + tan(18.f / DEG_BOX)*tan(18.f / DEG_BOX)), (tan(18.f / DEG_BOX)*figureSize) / sqrt(1 + tan(18.f / DEG_BOX)*tan(18.f / DEG_BOX)));
 		vec[2].Set(-figureSize / sqrt(1 + tan(54.f / DEG_BOX)*tan(54.f / DEG_BOX)), (-tan(54.f / DEG_BOX)*figureSize) / sqrt(1 + tan(54.f / DEG_BOX)*tan(54.f / DEG_BOX)));
@@ -227,7 +268,7 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord, float angle, strin
 		b_fixture.shape = &b_shape;
 		break;
 	}
-	case 5: {
+	case figureType::intnugon_T: {
 		vec[0].Set(0, figureSize);
 		vec[1].Set(-figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
 		vec[2].Set(-figureSize / sqrt(1 + tan(PI / 6)*tan(PI / 6)), (-tan(PI / 6)*figureSize) / sqrt(1 + tan(PI / 6)*tan(PI / 6)));
@@ -253,8 +294,25 @@ StaticObject::StaticObject(b2World* World, Vector2f initCord, float angle, strin
 	updateTextrPosition(Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX), body_ph->GetAngle()*DEG_BOX);
 }
 
-StaticObject::~StaticObject() {
+const sf::Vector2f StaticObject::getCoordinates() const
+{
+	return Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX);
+}
 
+void StaticObject::freezeObject()
+{
+	BaseObject::freezeObject();
+	body_ph->SetActive(false);
+}
+
+void StaticObject::unFreezeObject()
+{
+	BaseObject::unFreezeObject();
+	body_ph->SetActive(true);
+}
+
+StaticObject::~StaticObject() {
+	world->DestroyBody(body_ph);
 }
 
 
@@ -262,13 +320,13 @@ StaticObject::~StaticObject() {
 ////////////        CURSOR               ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-Cursor::Cursor(b2World* World, std::string textr, std::string name) :DynamicObject(World, sf::Vector2f(0, 0), textr, name, circle_T, 1, true) {
+Cursor::Cursor(b2World* World, std::string textr) :DynamicObject(World, sf::Vector2f(0, 0), textr, figureType::circle_T, 1, true) {
 	depthRender = -500;
 }
-#include <string>
+
 void Cursor::positionMouse(int x, int y) {
 	body_ph->SetTransform(b2Vec2((x + spl::Window::currGlobalViewCord.x - spl::Window::screenSize.x / 2) / SCALE_BOX, (y + spl::Window::currGlobalViewCord.y - spl::Window::screenSize.y / 2) / SCALE_BOX), 0);
 #ifdef DEV_MODE
-	ScreenLog::setValue(3, std::to_string(x) + " | " + std::to_string(y));
+	ScreenLog::setValue(1, std::to_string(x) + " | " + std::to_string(y));
 #endif
 }

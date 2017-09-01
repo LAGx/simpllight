@@ -1,18 +1,20 @@
-﻿#include <SFML/Graphics.hpp>
-#include <iostream>
+﻿#include "window.h"
+
+#include <Windows.h>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 #include <algorithm>
 #include <vector>
-#include <Windows.h>
 
 #include "state.h"
-#include "window.h"
 
-using namespace spl;
+using Window = spl::Window;
+using Vector2f = sf::Vector2f;
 
 Window::Window() {
 #ifdef GAME_MODE
 	FreeConsole();
-	canvas.create(sf::VideoMode().getDesktopMode(), "simpllight", sf::Style::None);
+	canvas.create(sf::VideoMode().getDesktopMode(), "simpllight", sf::Style::Fullscreen); // Trying to fullscreen
 	view.setSize(sf::VideoMode().getDesktopMode().width, sf::VideoMode().getDesktopMode().height);
 	view.setCenter(sf::VideoMode().getDesktopMode().width / 2, sf::VideoMode().getDesktopMode().height / 2);
 #else
@@ -26,8 +28,6 @@ Window::Window() {
 	canvas.setFramerateLimit(120);
 	canvas.setView(view);
 }
-
-
 
 void Window::drawAll() {
 	canvas.setView(view);
@@ -43,18 +43,18 @@ void Window::drawAll() {
 
 	canvas.display();
 	allDrawable.clear();
-	screenSize = sf::Vector2f(canvas.getSize());
+	screenSize = Vector2f(canvas.getSize());
 }
 
 Window::~Window() {
 
 }
 
-std::vector<ToDraw> Window::allDrawable;
+std::vector<spl::ToDraw> Window::allDrawable;
 
 void Window::updateState() {
 	currGlobalViewCord = view.getCenter();
 }
 
-sf::Vector2f Window::currGlobalViewCord;
-sf::Vector2f Window::screenSize;
+Vector2f Window::currGlobalViewCord;
+Vector2f Window::screenSize;
