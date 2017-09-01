@@ -327,6 +327,6 @@ Cursor::Cursor(b2World* World, std::string textr) :DynamicObject(World, sf::Vect
 void Cursor::positionMouse(int x, int y) {
 	body_ph->SetTransform(b2Vec2((x + spl::Window::currGlobalViewCord.x - spl::Window::screenSize.x / 2) / SCALE_BOX, (y + spl::Window::currGlobalViewCord.y - spl::Window::screenSize.y / 2) / SCALE_BOX), 0);
 #ifdef DEV_MODE
-	ScreenLog::setValue(3, std::to_string(x) + " | " + std::to_string(y));
+	ScreenLog::setValue(1, std::to_string(x) + " | " + std::to_string(y));
 #endif
 }

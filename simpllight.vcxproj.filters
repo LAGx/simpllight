@@ -135,13 +135,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="gameObjects.cpp">
-      <Filter>Source Files\game_objects</Filter>
-    </ClCompile>
     <ClCompile Include="animal.cpp">
-      <Filter>Source Files\game_objects</Filter>
-    </ClCompile>
-    <ClCompile Include="baseObjects.cpp">
       <Filter>Source Files\game_objects</Filter>
     </ClCompile>
     <ClCompile Include="window.cpp">
@@ -176,6 +170,12 @@
     </ClCompile>
     <ClCompile Include="world.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="base_objects.cpp">
+      <Filter>Source Files\game_objects</Filter>
+    </ClCompile>
+    <ClCompile Include="game_objects.cpp">
+      <Filter>Source Files\game_objects</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

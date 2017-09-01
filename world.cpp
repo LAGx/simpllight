@@ -1,12 +1,13 @@
 #include "world.h"
 
 #include <json.hpp>
-#include <Box2D\BOX2D.H>
+#include <Box2D/BOX2D.H>
 #include <string>
 #include <fstream>
-#include <SFML\System\Vector2.hpp>
+#include <SFML/System/Vector2.hpp>
 
 #include "log.h"
+#include "state.h"
 #include "INIReader.h"
 #include "INIWriter.h"
 #include "service.h"
@@ -14,14 +15,16 @@
 #include "control.h"
 #include "game_objects.h"
 
+#define jsonTmp_ptr (*jsonTmp)  // Getting rid of intrusive (), when using ptr with overloaded []
+#define jsonTmp2_ptr (*jsonTmp2)  // Don't throw tomatos in me for that
+
 using json = nlohmann::json;
 using Folders = spl::Folders;
 using string = std::string;
 
-
 World::World(spl::Window *window)
 {
-	gravity.Set(0.f, 0.f);
+	const b2Vec2 gravity(0.f, 0.f);
 	world = new b2World(gravity);
 
 	this->window = window;
@@ -31,76 +34,128 @@ World::World(spl::Window *window)
 	control = new spl::ControlBox;
 }
 
-void World::loadLocation(std::string locationName, bool isLoadPlayer)
+void World::loadWorld(const std::string saveName)
 {
-	INIReader locationSettings(locationName + "\\locationSettings.ini");
+	const string path = Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp";
+	Folders::createFolder(path);
+
+	if (saveName == "None")
+		Folders::copyFolder("world", path);
+	else
+		Folders::copyFolder(Folders::getSpecialFolderPath(Folders::myDocuments) + "\\simpllight\\saves\\" + saveName, path);
+
+	json jsonTmp_ptr = new json;
+
+	std::ifstream mainPlayerFile(path + "\\mainPlayer.json");
+	if (!mainPlayerFile.is_open())
+		throw Log::Exception("can`t load world file: mainPlayer.json");
+
+	jsonTmp_ptr << mainPlayerFile;
+	mainPlayerFile.close();
+
+	loadLocation(jsonTmp_ptr[0]["lastLocation"]);
+
+	delete jsonTmp;
+}
+
+void World::loadLocation(const std::string locationName)
+{
+	const string path = Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp\\" + locationName;
+
+	INIReader locationSettings(path + "\\locationSettings.ini");
 
 	// Checking for bad location type
 	short *locationType = new short;
 	*locationType = locationSettings.GetInteger("settings", "type", -2);
 	if (*locationType <= -2 || *locationType >= 2)
-		throw Log::Exception("unknown location type in " + locationName + "/locationSettings.ini", true);
+		throw Log::Exception("unknown location type in " + path + "/locationSettings.ini", true);
 
-	LocationType type = (LocationType)(*locationType);
+	const LocationType type = static_cast<LocationType>(*locationType);
 	delete locationType;
 
 	if (type == LocationType::big && currLocType == LocationType::notPlayable) {
 		//TODO: Interface -> "big location" loading proccess
+		if (parentLocName != "None") {
+			closeLocation(World::LocationType::mainLoc, true, false);
+			parentLocName = "None";
 
-		closeLocation(World::LocationType::mainLoc); // for future background world in menu
-		loadFromFile(locationName, isLoadPlayer);
+			for (auto &i : additionalLocation) {
+				for (auto &j : i.second) {
+					j.second->unFreezeObject();
+				}
+			}
+			mainLocation = additionalLocation;
+
+			closeLocation(World::LocationType::additionalLoc, false, false);
+		}
+		else {
+			closeLocation(World::LocationType::mainLoc, true); // for future background world in menu
+			loadFromFile(path, type);
+		}
 	}
 	else if (type == LocationType::small && currLocType == LocationType::notPlayable) {
 		//TODO: Interface -> "big location" loading proccess
 
-		closeLocation(World::LocationType::mainLoc); // for future background world in menu
-		loadFromFile(locationName, isLoadPlayer);
+		closeLocation(World::LocationType::mainLoc, true); // for future background world in menu
+		
+		if (parentLocName != "None") {
+			parentLocName = locationSettings.Get("settings", "parent", "err");
+			if (parentLocName == "err")
+				throw Log::Exception("unknown parent name in " + path + "/locationSettings.ini", true);
+
+			loadLocation(parentLocName);
+		}
+
+		loadFromFile(path, type);
 	}
 	else if (type == LocationType::notPlayable && currLocType == LocationType::notPlayable) {
 		//TODO: Interface -> ???
 
-		closeLocation(World::LocationType::mainLoc); // for future background world in menu
-		loadFromFile(locationName, isLoadPlayer);
+		closeLocation(World::LocationType::mainLoc, true); // for future background world in menu
+		loadFromFile(path, type);
 	}
 	else if (type == LocationType::big && currLocType == LocationType::big) {
 		//TODO: Interface -> "big location" loading proccess
 
-		saveLocation(mainLocName);
-		closeLocation(World::LocationType::mainLoc);
-		loadFromFile(locationName, isLoadPlayer);
+		saveLocation(currLocName);
+		closeLocation(World::LocationType::mainLoc, true);
+		loadFromFile(path, type);
 	}
 	else if (type == LocationType::small && currLocType == LocationType::big) {
 		//TODO: Interface -> "small location" loading proccess
-
 		additionalLocation = mainLocation;
+		parentLocName = currLocName;
+		savePlayer(Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp\\" + parentLocName);
+
 		for (auto &i : additionalLocation) {
 			for (auto &j : i.second) {
 				j.second->freezeObject();
 			}
 		}
 
-		closeLocation(World::LocationType::mainLoc);
-		loadFromFile(locationName, isLoadPlayer);
+		closeLocation(World::LocationType::mainLoc, false);
+		loadFromFile(path, type);
 	}
 	else if (type == LocationType::notPlayable && currLocType == LocationType::big) {
 		//TODO: Interface -> ???
 
-		saveLocation(mainLocName);
-		closeLocation(World::LocationType::mainLoc);
-		loadFromFile(locationName, isLoadPlayer);
+		saveLocation(currLocName);
+		closeLocation(World::LocationType::mainLoc, true);
+		loadFromFile(path, type);
 	}
 	else if (type == LocationType::small && currLocType == LocationType::small) {
 		//TODO: Interface -> "small location" loading proccess
 
-		saveLocation(mainLocName);
-		closeLocation(World::LocationType::mainLoc);
-		loadFromFile(locationName, isLoadPlayer);
+		saveLocation(currLocName);
+		closeLocation(World::LocationType::mainLoc, true);
+		loadFromFile(path, type);
 	}
 	else if (type == LocationType::big && currLocType == LocationType::small) {
 		//TODO: Interface -> "small location" loading proccess
 
-		saveLocation(mainLocName);
-		closeLocation(World::LocationType::mainLoc);
+		saveLocation(currLocName);
+		closeLocation(World::LocationType::mainLoc, true, false);
+		parentLocName = "None";
 
 		for (auto &i : additionalLocation) {
 			for (auto &j : i.second) {
@@ -109,28 +164,56 @@ void World::loadLocation(std::string locationName, bool isLoadPlayer)
 		}
 		mainLocation = additionalLocation;
 
-		closeLocation(World::LocationType::additionalLoc);
+		closeLocation(World::LocationType::additionalLoc, false, false);
 	}
 	else if (type == LocationType::notPlayable && currLocType == LocationType::small) {
 		//TODO: Interface -> ???
 
-		saveLocation(mainLocName);
-		closeLocation(World::LocationType::mainLoc);
-		loadFromFile(locationName, isLoadPlayer);
+		saveLocation(currLocName);
+		closeLocation(World::LocationType::mainLoc, true);
+		loadFromFile(path, type);
 	}
 	else {
 		throw Log::Exception("unexpected situation", true);
 	}
 
 	currLocType = type;
-	mainLocName = locationName;
+	currLocName = locationName;
+	State::current_state = locationName;
 	//TODO: Interface -> stop loading proccess
+#ifdef DEV_MODE
+	ScreenLog::setValue(2, locationName);
+#endif
 }
 
-void World::saveLocation(std::string locationName)
+void World::saveWorld(const std::string saveName)
 {
+	if (currLocName != "None")
+		saveLocation(currLocName, LocationType::mainLoc);
+	if (parentLocName != "None")
+		saveLocation(parentLocName, LocationType::additionalLoc);
+
+	const string path = Folders::getSpecialFolderPath(Folders::myDocuments) + "\\simpllight\\saves\\" + saveName;
+	Folders::createFolder(path);
+
+	Folders::copyFolder(Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp", path);
+}
+
+void World::saveLocation(const std::string locationName, const LocationType type)
+{
+	// Path to location folder
+	const string path = Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp\\" + locationName;
+
+	// Saving location settings
 	INIWriter locSettings;
-	locSettings["settings"]["type"] = (int)currLocType;
+
+	if (type == LocationType::mainLoc)
+		locSettings["settings"]["type"] = static_cast<int>(currLocType);
+	else if (type == LocationType::additionalLoc)
+		locSettings["settings"]["type"] = static_cast<int>(LocationType::mainLoc);
+	else
+		throw Log::Exception("error location type");
+
 	if (player != nullptr) {
 		if (player->cursor != nullptr)
 			locSettings["settings"]["cursor"] = true;
@@ -141,18 +224,27 @@ void World::saveLocation(std::string locationName)
 		locSettings["settings"]["cursor"] = false;
 	}
 
-	locSettings.saveToFile(locationName + "\\locationSettings.ini"); // !!!!!!!!!
+	locSettings.saveToFile(path + "\\locationSettings.ini");
 
-	json *jsonTmp = new json;
+	// Saving main
+	json jsonTmp_ptr = new json;
 	std::ofstream *file = new std::ofstream;
 
 	size_t jsonI = 0;
 
+	std::map<string, std::map<string, BaseObject*>> tmpLoc;
+	if (type == LocationType::mainLoc)
+		tmpLoc = mainLocation;
+	else if (type == LocationType::additionalLoc)
+		tmpLoc = additionalLocation;
+	else
+		throw Log::Exception("error location type");
+
 	// House
-	for (auto &i : mainLocation["House"]) {
+	for (auto &i : tmpLoc["House"]) {
 		House *tmp = static_cast<House*>(i.second);
 
-		(*jsonTmp)[jsonI] =
+		jsonTmp_ptr[jsonI] =
 		{
 			{ "name" , i.first },
 			{ "type" , "House" },
@@ -165,10 +257,10 @@ void World::saveLocation(std::string locationName)
 	}
 
 	// Fir_tree
-	for (auto &i : mainLocation["Fir_tree"]) {
+	for (auto &i : tmpLoc["Fir_tree"]) {
 		Fir_tree *tmp = static_cast<Fir_tree*>(i.second);
 
-		(*jsonTmp)[jsonI] =
+		jsonTmp_ptr[jsonI] =
 		{
 			{ "name" , i.first },
 			{ "type" , "Fir_tree" },
@@ -180,10 +272,10 @@ void World::saveLocation(std::string locationName)
 	}
 
 	// Shrub
-	for (auto &i : mainLocation["Shrub"]) {
+	for (auto &i : tmpLoc["Shrub"]) {
 		Shrub *tmp = static_cast<Shrub*>(i.second);
 
-		(*jsonTmp)[jsonI] =
+		jsonTmp_ptr[jsonI] =
 		{
 			{ "name" , i.first },
 			{ "type" , "Shrub" },
@@ -195,10 +287,10 @@ void World::saveLocation(std::string locationName)
 	}
 
 	// Person
-	for (auto &i : mainLocation["Person"]) {
+	for (auto &i : tmpLoc["Person"]) {
 		Person *tmp = static_cast<Person*>(i.second);
 
-		(*jsonTmp)[jsonI] =
+		jsonTmp_ptr[jsonI] =
 		{
 			{ "name" , i.first },
 			{ "type" , "Person" },
@@ -209,57 +301,73 @@ void World::saveLocation(std::string locationName)
 		jsonI++;
 	}
 
-	file->open(locationName + "\\main.json", std::ios::trunc);
-	*file << std::setw(4) << *jsonTmp << std::endl;
+	file->open(path + "\\main.json", std::ios::trunc);
+	*file << std::setw(4) << jsonTmp_ptr << std::endl;
 	file->close();
 	jsonTmp->clear();
 
-	// Player
-	if (player != nullptr) {
-		jsonI = 0;
-
-		if (player->cursor != nullptr) {
-			(*jsonTmp)[jsonI] =
-			{
-				{ "type" , "Cursor" },
-				{ "textureCursor" , player->cursor->getTexturePath() },
-			};
-			jsonI++;
-		}
-
-		(*jsonTmp)[jsonI] =
-		{
-			{ "type" , "Player" },
-			{ "initCord" , { player->getCoordinates().x, player->getCoordinates().y } },
-			{ "texture" , player->getTexturePath() },
-			{ "health" , player->getHealth() }
-		};
-
-		file->open(locationName + "\\player.json", std::ios::trunc);
-		*file << std::setw(4) << *jsonTmp << std::endl;
-		file->close();
-	}
+	savePlayer(path);
 
 	delete file;
 	delete jsonTmp;
 }
 
-void World::closeLocation(LocationType type)
+void World::closeWorld()
+{
+	currLocName = "None";
+	parentLocName = "None";
+
+	closeLocation(LocationType::additionalLoc, true);
+	closeLocation(LocationType::mainLoc, true);
+	Folders::deleteFolder(Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp");
+}
+
+void World::closeLocation(const LocationType type, const bool isDeleteObjects, const bool isDeletePlayer)
 {
 	if (type == LocationType::additionalLoc || type == LocationType::small) {
+		if (isDeleteObjects)
+			for (auto &i : additionalLocation)
+				for (auto &j : i.second)
+					delete j.second;
+				
 		additionalLocation.clear();
 	}
 	else if (type == LocationType::mainLoc || type == LocationType::big) {
+		if (isDeleteObjects)
+			for (auto &i : mainLocation)
+				for (auto &j : i.second)
+					delete j.second;
+				
 		mainLocation.clear();
-		mainLocName.clear();
+		currLocName = "None";
 	}
 	else {
 		throw Log::Exception("unknown location type");
+	}
+
+	if (isDeletePlayer && player != nullptr) {
+		if (player->cursor != nullptr)
+			control->deleteControlObject(player->cursor);
+
+		control->deleteControlObject(player);
+		delete player;
+		player = nullptr;
 	}
 }
 
 void World::blit()
 {
+	if (collideListener.isLoad == 1) {
+		loadLocation("testLoc");
+		collideListener.isLoad = 0;
+	}
+	else if (collideListener.isLoad == 2) {
+		loadLocation("testLoc2");
+		collideListener.isLoad = 0;
+	}
+	else {}
+
+
 	// House
 	for (auto &i : mainLocation["House"]) {
 		House *tmp = static_cast<House*>(i.second);
@@ -288,7 +396,9 @@ void World::blit()
 		tmp->blit();
 	}
 
+	/////
 	// add here new object type
+	/////
 
 	// Player
 	if (player != nullptr) {
@@ -300,25 +410,25 @@ void World::blit()
 	world->Step(timeStep, velocityIterations, positionIterations);
 }
 
-void World::setStep(float32 timeStep, int32 velocityIterations, int32 positionIterations)
+void World::setStep(const float32 timeStep, const int32 velocityIterations, const int32 positionIterations)
 {
 	this->timeStep = timeStep;
 	this->velocityIterations = velocityIterations;
 	this->positionIterations = positionIterations;
 }
 
-void World::loadFromFile(std::string locationFolder, bool isLoadPlayer)
+void World::loadFromFile(const std::string locationFolder, const LocationType type)
 {
-	json *jsonTmp = new json;
+	json jsonTmp_ptr = new json;
 
 	std::ifstream mainFile(locationFolder + "\\main.json");
 	if (!mainFile.is_open())
-		throw Log::Exception("can`t load location file: " + locationFolder + "/main.json");
+		throw Log::Exception("can`t load location file: " + locationFolder + "\\main.json");
 
-	*jsonTmp << mainFile;
+	jsonTmp_ptr << mainFile;
 	mainFile.close();
 
-	for (auto obj : *jsonTmp) {
+	for (auto obj : jsonTmp_ptr) {
 		if (obj["type"] == "House") {
 			mainLocation["House"][obj["name"]] =
 				new House(world, sf::Vector2f(obj["initCord"][0], obj["initCord"][1]), obj["angle"], obj["textureHouse"], obj["textureDoor"]);
@@ -337,57 +447,107 @@ void World::loadFromFile(std::string locationFolder, bool isLoadPlayer)
 		}
 		// add here new object type
 		else {
-			throw Log::Exception("wrong type in " + locationFolder + "/main.json");
+			throw Log::Exception("wrong object type in " + locationFolder + "/main.json");
 		}
 	}
-
+	
 	// Processing objects that needs control
-	if (isLoadPlayer) {
-		std::ifstream locationPlayerFile(locationFolder + "\\player.json");
-		if (!locationPlayerFile.is_open())
-			throw Log::Exception("can`t load location file: " + locationFolder + "/player.json");
+	loadPlayer(locationFolder, type);
 
-		*jsonTmp << locationPlayerFile;
-		locationPlayerFile.close();
+	delete jsonTmp;
+}
 
-		std::ifstream mainPlayerFile(locationFolder + "\\player.json");
-		if (!mainPlayerFile.is_open())
-			throw Log::Exception("can`t load location file: " + locationFolder + "/player.json");
+void World::savePlayer(const std::string path)
+{
+	json jsonTmp_ptr = new json;
+	std::ofstream *file = new std::ofstream;
 
-		*jsonTmp << mainPlayerFile;
-		mainPlayerFile.close();
+	if (player != nullptr) {
+		size_t jsonI = 0;
+
+		// Cursor
+		if (player->cursor != nullptr) {
+			jsonTmp_ptr[jsonI] =
+			{
+				{ "type" , "Cursor" },
+				{ "textureCursor" , player->cursor->getTexturePath() }
+			};
+			jsonI++;
+		}
+
+		// Player
+		jsonTmp_ptr[jsonI] =
+		{
+			{ "type" , "Player" },
+			{ "initCord" ,{ player->getCoordinates().x, player->getCoordinates().y } },
+			{ "texture" , player->getTexturePath() }
+		};
+
+		file->open(path + "\\player.json", std::ios::trunc);
+		*file << std::setw(4) << jsonTmp_ptr << std::endl;
+		file->close();
+		jsonTmp->clear();
+
+		jsonTmp_ptr[0] =
+		{
+			{ "lastLocation" , currLocName },
+			{ "health" , player->getHealth() }
+		};
+
+		file->open(Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp\\mainPlayer.json", std::ios::trunc);
+		*file << std::setw(4) << jsonTmp_ptr << std::endl;
+		file->close();
+	}
+
+	delete file;
+	delete jsonTmp;
+}
+
+void World::loadPlayer(const std::string locationFolder, const LocationType type)
+{
+	json jsonTmp_ptr = new json;
+
+	if (type != LocationType::notPlayable) {
+		std::ifstream playerFile(locationFolder + "\\player.json");
+
+		if (!playerFile.is_open())
+			throw Log::Exception("can`t load location file: " + locationFolder + "\\player.json");
+
+		jsonTmp_ptr << playerFile;
+		playerFile.close();
+
+		json jsonTmp2_ptr = new json;
+
+		playerFile.open(Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp\\mainPlayer.json");
+		if (!playerFile.is_open())
+			throw Log::Exception("can`t load world file: mainPlayer.json");
+
+		jsonTmp2_ptr << playerFile;
+		playerFile.close();
 
 		INIReader locationSettings(locationFolder + "\\locationSettings.ini");
 		bool *cursor = new bool;
 		*cursor = locationSettings.GetBoolean("settings", "cursor", false);
 
 		if (*cursor) {
-			player = new Player(world, sf::Vector2f((*jsonTmp)[1]["initCord"][0], (*jsonTmp)[1]["initCord"][1]), (*jsonTmp)[1]["health"], (*jsonTmp)[1]["texture"], (*jsonTmp)[0]["textureCursor"]);
+			player = new Player(world, sf::Vector2f(jsonTmp_ptr[1]["initCord"][0], jsonTmp_ptr[1]["initCord"][1]), jsonTmp2_ptr[0]["health"], jsonTmp_ptr[1]["texture"], jsonTmp_ptr[0]["textureCursor"]);
 			control->setControlObject(player);
 			control->setControlObject(player->cursor);
 		}
 		else {
-			player = new Player(world, sf::Vector2f((*jsonTmp)[0]["initCord"][0], (*jsonTmp)[0]["initCord"][1]), (*jsonTmp)[0]["health"], (*jsonTmp)[0]["texture"]);
+			player = new Player(world, sf::Vector2f(jsonTmp_ptr[0]["initCord"][0], jsonTmp_ptr[0]["initCord"][1]), jsonTmp2_ptr[0]["health"], jsonTmp_ptr[0]["texture"]);
 			control->setControlObject(player);
 		}
 
+		delete jsonTmp2;
 		delete cursor;
 	}
-
 	delete jsonTmp;
 }
 
 World::~World()
 {
-	closeLocation(LocationType::additionalLoc);
-	closeLocation(LocationType::mainLoc);
-
-	if (player != nullptr) {
-		control->deleteControlObject(player);
-		control->deleteControlObject(player->cursor);
-
-		delete player;
-	}
+	closeWorld();
 
 	delete control;
 	delete world;

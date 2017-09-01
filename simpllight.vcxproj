@@ -152,9 +152,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\Game_Lib\inih\cpp\INIReader.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\Game_Lib\inih\ini.c" />
     <ClCompile Include="animal.cpp" />
-    <ClCompile Include="baseObjects.cpp" />
+    <ClCompile Include="base_objects.cpp" />
     <ClCompile Include="control.cpp" />
-    <ClCompile Include="gameObjects.cpp" />
+    <ClCompile Include="game_objects.cpp" />
     <ClCompile Include="INIWriter.cpp" />
     <ClCompile Include="world.cpp" />
     <ClCompile Include="log.cpp" />

@@ -7,7 +7,6 @@
 #include "world.h"
 
 int main() {
-
 	Log::startSession();
 
 	spl::Window window;
@@ -15,9 +14,8 @@ int main() {
 #ifdef DEV_MODE
 	ScreenLog screenLog;
 	screenLog.setNewLog("FPS", 0);
-	screenLog.setNewLog("collision h1", 1);
-	screenLog.setNewLog("collision h2", 2);
-	screenLog.setNewLog("Mouse", 3);
+	screenLog.setNewLog("Mouse", 1);
+	screenLog.setNewLog("Location", 2);
 #endif
 
 #ifdef DEV_MODE
@@ -25,6 +23,8 @@ int main() {
 	sf::Clock clock;
 #endif
 
+	World world(&window);
+	world.loadWorld();
 
 	/////////////////////////////////////
 	// ---------- MAIN LOOP ---------- //
@@ -32,16 +32,16 @@ int main() {
 
 	while (window.canvas.isOpen()) {
 		// --- FPS --- //
-	#ifdef DEV_MODE
+#ifdef DEV_MODE
 		if (i > 15) {
-			ScreenLog::setValue(0, std::to_string((int)(1.f / clock.getElapsedTime().asSeconds())));
+			ScreenLog::setValue(0, std::to_string(static_cast<int>(1.f / clock.getElapsedTime().asSeconds())));
 			i = 0;
 		}
 		else {
 			i++;
 		}
 		clock.restart();
-	#endif
+#endif
 
 		world.blit();
 		window.updateState();
@@ -52,6 +52,8 @@ int main() {
 		window.drawAll();
 	}
 
+	world.saveWorld("testSave");
+	world.closeWorld();
 
 	Log::finishSession();
 	return 0;

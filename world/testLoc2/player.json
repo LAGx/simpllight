@@ -5,7 +5,7 @@
 },
 {
 	"type" : "Player",
-	"initCord" : [370, 235],
+	"initCord" : [300, 220],
 	"texture" : "image/human/player.png"
 }
 ]

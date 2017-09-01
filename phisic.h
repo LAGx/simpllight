@@ -11,6 +11,8 @@
 class CollideListener : public b2ContactListener {
 public:
 
+	int isLoad = 0;
+
 	void BeginContact(b2Contact* contact);
 
 	void EndContact(b2Contact* contact);
