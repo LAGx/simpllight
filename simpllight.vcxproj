@@ -123,6 +123,8 @@
     <ClInclude Include="INIWriter.h" />
     <ClInclude Include="world.h" />
     <ClInclude Include="game_objects.h" />
+    <ClInclude Include="interface.h" />
+    <ClInclude Include="item.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="phisic.h" />
     <ClInclude Include="service.h" />
@@ -154,6 +156,7 @@
     <ClCompile Include="animal.cpp" />
     <ClCompile Include="base_objects.cpp" />
     <ClCompile Include="control.cpp" />
+    <ClCompile Include="interface.cpp" />
     <ClCompile Include="game_objects.cpp" />
     <ClCompile Include="INIWriter.cpp" />
     <ClCompile Include="world.cpp" />
@@ -161,6 +164,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="phisic.cpp" />
     <ClCompile Include="service.cpp" />
+    <ClCompile Include="item.cpp" />
     <ClCompile Include="state.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>

@@ -22,6 +22,7 @@ Human::~Human() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 Person::Person(b2World* World, sf::Vector2f initCord, std::string textr, int health) :Human(World, initCord, textr, health) {
+	body_ph->SetActive(true);
 }
 
 
@@ -112,6 +113,7 @@ inline void Player::moveRight() {
 	b2Vec2 curr(1, 0);
 	currForceVec += curr;
 }
+
 inline void Player::haste() {
 	if (speed < 5)
 		speed += 0.1;

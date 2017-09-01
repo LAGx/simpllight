@@ -132,9 +132,6 @@ void Alive::setRadius(float radius) {
 	updateRadiusZone();
 }
 
-//////
-// Should we remove it?
-//////
 #ifdef DEV_MODE
 void Alive::moveRadius(float radiusDelta) {
 	if (radiusZone + radiusDelta >= 1)
@@ -210,3 +207,94 @@ void Alive::setHealth(int health) {
 
 Alive::~Alive() {
 }
+
+/*//////////////////////////////////////////////////////////////////////////////////////////////
+////////////       EDITOR        ////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+Editor::Editor(b2World* World, sf::View &view, std::string textrCur):view(view){
+	speed = 4;
+	cursor = new Cursor(World, textrCur);
+	currPosition = view.getCenter();
+	currSize = view.getSize();
+}
+
+void Editor::blit() {
+
+	view.setCenter(currPosition);
+	view.setSize(currSize);
+	cursor->blit();
+
+	if (phantom != nullptr) {
+		phantom->setPosition(cursor->getPosition().x, cursor->getPosition().y, currPfantomAngle);
+		phantom->blit();
+	}
+}
+
+inline void Editor::moveTop() {
+	currPosition.y -= speed + 1 / spl::WindowStateBox::absoluteScale*2;
+}
+inline void Editor::moveBottom() {
+	currPosition.y += speed + 1 / spl::WindowStateBox::absoluteScale*2;
+}
+inline void Editor::moveLeft() {
+	currPosition.x -= speed + 1/ spl::WindowStateBox::absoluteScale*2;
+}
+inline void Editor::moveRight() {
+	currPosition.x += speed + 1/ spl::WindowStateBox::absoluteScale*2;
+}
+inline void Editor::l_ctrl() {
+	isPressedContrl = true;
+}
+inline void Editor::l_shift(){
+	isPressedShift = true;
+}
+
+inline void Editor::selectMouse() {
+	deleteFantom();
+}
+inline void Editor::useMouse() {
+	newFantom("image/house/house.png");
+}
+
+void Editor::newFantom(std::string texture) {
+	if (phantom == nullptr) {
+		phantom = new PhantomObject(sf::Vector2f(0, 0), texture);
+	}
+}
+
+sf::Vector3f Editor::getfantomPosition(){
+	if (phantom != nullptr) {
+		return phantom->getPosition();
+	}
+	else {
+		throw Log::Exception("no fantom to get position");
+		return sf::Vector3f(0,0,0);
+	}
+}
+
+void Editor::deleteFantom() {
+	if (phantom != nullptr) {
+		delete phantom;
+		phantom = nullptr;
+		currPfantomAngle = 0;
+	}
+}
+
+inline void Editor::wheelMouse(float delta) {
+	if (isPressedContrl)
+		speed += delta/5;
+	else if (isPressedShift) 
+		currPfantomAngle += delta * speed;
+	else {
+		currSize *= (-(delta*speed) / (20*(spl::WindowStateBox::absoluteScale*5+1)) + 1);
+	}
+
+	isPressedShift = false;
+	isPressedContrl = false;
+}
+
+Editor::~Editor() {
+	delete cursor;
+	deleteFantom();
+*/

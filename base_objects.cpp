@@ -28,6 +28,10 @@ BaseObject::BaseObject(sf::Vector2f initCord, std::string textr) {
 	g_body.setPosition(initCord);
 }
 
+BaseObject::BaseObject() {	//empty//for inheritance
+	isVisible = false;
+}
+
 const sf::Vector2f BaseObject::getCoordinates() const
 {
 	return Vector2f(g_body.getPosition().x*SCALE_BOX, g_body.getPosition().y*SCALE_BOX);
@@ -320,13 +324,38 @@ StaticObject::~StaticObject() {
 ////////////        CURSOR               ////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-Cursor::Cursor(b2World* World, std::string textr) :DynamicObject(World, sf::Vector2f(0, 0), textr, figureType::circle_T, 1, true) {
-	depthRender = -500;
+Cursor::Cursor(b2World* World, std::string textr, std::string name) :DynamicObject(World, sf::Vector2f(0, 0), textr, figureType::circle_T, 1, true) {
+	depthRender = -2000;
+	setDrag(0,0);
 }
 
 void Cursor::positionMouse(int x, int y) {
-	body_ph->SetTransform(b2Vec2((x + spl::Window::currGlobalViewCord.x - spl::Window::screenSize.x / 2) / SCALE_BOX, (y + spl::Window::currGlobalViewCord.y - spl::Window::screenSize.y / 2) / SCALE_BOX), 0);
+	spl::Window::updateWindowStateBox();
+	body_ph->SetTransform(b2Vec2((x/ spl::WindowStateBox::absoluteScale + spl::WindowStateBox::inGameZeroCordRelativeWindow.x) / SCALE_BOX, (y/ spl::WindowStateBox::absoluteScale + spl::WindowStateBox::inGameZeroCordRelativeWindow.y) / SCALE_BOX), 0);
+	BaseObject::g_body.setScale(1/ spl::WindowStateBox::absoluteScale, 1 / spl::WindowStateBox::absoluteScale);
 #ifdef DEV_MODE
 	ScreenLog::setValue(1, std::to_string(x) + " | " + std::to_string(y));
 #endif
+}
+
+sf::Vector2f Cursor::getPosition() {
+	return sf::Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX);
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+////////////       PHANTOM               ////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+
+PhantomObject::PhantomObject(sf::Vector2f initCord, std::string texture) : BaseObject(initCord, texture) {
+	g_body.setColor(sf::Color(255, 255, 255, 120));
+	depthRender = -200;
+}
+
+void PhantomObject::setPosition(int x, int y, float angle) {
+	updateTextrPosition(sf::Vector2f(x, y),angle);
+}
+
+sf::Vector3f PhantomObject::getPosition() {
+	return sf::Vector3f(g_body.getPosition().x, g_body.getPosition().y, g_body.getRotation());
 }

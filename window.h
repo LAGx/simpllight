@@ -13,22 +13,43 @@ namespace spl {
 		int depth = 0;
 	};
 
+	class WindowStateBox;
+
 	class Window {
+	private:
+
+		friend class WindowStateBox;
+	
 	public:
-		sf::RenderWindow canvas;
-		sf::View view;
+
+		static void updateWindowStateBox();
+
+		static sf::RenderWindow canvas;
+		static sf::View view;
 
 		static std::vector<ToDraw> allDrawable;
+		static sf::Clock clock;
 
 		Window();
 
 		void drawAll();
-		void updateState();
-
-		static sf::Vector2f currGlobalViewCord;
-		static sf::Vector2f screenSize;
 
 		~Window();
 	};
+
+	class WindowStateBox {
+	private:
+
+		
+	public:
+		static sf::Vector2f currScreenSize;
+		static sf::Vector2f currGlobalViewCord;
+		static sf::Vector2f currViewSize;
+		static float absoluteScale;		//increase of gameObject on screen in absoluteScale times
+
+		static sf::Vector2f inGameZeroCordRelativeWindow;
+		static sf::Vector2i mouseCurrPositionRelativeWindow;//need updateing
+	};
 }
 #endif
+

@@ -22,6 +22,10 @@ namespace spl {
 
 		virtual void moveRight() {} //for player
 
+		virtual void moveRadiusMinus() {} //for player
+
+		virtual void moveRadiusPlus() {} //for player
+
 		virtual void haste() {} //for player
 
 		virtual void apply() {}
@@ -33,6 +37,10 @@ namespace spl {
 		virtual void wheelMouse(float delta) {} //mouse
 
 		virtual void positionMouse(int x, int y) {} //mouse
+
+		virtual void l_ctrl() {} 
+
+		virtual void l_shift() {}
 	};
 
 
@@ -79,6 +87,8 @@ namespace spl {
 			sf::Keyboard::Key haste = sf::Keyboard::LShift;
 			sf::Keyboard::Key apply = sf::Keyboard::F;
 			sf::Keyboard::Key console = sf::Keyboard::Tilde;
+			sf::Keyboard::Key l_ctrl = sf::Keyboard::LControl;
+			sf::Keyboard::Key l_shift = sf::Keyboard::LShift;
 
 			sf::Mouse::Button primaryMouseAction = sf::Mouse::Button::Left;
 			sf::Mouse::Button secondaryMouseAction = sf::Mouse::Button::Right;

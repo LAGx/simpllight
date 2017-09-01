@@ -35,6 +35,12 @@ void ControlBox::updateKeyBindings() {
 		keyBindings.haste = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "haste", 38);
 		keyBindings.apply = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "apply", 5);
 		keyBindings.console = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "console", 54);
+		keyBindings.l_ctrl = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "l_ctrl", 37);
+		keyBindings.l_shift = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "l_shift", 38);
+#ifdef DEV_MODE
+		keyBindings.moveRadiusPlus = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRadiusPlus", 4);
+		keyBindings.moveRadiusMinus = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRadiusMinus", 16);
+#endif
 
 		keyBindings.primaryMouseAction = (sf::Mouse::Button) settings.GetInteger("keyBindings", "primaryMouseAction", 0);
 		keyBindings.secondaryMouseAction = (sf::Mouse::Button) settings.GetInteger("keyBindings", "secondaryMouseAction", 1);
@@ -53,6 +59,8 @@ void ControlBox::saveKeyBindings() {
 	settings["keyBindings"]["apply"] = keyBindings.apply;
 	settings["keyBindings"]["console"] = keyBindings.console;
 	settings["keyBindings"]["haste"] = keyBindings.haste;
+	settings["keyBindings"]["l_ctrl"] = keyBindings.l_ctrl;
+	settings["keyBindings"]["l_shift"] = keyBindings.l_shift;
 
 	string path = Folders::getSpecialFolderPath(Folders::myDocuments);
 	Folders::createFolder(path + "\\simpllight");
@@ -86,6 +94,17 @@ void ControlBox::resulveControl(spl::Window &window) {
 			//console->show();
 		if (sf::Keyboard::isKeyPressed(keyBindings.haste))
 			controlObjects[i]->haste();
+		if (sf::Keyboard::isKeyPressed(keyBindings.l_ctrl))
+			controlObjects[i]->l_ctrl();
+		if (sf::Keyboard::isKeyPressed(keyBindings.l_shift))
+			controlObjects[i]->l_shift();
+
+#ifdef DEV_MODE
+		if (sf::Keyboard::isKeyPressed(keyBindings.moveRadiusPlus))
+			controlObjects[i]->moveRadiusPlus();
+		if (sf::Keyboard::isKeyPressed(keyBindings.moveRadiusMinus))
+			controlObjects[i]->moveRadiusMinus();
+#endif
 
 		if (sf::Mouse::isButtonPressed(keyBindings.primaryMouseAction))
 			controlObjects[i]->primaryMouseAction();

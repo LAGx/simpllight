@@ -4,12 +4,20 @@
 #include "window.h"
 #include "log.h"
 #include "state.h"
+#include "service.h"
+#include "interface.h"
+#include "item.h"
 #include "world.h"
 
+using namespace std;
+
 int main() {
+
 	Log::startSession();
 
 	spl::Window window;
+
+	//Editor edit(&World, window.view, "image/cursor.png");
 
 #ifdef DEV_MODE
 	ScreenLog screenLog;
@@ -44,7 +52,7 @@ int main() {
 #endif
 
 		world.blit();
-		window.updateState();
+		window.updateWindowStateBox();
 #ifdef DEV_MODE
 		screenLog.blit();
 #endif
