@@ -1,0 +1,11 @@
+[
+{
+	"type" : "Cursor",
+	"textureCursor" : "image/cursor.png"
+},
+{
+	"type" : "Player",
+	"initCord" : [300, 220],
+	"texture" : "image/human/player.png"
+}
+]

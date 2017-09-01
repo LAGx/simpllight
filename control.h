@@ -3,15 +3,15 @@
 
 #pragma once
 #include <vector>
-#include <SFML/Graphics.hpp>
-#include "state.h"
+#include <string>
+#include <SFML/Window.hpp>
+
 #include "window.h"
 
 
 namespace spl {
 
 	class EventInterface {
-
 	public:
 
 		virtual void moveTop() {} //for player
@@ -25,10 +25,14 @@ namespace spl {
 		virtual void moveRadiusMinus() {} //for player
 
 		virtual void moveRadiusPlus() {} //for player
-		
-		virtual void selectMouse() {} //mouse
 
-		virtual void useMouse() {} //mouse
+		virtual void haste() {} //for player
+
+		virtual void apply() {}
+
+		virtual void primaryMouseAction() {} //mouse
+
+		virtual void secondaryMouseAction() {} //mouse
 
 		virtual void wheelMouse(float delta) {} //mouse
 
@@ -44,42 +48,71 @@ namespace spl {
 	class ControlBox {
 	private:
 
+		/*class Console {
+		public:
+
+			#define cendl '\n'
+
+			~Console() {
+				history.clear();
+			}
+
+			void hide();
+
+			void show();
+
+			void renderAll();
+
+			template<class T>
+			void render(T &in);
+
+			template<class T> 
+			Console &operator<<(T &in);
+		private:
+			void clear();
+			void saveHistory(); //Saving available console history to file "consoleLog.txt"
+		//	void listenCommand();
+
+			template <class T> 
+			Console &operator>>(std::string &in);
+
+			std::string history;
+		};*/
+
 		struct KeyBindings {
-			sf::Keyboard::Key moveTop = sf::Keyboard::Unknown;
-			sf::Keyboard::Key moveBottom = sf::Keyboard::Unknown;
-			sf::Keyboard::Key moveLeft = sf::Keyboard::Unknown;
-			sf::Keyboard::Key moveRight = sf::Keyboard::Unknown;
+			sf::Keyboard::Key moveTop = sf::Keyboard::W;
+			sf::Keyboard::Key moveBottom = sf::Keyboard::S;
+			sf::Keyboard::Key moveLeft = sf::Keyboard::A;
+			sf::Keyboard::Key moveRight = sf::Keyboard::D;
+			sf::Keyboard::Key haste = sf::Keyboard::LShift;
+			sf::Keyboard::Key apply = sf::Keyboard::F;
+			sf::Keyboard::Key console = sf::Keyboard::Tilde;
+			sf::Keyboard::Key l_ctrl = sf::Keyboard::LControl;
+			sf::Keyboard::Key l_shift = sf::Keyboard::LShift;
 
-			sf::Keyboard::Key l_ctrl = sf::Keyboard::Unknown;
-			sf::Keyboard::Key l_shift = sf::Keyboard::Unknown;
+			sf::Mouse::Button primaryMouseAction = sf::Mouse::Button::Left;
+			sf::Mouse::Button secondaryMouseAction = sf::Mouse::Button::Right;
+		} keyBindings;
 
-			sf::Keyboard::Key moveRadiusMinus = sf::Keyboard::Unknown;
-			sf::Keyboard::Key moveRadiusPlus = sf::Keyboard::Unknown;
-
-			sf::Mouse::Button selectMouse = sf::Mouse::Button::Left;
-			sf::Mouse::Button useMouse = sf::Mouse::Button::Right;
-		};
-
-		std::vector<EventInterface*> controlObjects;
-
-		KeyBindings keyBindings;
+		std::vector<spl::EventInterface*> controlObjects;
 
 		sf::Event event;
 
 	public:
 
-		ControlBox();
-		
-		void updateKeyBindings();//for xml setting key
-		
-		bool deleteControlObject(EventInterface*);
+		//static Console *console;
 
-		void setControlObject(EventInterface*);
+		ControlBox();
+
+		void updateKeyBindings();
+
+		void saveKeyBindings();
+
+		bool deleteControlObject(spl::EventInterface*);
+
+		void setControlObject(spl::EventInterface*);
 
 		void resulveControl(spl::Window &window);
 	};
-
-
-
 }
 #endif

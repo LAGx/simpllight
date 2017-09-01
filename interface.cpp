@@ -1,17 +1,22 @@
 #include "interface.h"
-#include "window.h"
-#include "log.h"
-#include "service.h"
+
 #include <cstdio>  
 #include <string>
 #include <iostream>
+#include <fstream>
 #include <windows.h>
-#include <conio.h>
-#include "json.hpp"
 #include <vector>
+#include <conio.h>
+#include <json.hpp>
+
+#include "window.h"
+#include "log.h"
+#include "service.h"
+
+#pragma warning(disable : 4996)
 
 using json = nlohmann::json;
-#pragma warning(disable : 4996)
+using namespace std;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,7 +32,7 @@ CellInterface::CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, Sty
 	sizeCell = sf::Vector2f(spl::WindowStateBox::currScreenSize.x * sizeRatio.x / 100, spl::WindowStateBox::currScreenSize.y * sizeRatio.y / 100);
 
 	{
-		TextureGenerator textureGenerator;
+		spl::TextureGenerator textureGenerator;
 		if ((fopen(("image/tempInterface/" + id + "_base.png").c_str(), "r") == NULL) &&
 			(fopen(("image/tempInterface/" + id + "_frame.png").c_str(), "r") == NULL)) {
 			switch (this->type) {
@@ -191,7 +196,7 @@ void CellInterface::setItem(InterfaceItem *item) {
 void CellInterface::removeItem(){
 	item = nullptr;
 }
-///////////BaseObgect////////////////
+
 CellInterface::BaseObject::BaseObject(sf::Vector2f initCord, string textr) {
 	if (!texture.loadFromFile(textr)) {
 		throw Log::Exception("Texture load in CellInterface::BaseObject from " + textr, true);
@@ -275,7 +280,7 @@ void CellInterface::Text::blit() {
 
 AssemblyLayerInterface::AssemblyLayerInterface(string id, string mode, string styleId) {
 	if (mode == "new") {
-		ofstream file("game_data/interface/" + id + ".json", ios::trunc);
+		std::ofstream file("game_data/interface/" + id + ".json", ios::trunc);
 
 		json j;
 		j["id"] = id;
@@ -474,9 +479,8 @@ string UserInterfaceBox::activeLayer;
 string UserInterfaceBox::activeCell;
 
 UserInterfaceBox::UserInterfaceBox() {
-	DeleteDirectory("image\\tempInterface", false);
-	if (!CreateDirectory("image\\tempInterface", NULL))
-		Log::warning("no directory tempInterface 2", true);
+	spl::Folders::deleteFolder("image\\tempInterface");
+	spl::Folders::createFolder("image\\tempInterface");
 
 	CellInterface::StyleCell style = { sf::Color(10,60,50), sf::Color(0,255,255), 2, 2, 50, 200, 0.05, "font/arial.ttf", sf::Color(255,255,255)};
 	createStyle("default",style); 
@@ -542,6 +546,7 @@ UserInterfaceBox::~UserInterfaceBox() {
 	for (auto i : fastAccessLayer)
 		delete i;
 	fastAccessLayer.clear();
+	spl::Folders::deleteFolder("image\\tempInterface");
 }
 
 

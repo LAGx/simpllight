@@ -6,10 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
-#include "service.h"
 #include "item.h"
-
-using namespace std;
 
 class BaseClass;
 
@@ -25,12 +22,12 @@ private:
 		int depthRender = 0;
 
 	public:
-		Text(int id, string text, sf::Vector2f posRatio, float scaleRatio, sf::Color textColor, sf::Font &font, CellInterface& cell);
+		Text(int id, std::string text, sf::Vector2f posRatio, float scaleRatio, sf::Color textColor, sf::Font &font, CellInterface& cell);
 
 		void setPosition(sf::Vector2f position);
 		void setScale(float scale);
 
-		void setNewText(string text);
+		void setNewText(std::string text);
 		void setColor(sf::Color color);
 		void setSize(float size);
 
@@ -58,10 +55,6 @@ private:
 		void blit();
 
 	};
-
-	
-
-
 
 	sf::Color textColor;
 	sf::Font font;
@@ -103,7 +96,7 @@ public:
 		unsigned char deltaTransperQuiet = 0;
 		float speedChangeTransper = 0;
 
-		string textFont = "None";
+		std::string textFont = "None";
 		sf::Color textColor = {255,255,255};
 	};
 
@@ -113,7 +106,7 @@ public:
 	};
 
 //	position and scale reletive cell (in %)
-	void textControl(string mod, int id, string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);//mod "new"-new text, "del"-delete text
+	void textControl(std::string mod, int id, std::string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);//mod "new"-new text, "del"-delete text
 	Text* getTextPtr(int id);
 
 	void setItem(InterfaceItem* item);
@@ -137,25 +130,25 @@ public:
 
 class AssemblyLayerInterface {
 
-	CellInterface::StyleCell getStyle(string styleId);
+	CellInterface::StyleCell getStyle(std::string styleId);
 	void updateAllCellFromFile();
 
 	std::vector<CellInterface*> allCell;
-	string styleId = "None";//can be changed only once in constructor
+	std::string styleId = "None";//can be changed only once in constructor
 
 public:
 
-	AssemblyLayerInterface(string id, string mode, string styleId = "default"); //mod "new", "old"(can`t change style)
+	AssemblyLayerInterface(std::string id, std::string mode, std::string styleId = "default"); //mod "new", "old"(can`t change style)
 
-	CellInterface* getCellById(string id = "None");
-	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, string styleId = "default");//for creating//can be using for update 
+	CellInterface* getCellById(std::string id = "None");
+	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, std::string styleId = "default");//for creating//can be using for update 
 	void deleteCell(std::string id); //for creating
-	void textControl(string cellId, string mod, int idText, string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);
+	void textControl(std::string cellId, std::string mod, int idText, std::string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);
 
 
-	string id = "None";
+	std::string id = "None";
 
-	string getActiveCell();
+	std::string getActiveCell();
 
 	void blit();
 
@@ -173,15 +166,15 @@ public:
 
 	UserInterfaceBox();
 
-	static string activeLayer;
+	static std::string activeLayer;
 
-	static string activeCell;
+	static std::string activeCell;
 
-	void createLayer(string id, string styleId = "default"); //for creating
+	void createLayer(std::string id, std::string styleId = "default"); //for creating
 
-	void createStyle(string id, CellInterface::StyleCell& style); //for creating
+	void createStyle(std::string id, CellInterface::StyleCell& style); //for creating
 
-	void downloadLayerById(string id);
+	void downloadLayerById(std::string id);
 
 	AssemblyLayerInterface* getCurrLayer();
 
@@ -189,6 +182,4 @@ public:
 
 	~UserInterfaceBox();
 };
-
-
 #endif

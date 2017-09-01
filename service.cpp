@@ -1,13 +1,23 @@
 #include "service.h"
-#include <iostream>
+
 #include <random>
 #include <string>
 #include <windows.h>
 #include <conio.h>
 #include "log.h"
 #include <SFML/Graphics.hpp>
+#include <ctime>
+#include <cmath>
+#include <ShlObj.h>
+#include "state.h"
+using string = std::string;
 
-unsigned int Rand::intRand(int min, int max) {
+
+///////////////////////////////////////
+// -------------  Rand  ------------ //
+///////////////////////////////////////
+
+unsigned int spl::Rand::intRand(int min, int max) {
 	std::mt19937 rng;
 	rng.seed(std::random_device()());
 	std::uniform_int_distribution<std::mt19937::result_type> dist6(min, max);
@@ -15,14 +25,13 @@ unsigned int Rand::intRand(int min, int max) {
 }
 
 
-float getLength(sf::Vector2f vec1, sf::Vector2f vec2) {
-	return sqrt((vec1.x - vec2.x)*(vec1.x - vec2.x) + (vec1.y - vec2.y)*(vec1.y - vec2.y));
-}
+///////////////////////////////////////
+// -------  TextureGenerator  ------ //
+///////////////////////////////////////
 
-
-void TextureGenerator::fillShadowRect(int shadowSize, sf::Vector2i size, sf::Color color, std::string name) {
+void spl::TextureGenerator::fillShadowRect(int shadowSize, sf::Vector2i size, sf::Color color, std::string name) {
 	sf::Image image;
-	image.create(shadowSize * 2 + size.x, shadowSize * 2 + size.y, sf::Color(255,0,0,0)); //DEBAG change 155 to 0
+	image.create(shadowSize * 2 + size.x, shadowSize * 2 + size.y, sf::Color(255,0,0,0)); //DEBUG change 155 to 0
 
 	//fill base rect
 	for (int i = shadowSize; i < size.x + shadowSize; i++) {//by x move
@@ -55,8 +64,7 @@ void TextureGenerator::fillShadowRect(int shadowSize, sf::Vector2i size, sf::Col
 		throw Log::Exception("invalid way to save image rect " + name);
 }
 
-
-void TextureGenerator::fillShadowCircle(int shadowSize, int radiusSize, sf::Color color, std::string name) {
+void spl::TextureGenerator::fillShadowCircle(int shadowSize, int radiusSize, sf::Color color, std::string name) {
 	sf::Image image;
 	image.create((shadowSize+ radiusSize)*2, (shadowSize + radiusSize) * 2, sf::Color(255, 0, 0, 0)); //DEBAG change 155 to 0
 
@@ -88,8 +96,7 @@ void TextureGenerator::fillShadowCircle(int shadowSize, int radiusSize, sf::Colo
 		throw Log::Exception("invalid way to save image circle" + name);
 }
 
-
-void TextureGenerator::conturRect(sf::Vector2i size, int lineWidth, sf::Color color, std::string name) {
+void spl::TextureGenerator::conturRect(sf::Vector2i size, int lineWidth, sf::Color color, std::string name) {
 	sf::Image image;
 	image.create(size.x, size.y, sf::Color(255, 0, 0, 0)); //DEBAG change 155 to 0
 
@@ -116,7 +123,7 @@ void TextureGenerator::conturRect(sf::Vector2i size, int lineWidth, sf::Color co
 		throw Log::Exception("invalid way to save image contur rect " + name);
 }
 
-void TextureGenerator::conturCircle(int radius, int lineWidth, sf::Color color, std::string name) {
+void spl::TextureGenerator::conturCircle(int radius, int lineWidth, sf::Color color, std::string name) {
 	sf::Image image;
 
 	image.create(radius *2, radius *2, sf::Color(255, 0, 0, 0)); //DEBAG change 155 to 0
@@ -145,75 +152,89 @@ void TextureGenerator::conturCircle(int radius, int lineWidth, sf::Color color, 
 }
 
 
+///////////////////////////////////////
+// -------------  Time  ------------ //
+///////////////////////////////////////
 
+std::string spl::Time::getTime(TimeMode mode)
+{
+	time_t rawtime;
+	rawtime = time(0);
+	tm timeinfo;
+	localtime_s(&timeinfo, &rawtime);
 
-int DeleteDirectory(const std::string &refcstrRootDirectory, bool bDeleteSubdirectories) {
-	bool            bSubdirectory = false;       // Flag, indicating whether
-												 // subdirectories have been found
-	HANDLE          hFile;                       // Handle to directory
-	std::string     strFilePath;                 // Filepath
-	std::string     strPattern;                  // Pattern
-	WIN32_FIND_DATA FileInformation;             // File information
-
-
-	strPattern = refcstrRootDirectory + "\\*.*";
-	hFile = ::FindFirstFile(strPattern.c_str(), &FileInformation);
-	if (hFile != INVALID_HANDLE_VALUE)
+	switch (mode)
 	{
-		do
-		{
-			if (FileInformation.cFileName[0] != '.')
-			{
-				strFilePath.erase();
-				strFilePath = refcstrRootDirectory + "\\" + FileInformation.cFileName;
+	case spl::Time::TimeMode::Day_HourMinSec:
+		return std::to_string(timeinfo.tm_mday) + "|" + std::to_string(timeinfo.tm_hour) + ":" + std::to_string(timeinfo.tm_min) + ":" + std::to_string(timeinfo.tm_sec);
+	
+	case spl::Time::TimeMode::Day_HourMin:
+		return std::to_string(timeinfo.tm_mday) + "|" + std::to_string(timeinfo.tm_hour) + ":" + std::to_string(timeinfo.tm_min);
+	
+	case spl::Time::TimeMode::HourMinSec:
+		return std::to_string(timeinfo.tm_hour) + ":" + std::to_string(timeinfo.tm_min) + ":" + std::to_string(timeinfo.tm_sec);
+	
+	case spl::Time::TimeMode::HourMin:
+		return std::to_string(timeinfo.tm_hour) + ":" + std::to_string(timeinfo.tm_min);
+	}
+}
 
-				if (FileInformation.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-				{
-					if (bDeleteSubdirectories)
-					{
-						// Delete subdirectory
-						int iRC = DeleteDirectory(strFilePath, bDeleteSubdirectories);
-						if (iRC)
-							return iRC;
-					}
-					else
-						bSubdirectory = true;
-				}
-				else
-				{
-					// Set file attributes
-					if (::SetFileAttributes(strFilePath.c_str(),
-						FILE_ATTRIBUTE_NORMAL) == FALSE)
-						return ::GetLastError();
 
-					// Delete file
-					if (::DeleteFile(strFilePath.c_str()) == FALSE)
-						return ::GetLastError();
-				}
+///////////////////////////////////////
+// -----------  Vectors  ----------- //
+///////////////////////////////////////
+
+template<class T>
+T spl::getLength(sf::Vector2<T> vec1, sf::Vector2<T> vec2)
+{
+	return sqrt((vec2.x - vec1.x)*(vec2.x - vec1.x) + (vec2.y - vec1.y)*(vec2.y - vec1.y));
+}
+
+
+///////////////////////////////////////
+// -----------  Folders  ----------- //
+///////////////////////////////////////
+
+std::string spl::Folders::getSpecialFolderPath(foldersCSIDL csidl)
+{
+	LPITEMIDLIST pidl;
+	LPMALLOC pShellMalloc;
+	char szDir[MAX_PATH];
+	string result("None");
+
+	if (SUCCEEDED(SHGetMalloc(&pShellMalloc))) {
+		if (SUCCEEDED(SHGetSpecialFolderLocation(NULL, csidl, &pidl))) {
+			if (SHGetPathFromIDList(pidl, szDir)) {
+				result = szDir;
 			}
-		} while (::FindNextFile(hFile, &FileInformation) == TRUE);
-
-		// Close handle
-		::FindClose(hFile);
-
-		DWORD dwError = ::GetLastError();
-		if (dwError != ERROR_NO_MORE_FILES)
-			return dwError;
-		else
-		{
-			if (!bSubdirectory)
-			{
-				// Set directory attributes
-				if (::SetFileAttributes(refcstrRootDirectory.c_str(),
-					FILE_ATTRIBUTE_NORMAL) == FALSE)
-					return ::GetLastError();
-
-				// Delete directory
-				if (::RemoveDirectory(refcstrRootDirectory.c_str()) == FALSE)
-					return ::GetLastError();
-			}
+			pShellMalloc->Free(pidl);
 		}
+		pShellMalloc->Release();
 	}
 
-	return 0;
+	if (result == "None")
+		throw Log::Exception("getting special folder");
+	else
+		return result;
+}
+
+void spl::Folders::createFolder(std::string path)
+{
+	SHCreateDirectoryEx(NULL, path.c_str(), NULL);
+}
+
+void spl::Folders::copyFolder(std::string from, std::string to)
+{
+#ifdef GAME_MODE
+	string command = "\"xcopy " + from + ' ' + to + " /E /Y /Q\"";
+	system(command.c_str());
+#else
+	string command = "\"xcopy " + from + ' ' + to + " /E /Y /F\"";
+	system(command.c_str());
+#endif
+}
+
+void spl::Folders::deleteFolder(std::string path)
+{
+	system(("\"rmdir /S /Q " + path + " \"").c_str());
 }

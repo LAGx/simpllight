@@ -11,14 +11,12 @@
 
 
 class State {
-	private:
-	 
-	public:
+public:
 
-		static std::string current_state; //states of game like lvls/menus/ect
+	static std::string current_state; //states of game like lvls/menus/ec
 
-		static sf::Color mainColorMajor;
+	static sf::Color mainColorMajor;
 
-		static sf::Color mainColorMinor;
+	static sf::Color mainColorMinor;
 };
 #endif

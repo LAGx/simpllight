@@ -1,30 +1,44 @@
 #include "game_objects.h"
+
 #include <SFML/Graphics.hpp>
+#include <SFML\System\Vector2.hpp>
 #include <Box2D/Box2D.h>
+#include <string>
+
 #include "phisic.h"
 #include "log.h"
 #include "window.h"
 #include "state.h"
 
-using namespace std;
-using namespace sf;
+using Vector2f = sf::Vector2f;
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ////////////        HOUSE          //////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-House::House(b2World* World, Vector2f initCord, float angle, string textureHouse, string textureDoor, string name) :StaticObject(World, initCord, angle, textureHouse, name, rect_T, 10, false) {
+House::House(b2World* World, sf::Vector2f initCord, float angle, std::string textureHouse, std::string textureDoor) :StaticObject(World, initCord, angle, textureHouse, figureType::rect_T, 10, false) {
 	depthRender = -100;
 	Vector2f doorCord(initCord);
-	doorCord.x = doorCord.x + ((texture.getSize().y)/2-10) * sin(angle / DEG_BOX);
-	doorCord.y = doorCord.y - ((texture.getSize().y)/2-10) * cos(angle / DEG_BOX);
-	door = new StaticObject(World, doorCord, angle,textureDoor,name+"_d",rect_T,4,true);
+	doorCord.x = doorCord.x + ((texture.getSize().y) / 2 - 10) * sin(angle / DEG_BOX);
+	doorCord.y = doorCord.y - ((texture.getSize().y) / 2 - 10) * cos(angle / DEG_BOX);
+	door = new StaticObject(World, doorCord, angle, textureDoor, figureType::rect_T, 4, true);
 	door->depthRender = depthRender - 1;
 }
 
 void House::blit() {
 	door->blit();
 	BaseObject::blit();
+}
+
+void House::freezeObject() {
+	StaticObject::freezeObject();
+	door->freezeObject();
+}
+
+void House::unFreezeObject() {
+	StaticObject::unFreezeObject();
+	door->unFreezeObject();
 }
 
 House::~House() {
@@ -36,14 +50,19 @@ House::~House() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-Fir_tree::Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, std::string name) :StaticObject(World, initCord, 0, textr, name, tringle_T, 17, false) {
+Fir_tree::Fir_tree(b2World* World, sf::Vector2f initCord, std::string textr, int health) :StaticObject(World, initCord, 0, textr, figureType::tringle_T, 17, false) {
 }
 
-bool Fir_tree::decreaseHealth(int delta){
+bool Fir_tree::decreaseHealth(int delta) {
 	health -= delta;
 	if (health <= 0)
 		return 0;
 	return 1;
+}
+
+const int &Fir_tree::getHealth() const
+{
+	return health;
 }
 
 void Fir_tree::setHealth(int health) {
@@ -58,7 +77,7 @@ Fir_tree::~Fir_tree() {
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 
-Shrub::Shrub(b2World* World, sf::Vector2f initCord, std::string textr, std::string name) :StaticObject(World, initCord, 0, textr, name, rect_T, 15, true) {
+Shrub::Shrub(b2World* World, sf::Vector2f initCord, std::string textr, int health) :StaticObject(World, initCord, 0, textr, figureType::rect_T, 15, true) {
 	g_body.setColor(sf::Color(255, 255, 255, 175));
 	depthRender = -200;
 }
@@ -68,6 +87,11 @@ bool Shrub::decreaseHealth(int delta) {
 	if (health <= 0)
 		return 0;
 	return 1;
+}
+
+const int &Shrub::getHealth() const
+{
+	return health;
 }
 
 void Shrub::setHealth(int health) {
@@ -81,14 +105,14 @@ Shrub::~Shrub() {
 ////////////        ALIVE        ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-Alive::Alive(b2World* World, sf::Vector2f initCord, std::string textr, std::string name, figureType type, float figureSize): DynamicObject(World, initCord, textr, name, type, figureSize, false) {
+Alive::Alive(b2World* World, sf::Vector2f initCord, std::string textr, figureType type, float figureSize, int health) : DynamicObject(World, initCord, textr, type, figureSize, false) {
 
-	if (!texture_zone.loadFromFile(textr, sf::IntRect(texture.getSize().x/2, texture.getSize().x / 2, 2, 2))) {
+	if (!texture_zone.loadFromFile(textr, sf::IntRect(texture.getSize().x / 2, texture.getSize().x / 2, 2, 2))) {
 		throw Log::Exception("Texture load in Alive. ");
 	}
 	texture_zone.setSmooth(true);
 	g_zone.setRadius(radiusZone);
-	g_zone.setFillColor(Color(230, 255, 255, 30));
+	g_zone.setFillColor(sf::Color(230, 255, 255, 30));
 	g_zone.setTexture(&texture_zone);
 
 	b2CircleShape z_shape;
@@ -97,6 +121,8 @@ Alive::Alive(b2World* World, sf::Vector2f initCord, std::string textr, std::stri
 	z_fixt.isSensor = true;
 	z_fixt.shape = &z_shape;
 	zoneFixt = body_ph->CreateFixture(&z_fixt);
+
+	this->health = health;
 }
 
 void Alive::setRadius(float radius) {
@@ -137,7 +163,7 @@ void Alive::update() {
 	updateZonePos(Vector2f(body_ph->GetPosition().x*SCALE_BOX, body_ph->GetPosition().y*SCALE_BOX));
 }
 
-void Alive::updateZonePos(Vector2f cord) {
+void Alive::updateZonePos(sf::Vector2f cord) {
 	g_zone.setPosition(Vector2f(cord.x - radiusZone, cord.y - radiusZone));
 }
 
@@ -158,6 +184,23 @@ bool Alive::decreaseHealth(int delta) {
 	return 1;
 }
 
+const int &Alive::getHealth() const
+{
+	return health;
+}
+
+void Alive::freezeObject()
+{
+	DynamicObject::freezeObject();
+	isVisibleZone = false;
+}
+
+void Alive::unFreezeObject()
+{
+	DynamicObject::unFreezeObject();
+	isVisibleZone = true;
+}
+
 void Alive::setHealth(int health) {
 	this->health = health;
 }
@@ -165,7 +208,7 @@ void Alive::setHealth(int health) {
 Alive::~Alive() {
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
+/*//////////////////////////////////////////////////////////////////////////////////////////////
 ////////////       EDITOR        ////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -254,4 +297,4 @@ inline void Editor::wheelMouse(float delta) {
 Editor::~Editor() {
 	delete cursor;
 	deleteFantom();
-}
+*/
