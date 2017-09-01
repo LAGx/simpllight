@@ -84,6 +84,12 @@
     <ClInclude Include="world.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Font Include="font\arial.ttf">
@@ -175,6 +181,12 @@
       <Filter>Source Files\game_objects</Filter>
     </ClCompile>
     <ClCompile Include="game_objects.cpp">
+      <Filter>Source Files\game_objects</Filter>
+    </ClCompile>
+    <ClCompile Include="interface.cpp">
+      <Filter>Source Files\graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="item.cpp">
       <Filter>Source Files\game_objects</Filter>
     </ClCompile>
   </ItemGroup>

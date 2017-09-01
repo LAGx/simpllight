@@ -1,11 +1,22 @@
+#pragma once
 #ifndef _SERVICE_
 #define _SERVICE_
 
-#pragma once
+#include <SFML/Graphics.hpp>
 #include <string>
-#include <SFML\System.hpp>
 
 namespace spl {
+
+	class TextureGenerator {
+	public:
+		void fillShadowRect(int shadowSize, sf::Vector2i size, sf::Color color, std::string name);
+
+		void fillShadowCircle(int shadowSize, int radiusSize, sf::Color color, std::string name);
+
+		void conturRect(sf::Vector2i size, int lineWidth, sf::Color color, std::string name);
+
+		void conturCircle(int radius, int lineWidth, sf::Color color, std::string name);
+	};
 
 	class Rand {
 	public:

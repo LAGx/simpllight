@@ -1,6 +1,5 @@
 ﻿#include "window.h"
 
-#include <Windows.h>
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 #include <algorithm>
@@ -22,9 +21,8 @@ Window::Window() {
 	view.setSize(900, 500);
 	view.setCenter(450, 250);
 #endif
-	updateState();
-	sf::Mouse::setPosition(sf::Vector2i(currGlobalViewCord), canvas);
-	canvas.setMouseCursorVisible(true);
+	updateWindowStateBox();
+	canvas.setMouseCursorVisible(false);
 	canvas.setFramerateLimit(120);
 	canvas.setView(view);
 }
@@ -43,18 +41,32 @@ void Window::drawAll() {
 
 	canvas.display();
 	allDrawable.clear();
-	screenSize = Vector2f(canvas.getSize());
 }
 
 Window::~Window() {
 
 }
 
+sf::Clock Window::clock;
+sf::RenderWindow Window::canvas;
+sf::View Window::view;
+
 std::vector<spl::ToDraw> Window::allDrawable;
 
-void Window::updateState() {
-	currGlobalViewCord = view.getCenter();
-}
+sf::Vector2f spl::WindowStateBox::currScreenSize;
+sf::Vector2f spl::WindowStateBox::currGlobalViewCord;
+sf::Vector2f spl::WindowStateBox::currViewSize;
+float spl::WindowStateBox::absoluteScale;
 
-Vector2f Window::currGlobalViewCord;
-Vector2f Window::screenSize;
+sf::Vector2f spl::WindowStateBox::inGameZeroCordRelativeWindow;
+sf::Vector2i spl::WindowStateBox::mouseCurrPositionRelativeWindow;
+
+void Window::updateWindowStateBox(){
+	spl::WindowStateBox::mouseCurrPositionRelativeWindow = sf::Mouse::getPosition(canvas);
+	spl::WindowStateBox::currScreenSize = sf::Vector2f(canvas.getSize());
+	spl::WindowStateBox::currGlobalViewCord = view.getCenter();
+	spl::WindowStateBox::currViewSize = view.getSize();
+	spl::WindowStateBox::absoluteScale = spl::WindowStateBox::currScreenSize.x / spl::WindowStateBox::currViewSize.x;
+
+	spl::WindowStateBox::inGameZeroCordRelativeWindow = spl::WindowStateBox::currGlobalViewCord - (spl::WindowStateBox::currViewSize / (float)2);
+}

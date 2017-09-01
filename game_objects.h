@@ -24,13 +24,15 @@ protected:
 
 	sf::Sprite g_body;
 
-	void updateTextrPosition(sf::Vector2f newCord, float newAngle);
+	void updateTextrPosition(sf::Vector2f newCord, float newAngle = 0);
 	bool isVisible = true;
 
 public:
 	int depthRender = 0;
 
 	BaseObject(sf::Vector2f initCord, std::string texture);
+
+	BaseObject();
 
 	const sf::Vector2f getCoordinates() const;
 
@@ -45,6 +47,18 @@ public:
 	virtual void blit();
 
 	virtual ~BaseObject();
+};
+
+
+class PhantomObject:public BaseObject {
+public:
+	
+	PhantomObject(sf::Vector2f initCord, std::string texture);
+
+	void setPosition(int x, int y, float angle = 0);
+
+	sf::Vector3f getPosition();
+
 };
 
 
@@ -227,13 +241,58 @@ class Cursor : public DynamicObject, public spl::EventInterface {
 private:
 	void positionMouse(int x, int y);
 public:
-	Cursor(b2World* World, std::string textr);
+
+	sf::Vector2f getPosition();
+
+	Cursor(b2World* World, std::string textr, std::string name = "cursor");
 };
 
+/*
+class Editor: public spl::EventInterface {
+private:
+	bool isPressedContrl = false;
+	bool isPressedShift = false;
+	float speed = 1;
+	float delta = 0;
+	sf::Vector2f currSize;
+	sf::Vector2f currPosition;
+	float currPfantomAngle = 0;
+	sf::View &view;
+
+	PhantomObject *phantom = nullptr;
+protected:
+	void moveTop();
+	void moveBottom();
+	void moveLeft();
+	void moveRight();
+	void l_ctrl();
+	void l_shift();
+
+	void selectMouse();
+	void useMouse();
+	void wheelMouse(float delta);
+
+public:
+
+	Cursor *cursor;
+
+	Editor(b2World* World, sf::View &view, std::string textrCur = "None");
+
+	void newFantom(std::string texture);
+	sf::Vector3f getfantomPosition();
+	void deleteFantom();
+
+	void blit();
+
+	~Editor();
+};
+*/
 
 class Player : public Human, public spl::EventInterface {
+
 private:
 	b2Vec2 currForceVec;
+
 protected:
 	void moveTop();
 	void moveBottom();
