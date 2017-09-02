@@ -195,7 +195,26 @@ T spl::getLength(sf::Vector2<T> vec1, sf::Vector2<T> vec2)
 // -----------  Folders  ----------- //
 ///////////////////////////////////////
 
-std::string spl::Folders::getSpecialFolderPath(foldersCSIDL csidl)
+std::string spl::Folders::getGameFolderPath(GameFolders folder)
+{
+	switch (folder)
+	{
+	case GameFolders::nativeWorld:
+		return "world";
+	case GameFolders::workWorld: 
+		return getSpecialFolderPath(userName_applicationData) + "\\simpllight\\temp\\world";
+	case GameFolders::savesWorlds: 
+		return getSpecialFolderPath(myDocuments) + "\\simpllight\\saves";
+	case GameFolders::nativeTextures:
+		return "textures";
+	case GameFolders::workTextures:
+		return getSpecialFolderPath(userName_applicationData) + "\\simpllight\\temp\\textures";
+	case GameFolders::sounds:
+		return "sounds";
+	}
+}
+
+std::string spl::Folders::getSpecialFolderPath(FoldersCSIDL csidl)
 {
 	LPITEMIDLIST pidl;
 	LPMALLOC pShellMalloc;
