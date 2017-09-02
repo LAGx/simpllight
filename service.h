@@ -83,6 +83,8 @@ namespace spl {
 
 		@param[in] folder  folder that you want to find
 
+		@warning return path without backslash '\' at the end
+
 		@return path to folder
 		 */
 		static std::string getGameFolderPath(GameFolders folder);
@@ -92,6 +94,8 @@ namespace spl {
 		for example "Documents" or "Startup Directory"
 
 		@param[in] csidl  identificator for folder that you want to find
+
+		@warning return path without backslash '\' at the end
 
 		@throw Log::Exception if can't get folder path
 
