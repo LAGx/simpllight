@@ -33,8 +33,8 @@ CellInterface::CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, Sty
 
 	{
 		spl::TextureGenerator textureGenerator;
-		if ((fopen(("image/tempInterface/" + id + "_base.png").c_str(), "r") == NULL) &&
-			(fopen(("image/tempInterface/" + id + "_frame.png").c_str(), "r") == NULL)) {
+		if ((fopen((spl::Folders::getSpecialFolderPath(spl::Folders::userName_applicationData)+"\\simpllight\\resources\\interface" + id + "_base.png").c_str(), "r") == NULL) &&
+			(fopen((spl::Folders::getSpecialFolderPath(spl::Folders::userName_applicationData) + "\\simpllight\\resources\\interface" + id + "_base.png").c_str(), "r") == NULL)) {
 			switch (this->type) {
 			case typeCell::rect:
 				textureGenerator.fillShadowRect(style.shadow, sf::Vector2i(sizeCell), style.baseColor - sf::Color(0, 0, 0, style.deltaTransperActive), "image/tempInterface/" + id + "_base.png");
@@ -50,8 +50,8 @@ CellInterface::CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, Sty
 		}
 	}
 
-	this->baseTextr  = new BaseObject(sf::Vector2f(0,0), "image/tempInterface/" + id + "_base.png");
-	this->frameTextr = new BaseObject(sf::Vector2f(0,0), "image/tempInterface/" + id + "_frame.png");
+	this->baseTextr  = new CellTexture(sf::Vector2f(0,0), "image/tempInterface/" + id + "_base.png");
+	this->frameTextr = new CellTexture(sf::Vector2f(0,0), "image/tempInterface/" + id + "_frame.png");
 
 	baseTextr->depthRender = -1000;
 	depthRender = -1000;
@@ -129,7 +129,7 @@ void CellInterface::setVisible(bool isVisible) {
 
 void CellInterface::update() {
 		phisicCollideDetecting();
-		spl::Window::updateWindowStateBox();//don`t need there //too much calls 
+		//spl::Window::updateWindowStateBox();//don`t need there //too much calls 
 		baseTextr->updateTextrPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + positionRelWindow / spl::WindowStateBox::absoluteScale, 0);
 		baseTextr->g_body.setScale(sf::Vector2f(1 / spl::WindowStateBox::absoluteScale, 1 / spl::WindowStateBox::absoluteScale));
 		frameTextr->updateTextrPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + positionRelWindow / spl::WindowStateBox::absoluteScale, 0);
@@ -197,9 +197,9 @@ void CellInterface::removeItem(){
 	item = nullptr;
 }
 
-CellInterface::BaseObject::BaseObject(sf::Vector2f initCord, string textr) {
+CellInterface::CellTexture::CellTexture(sf::Vector2f initCord, string textr) {
 	if (!texture.loadFromFile(textr)) {
-		throw Log::Exception("Texture load in CellInterface::BaseObject from " + textr, true);
+		throw Log::Exception("Texture load in CellInterface::CellTexture from " + textr, true);
 	}
 	texture.setSmooth(true);
 	g_body.setTexture(texture);
@@ -207,16 +207,16 @@ CellInterface::BaseObject::BaseObject(sf::Vector2f initCord, string textr) {
 	g_body.setPosition(initCord);
 }
 
-CellInterface::BaseObject::BaseObject() {	//empty//for inheritance
+CellInterface::CellTexture::CellTexture() {	//empty//for inheritance
 	isVisible = false;
 }
 
-void CellInterface::BaseObject::updateTextrPosition(sf::Vector2f newCord, float newAngle) {
+void CellInterface::CellTexture::updateTextrPosition(sf::Vector2f newCord, float newAngle) {
 	g_body.setPosition(newCord);
 	g_body.setRotation(newAngle);
 }
 
-void CellInterface::BaseObject::blit() {
+void CellInterface::CellTexture::blit() {
 	if (isVisible) {
 		spl::ToDraw draw = { &g_body, depthRender };
 		spl::Window::allDrawable.push_back(draw);
@@ -239,6 +239,7 @@ CellInterface::Text::Text(int id, std::string text, sf::Vector2f posRatio, float
 		this->posRatio = sf::Vector2f((posRatio.x / 100)*cell.sizeCell.x, (posRatio.y / 100)*cell.sizeCell.y);
 	else
 		this->posRatio = sf::Vector2f((posRatio.x / 100)*cell.sizeCell.x, (posRatio.y / 100)*cell.sizeCell.x);
+	this->depthRender = cell.depthRender - 1;
 }
 
 void CellInterface::Text::setPosition(sf::Vector2f position) {

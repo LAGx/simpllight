@@ -10,35 +10,50 @@
 
 class BaseClass;
 
+/// one cell of interface. 
 class CellInterface {
 private:
+
+	/// interface text, don`t use directly
 	class Text {
-
 	private:
-		int id;
-		sf::Text text;
+		int id;///< id of this text
+		sf::Text text;///< sfml text
 
-		sf::Vector2f posRatio;
-		int depthRender = 0;
+		sf::Vector2f posRatio; ///< position of center of text ratio cell(0 by 100)
+		int depthRender = 0; ///< depth render 
 
 	public:
+		/*!
+		 @warning don`t use class directly. only across cellInterface methods
+		 @param [in] text start text
+		 @param [in] posRatio position of center of text ratio cell(0 by 100)
+		 @param [in] scaleRatio scele factor  
+		 @param [in] cell parent cell
+		 */
 		Text(int id, std::string text, sf::Vector2f posRatio, float scaleRatio, sf::Color textColor, sf::Font &font, CellInterface& cell);
 
+		/// set position of text
 		void setPosition(sf::Vector2f position);
+		/// set scale factor 
 		void setScale(float scale);
-
+		///set new text
 		void setNewText(std::string text);
+		///set new color
 		void setColor(sf::Color color);
+		///set new size
 		void setSize(float size);
-
+		/// @return id of text
 		int getId();
+		/// change depth render by delta point
 		void changeDepthRender(int delta);
-
+		/// blit
 		void blit();
 
 	};
 
-	class BaseObject {//gvnocod becouse of circular include
+	///cell texture 
+	class CellTexture {//gvnocod becouse of circular include
 	public:
 		sf::Texture texture;
 		sf::Sprite g_body;
@@ -48,65 +63,73 @@ private:
 
 		int depthRender = 0;
 
-		BaseObject(sf::Vector2f initCord, std::string texture);
+		CellTexture(sf::Vector2f initCord, std::string texture);
 
-		BaseObject();
+		CellTexture();
 
 		void blit();
 
 	};
 
-	sf::Color textColor;
-	sf::Font font;
-	vector<Text* > allText;
+	sf::Color textColor; ///< default color of all text
+	sf::Font font; ///< default font of all text
+	vector<Text* > allText; ///< storage for all text
 	
-	void update();
-	float animationCoef = 0;
-	void animation();
+	void update();///< resolving small operations
+	float animationCoef = 0; ///< for animation make 
+	void animation(); ///< make animation 
 
-	InterfaceItem* item = nullptr; //have to be created outside
+	InterfaceItem* item = nullptr; ///< @warning have to be created outside
 
+	/*!
+	 @brief check if mouse on cell and set "isActive" true or false
+	 */
 	void phisicCollideDetecting();
 
-	CellInterface::BaseObject *baseTextr;
-	CellInterface::BaseObject *frameTextr;
+	CellInterface::CellTexture *baseTextr;/// <background of texture
+	CellInterface::CellTexture *frameTextr;///<frame of texture
 
 	enum typeCell;
-	typeCell type;
+	typeCell type;///< type of cell 
 
-	sf::Vector2f sizeCell;           //in pixel relative window//if it`s circle, first parameter is radius 
-	sf::Vector2f positionRelWindow; //in pixel //no update
-	float speedChangeTransper = 1;  //0 - newer change//1 - in moment change
-	char deltaTransp = 0;          //in pixel//how more transperent it need to be in Quiet
+	sf::Vector2f sizeCell;           ///< Size in pixel relative window. if it`s circle - first parameter is radius, second ignore
+	sf::Vector2f positionRelWindow; ///<Position in pixel, @warning don`t have to update
+	float speedChangeTransper = 1;  ///< from 0 (newer change) by 1 (in moment change)
+	char deltaTransp = 0;          ///< in pixel. how more transperent it need to be in Quiet
 
-	int depthRender = 0;
+	int depthRender = 0; ///< depth render of cell
 
-	bool isVisible = true;
+	bool isVisible = true; ///< visibility of cell 
 
 public:
 
+	/// define style of cell
 	struct StyleCell {
-		sf::Color baseColor = { 0,0,0,255 };
-		sf::Color frameColor = { 0,0,0 };
+		/// generate texture
+		sf::Color baseColor = { 0,0,0,255 };///<base color of background
+		sf::Color frameColor = { 0,0,0 };///<base color of frane
+		int borderSize = 1; ///< size of frame
+		int shadow = 0; ///< size of shadow cell
 
-		int borderSize = 1;
-		int shadow = 0;
+		unsigned char deltaTransperActive = 0;///<how more transperent base, then 100%
+		unsigned char deltaTransperQuiet = 0;///< transperent od background cell in usual state
+		float speedChangeTransper = 0;///< speed of animation
 
-		unsigned char deltaTransperActive = 0;//how more transperent base, then 100%
-		unsigned char deltaTransperQuiet = 0;
-		float speedChangeTransper = 0;
-
-		std::string textFont = "None";
-		sf::Color textColor = {255,255,255};
+		std::string textFont = "None";///< path to text font
+		sf::Color textColor = {255,255,255};///<< start text color
 	};
 
+	///what type of sell. define form of cell
 	enum typeCell {
 		rect = 0,
 		round
 	};
 
-//	position and scale reletive cell (in %)
-	void textControl(std::string mod, int id, std::string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);//mod "new"-new text, "del"-delete text
+	/*!
+	 @warning position and scale reletive cell (in %)
+	@param [in] mod can be "new"-new text(need almost parameters for create) and "del"-delete(need only id of deleting text)
+	*/
+	void textControl(std::string mod, int id, std::string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);
 	Text* getTextPtr(int id);
 
 	void setItem(InterfaceItem* item);
@@ -127,7 +150,7 @@ public:
 	~CellInterface();
 };
 
-
+/// layer of group of cells
 class AssemblyLayerInterface {
 
 	CellInterface::StyleCell getStyle(std::string styleId);
@@ -155,7 +178,7 @@ public:
 	~AssemblyLayerInterface();
 };
 
-
+///controller of several leyer
 class UserInterfaceBox {
 protected:
 	std::vector<AssemblyLayerInterface*> fastAccessLayer;
