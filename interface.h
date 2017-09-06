@@ -62,7 +62,7 @@ private:
 		bool isVisible = true;
 
 		int depthRender = 0;
-
+		
 		CellTexture(sf::Vector2f initCord, std::string texture);
 
 		CellTexture();
@@ -119,7 +119,7 @@ public:
 		sf::Color textColor = {255,255,255};///<< start text color
 	};
 
-	///what type of sell. define form of cell
+	///what type of cell. define form of cell
 	enum typeCell {
 		rect = 0,
 		round
@@ -128,24 +128,39 @@ public:
 	/*!
 	 @warning position and scale reletive cell (in %)
 	@param [in] mod can be "new"-new text(need almost parameters for create) and "del"-delete(need only id of deleting text)
+	@param [in] posRatio posRatio position of center of text ratio cell(0 by 100)
+	@throw Log::Exception invalid mod
 	*/
 	void textControl(std::string mod, int id, std::string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);
-	Text* getTextPtr(int id);
+	Text* getTextPtr(int id);///< get text by id for control it
 
-	void setItem(InterfaceItem* item);
-	void removeItem();
+	void setItem(InterfaceItem* item);///< set item in sell
+	void removeItem();///< remove item in sell
 
+	/*!
+	 @param [in] initRatio (in %) position of center ratio window
+	 @param [in] sizeRatio (in %) size ratio window
+	 @param [in] style set style settings
+	 @param [in] type type of cell(round or rect). warning: can`t be changed 
+	 @param [in] id id cell on layer
+	@warning dont`t use cell directly. only across AssemblyLayerInterface
+	@throw Log::Exception if does not exist given type
+	@throw Log::Exception if does not exist given font from style
+	 */
 	CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, StyleCell& style, typeCell type, std::string id);
 
-	std::string id = "None";
+	std::string id = "None";///< id cell on layer
 
-	bool isActive = false;
+	bool isActive = false;///< is on mouse @warning don`t change by hand
+	/*!
+	@brief change depth render by deltaDepth
+	@param [in] deltaDepth delta value
+	 */
+	void changeDepthRender(int deltaDepth);
 
-	void changeDepthRender(int depth);
+	void blit();///< blit cell per frame
 
-	void blit();
-
-	void setVisible(bool isVisible);
+	void setVisible(bool isVisible);///< set is visible
 
 	~CellInterface();
 };
@@ -153,55 +168,70 @@ public:
 /// layer of group of cells
 class AssemblyLayerInterface {
 
-	CellInterface::StyleCell getStyle(std::string styleId);
-	void updateAllCellFromFile();
+	CellInterface::StyleCell getStyle(std::string styleId);///< transform style from file to normal style type
+	void updateAllCellFromFile();///< read layer by json file
 
-	std::vector<CellInterface*> allCell;
-	std::string styleId = "None";//can be changed only once in constructor
+	std::vector<CellInterface*> allCell;///< all cell are stored in vector
+	std::string styleId = "None";///<can be changed only once in constructor
 
 public:
 
-	AssemblyLayerInterface(std::string id, std::string mode, std::string styleId = "default"); //mod "new", "old"(can`t change style)
-
+	/*!
+	 @warning style of layer can`t be changed in work. 
+	@param [in] mode can take "new"(create new file) and "old"(load file)
+	 */
+	AssemblyLayerInterface(std::string id, std::string mode, std::string styleId = "default"); ///< mod "new", "old"(can`t change style)
+	
+	/*!
+	 @brief every cell have id, u can take one cell by id and do manipulation
+	@throw Log::Exception no such cell id
+	 */
 	CellInterface* getCellById(std::string id = "None");
-	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, std::string styleId = "default");//for creating//can be using for update 
-	void deleteCell(std::string id); //for creating
+	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, std::string styleId = "default");///<for creating. can be using for update (just input id of upateing cell). doing update of file layer
+	void deleteCell(std::string id); ///<for creating. doing update of file layer
+	/*!
+	@brief use for text manipulation in cell. doing update of file layer
+	@param [in] mode can take "new"(create new text) and "del"(delete text).
+	 */
 	void textControl(std::string cellId, std::string mod, int idText, std::string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);
 
 
-	std::string id = "None";
+	std::string id = "None";///<< id layer
 
-	std::string getActiveCell();
+	std::string getActiveCell();///< get cell on which mouse on
 
-	void blit();
+	void blit();///< blit all vesible cells in layer 
 
 	~AssemblyLayerInterface();
 };
 
-///controller of several leyer
+///controller of several leyer. Use interface classes only through UserInterfaceBox.
 class UserInterfaceBox {
 protected:
-	std::vector<AssemblyLayerInterface*> fastAccessLayer;
+	std::vector<AssemblyLayerInterface*> fastAccessLayer;///layers, that in RAM
 
-	AssemblyLayerInterface* currInterfaceLayer = nullptr;
+	AssemblyLayerInterface* currInterfaceLayer = nullptr;/// layer, that blit on screen now
 	
+	static std::string activeLayer;///< id of currInterfaceLayer
+
+	static std::string activeCell;///< id of cell, that mouse on
+
 public:
 
 	UserInterfaceBox();
+	/*!
+	@brief create new layer, with style? that can`t change in game. 
+	@warning if id match with some else layer id, this layer delete and create empty.
+	 */
+	void createLayer(std::string id, std::string styleId = "default"); 
 
-	static std::string activeLayer;
+	void createStyle(std::string id, CellInterface::StyleCell& style); ///<write new style in style file
 
-	static std::string activeCell;
+	void downloadLayerById(std::string id);///<download layer fom file if it not in RAM. set this layer as current
 
-	void createLayer(std::string id, std::string styleId = "default"); //for creating
+	AssemblyLayerInterface* getCurrLayer();///<get access to curr layer for manipulating 
 
-	void createStyle(std::string id, CellInterface::StyleCell& style); //for creating
-
-	void downloadLayerById(std::string id);
-
-	AssemblyLayerInterface* getCurrLayer();
-
-	void blit();
+	void blit();///< ZAEBALO I TAK JACNO. blit curr layer
 
 	~UserInterfaceBox();
 };
