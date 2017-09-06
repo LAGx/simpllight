@@ -205,7 +205,7 @@ public:
 	~AssemblyLayerInterface();
 };
 
-///controller of several leyer
+///controller of several leyer. Use interface classes only through UserInterfaceBox.
 class UserInterfaceBox {
 protected:
 	std::vector<AssemblyLayerInterface*> fastAccessLayer;///layers, that in RAM

@@ -9,6 +9,7 @@
 #include <conio.h>
 #include <json.hpp>
 
+#include "service.h"
 #include "window.h"
 #include "log.h"
 #include "service.h"
@@ -33,16 +34,16 @@ CellInterface::CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, Sty
 
 	{
 		spl::TextureGenerator textureGenerator;
-		if ((fopen((spl::Folders::getSpecialFolderPath(spl::Folders::userName_applicationData)+"\\simpllight\\resources\\interface" + id + "_base.png").c_str(), "r") == NULL) &&
-			(fopen((spl::Folders::getSpecialFolderPath(spl::Folders::userName_applicationData) + "\\simpllight\\resources\\interface" + id + "_base.png").c_str(), "r") == NULL)) {
+		if ((fopen((spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures)+"\\interface\\" + id + "_base.png").c_str(), "r") == NULL) &&
+			(fopen((spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_frame.png").c_str(), "r") == NULL)) {
 			switch (this->type) {
 			case typeCell::rect:
-				textureGenerator.fillShadowRect(style.shadow, sf::Vector2i(sizeCell), style.baseColor - sf::Color(0, 0, 0, style.deltaTransperActive), "image/tempInterface/" + id + "_base.png");
-				textureGenerator.conturRect(sf::Vector2i(sizeCell), style.borderSize, style.frameColor, "image/tempInterface/" + id + "_frame.png");
+				textureGenerator.fillShadowRect(style.shadow, sf::Vector2i(sizeCell), style.baseColor - sf::Color(0, 0, 0, style.deltaTransperActive), spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_base.png");
+				textureGenerator.conturRect(sf::Vector2i(sizeCell), style.borderSize, style.frameColor, spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_frame.png");
 				break;
 			case typeCell::round:
-				textureGenerator.fillShadowCircle(style.shadow, int(sizeCell.x), style.baseColor - sf::Color(0, 0, 0, style.deltaTransperActive), "image/tempInterface/" + id + "_base.png");
-				textureGenerator.conturCircle(sizeCell.x, style.borderSize, style.frameColor, "image/tempInterface/" + id + "_frame.png");
+				textureGenerator.fillShadowCircle(style.shadow, int(sizeCell.x), style.baseColor - sf::Color(0, 0, 0, style.deltaTransperActive), spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_base.png");
+				textureGenerator.conturCircle(sizeCell.x, style.borderSize, style.frameColor, spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_frame.png");
 				break;
 			default:
 				throw Log::Exception("Error type in CellInterface");
@@ -50,8 +51,8 @@ CellInterface::CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, Sty
 		}
 	}
 
-	this->baseTextr  = new CellTexture(sf::Vector2f(0,0), "image/tempInterface/" + id + "_base.png");
-	this->frameTextr = new CellTexture(sf::Vector2f(0,0), "image/tempInterface/" + id + "_frame.png");
+	this->baseTextr  = new CellTexture(sf::Vector2f(0,0), spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_base.png");
+	this->frameTextr = new CellTexture(sf::Vector2f(0,0), spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_frame.png");
 
 	baseTextr->depthRender = -1000;
 	depthRender = -1000;
@@ -281,7 +282,7 @@ void CellInterface::Text::blit() {
 
 AssemblyLayerInterface::AssemblyLayerInterface(string id, string mode, string styleId) {
 	if (mode == "new") {
-		std::ofstream file("game_data/interface/" + id + ".json", ios::trunc);
+		std::ofstream file(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\" + id + ".json", ios::trunc);
 
 		json j;
 		j["id"] = id;
@@ -305,7 +306,7 @@ void AssemblyLayerInterface::updateAllCellFromFile() {
 		delete allCell[i];
 
 	allCell.clear();
-	ifstream file("game_data/interface/" + id + ".json");
+	ifstream file(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\" + id + ".json");
 	if (!file.is_open())
 		throw Log::Exception("no such id file", true);
 
@@ -344,7 +345,7 @@ void AssemblyLayerInterface::updateAllCellFromFile() {
 
 void AssemblyLayerInterface::textControl(string cellId, string mod, int idText, string text, sf::Vector2f posRatio, float scaleRatio) {
 
-	ifstream file("game_data/interface/" + this->id + ".json");
+	ifstream file(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\" + this->id + ".json");
 	if (!file.is_open())
 		throw Log::Exception("no such id file", true);
 	json j;
@@ -360,7 +361,7 @@ void AssemblyLayerInterface::textControl(string cellId, string mod, int idText, 
 		j[cellId]["text"].erase(to_string(idText));
 	}
 	file.close();
-	ofstream file_o("game_data/interface/" + this->id + ".json");
+	ofstream file_o(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\" + this->id + ".json");
 	if (!file_o.is_open())
 		throw Log::Exception("no such id file", true);
 
@@ -372,9 +373,9 @@ void AssemblyLayerInterface::textControl(string cellId, string mod, int idText, 
 void AssemblyLayerInterface::createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, string styleId) {
 	json jStyle;
 
-	ifstream inStreamFile("game_data/interface/" + this->id + ".json");
+	ifstream inStreamFile(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\" + this->id + ".json");
 	if (!inStreamFile.is_open())
-		throw Log::Exception("game_data/interface/" + this->id + ".json", true);
+		throw Log::Exception(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\" + this->id + ".json", true);
 
 
 	jStyle << inStreamFile;
@@ -388,9 +389,9 @@ void AssemblyLayerInterface::createNewCell(sf::Vector2f initRatio, sf::Vector2f 
 	jStyle[id]["typeObject"] = "CellInterface";
 	jStyle[id]["id"] = id;
 
-	ofstream outStreamFile("game_data/interface/" + this->id + ".json");
+	ofstream outStreamFile(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\" + this->id + ".json");
 	if (!outStreamFile.is_open())
-		throw Log::Exception("game_data/interface/" + this->id + ".json", true);
+		throw Log::Exception(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\" + this->id + ".json", true);
 
 	outStreamFile << jStyle;
 	outStreamFile.close();
@@ -400,7 +401,7 @@ void AssemblyLayerInterface::createNewCell(sf::Vector2f initRatio, sf::Vector2f 
 }
 
 CellInterface::StyleCell AssemblyLayerInterface::getStyle(string styleId) {
-	ifstream file("game_data/interface/styles.json");
+	ifstream file(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\styles.json");
 	if (!file.is_open())
 		throw Log::Exception("no such styles file", true);
 
@@ -442,7 +443,7 @@ CellInterface* AssemblyLayerInterface::getCellById(string id) {
 }
 
 void AssemblyLayerInterface::deleteCell(std::string id) {
-	ifstream file("game_data/interface/" + this->id + ".json");
+	ifstream file(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\" + this->id + ".json");
 	if (!file.is_open())
 		throw Log::Exception("no such id file", true);
 
@@ -451,9 +452,9 @@ void AssemblyLayerInterface::deleteCell(std::string id) {
 	j.erase("cell_1");
 
 	file.close();
-	ofstream outStreamFile("game_data/interface/" + this->id + ".json");
+	ofstream outStreamFile(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\" + this->id + ".json");
 	if (!outStreamFile.is_open())
-		throw Log::Exception("game_data/interface/" + this->id + ".json", true);
+		throw Log::Exception(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\" + this->id + ".json", true);
 
 	outStreamFile << j;
 	outStreamFile.close();
@@ -480,8 +481,8 @@ string UserInterfaceBox::activeLayer;
 string UserInterfaceBox::activeCell;
 
 UserInterfaceBox::UserInterfaceBox() {
-	spl::Folders::deleteFolder("image\\tempInterface");
-	spl::Folders::createFolder("image\\tempInterface");
+	spl::Folders::deleteFolder(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface");
+	spl::Folders::createFolder(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface");
 
 	CellInterface::StyleCell style = { sf::Color(10,60,50), sf::Color(0,255,255), 2, 2, 50, 200, 0.05, "font/arial.ttf", sf::Color(255,255,255)};
 	createStyle("default",style); 
@@ -490,9 +491,9 @@ UserInterfaceBox::UserInterfaceBox() {
 void UserInterfaceBox::createStyle(string id, CellInterface::StyleCell& style) {
 	json jStyle;
 
-	ifstream inStreamFile("game_data/interface/styles.json");
+	ifstream inStreamFile(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\styles.json");
 	if (!inStreamFile.is_open())
-		throw Log::Exception("Can`t open game_data/interface/styles.json", true);
+		throw Log::Exception(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\styles.json", true);
 
 	jStyle << inStreamFile;
 	jStyle[id]["baseColor"] = { style.baseColor.r,style.baseColor.g, style.baseColor.b,style.baseColor.a };
@@ -505,9 +506,9 @@ void UserInterfaceBox::createStyle(string id, CellInterface::StyleCell& style) {
 	jStyle[id]["font"] = style.textFont;
 	jStyle[id]["textColor"] = { style.frameColor.r,style.frameColor.g, style.frameColor.b};
 
-	ofstream outStreamFile("game_data/interface/styles.json");
+	ofstream outStreamFile(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\styles.json");
 	if (!outStreamFile.is_open())
-		throw Log::Exception("Can`t open game_data/interface/styles.json", true);
+		throw Log::Exception("Can`t open " + spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\styles.json", true);
 
 	outStreamFile << jStyle;
 	outStreamFile.close();
@@ -547,7 +548,7 @@ UserInterfaceBox::~UserInterfaceBox() {
 	for (auto i : fastAccessLayer)
 		delete i;
 	fastAccessLayer.clear();
-	spl::Folders::deleteFolder("image\\tempInterface");
+	spl::Folders::deleteFolder(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface");
 }
 
 

@@ -72,6 +72,7 @@ namespace spl {
 			tempWorld, ///< "user name"\Application Data\simpllight\temp\world
 			savesWorlds, ///< My Documents\simpllight\saves
 
+			interfaceFiles, ///< "game folder"\interface
 			nativeTextures, ///< "game folder"\textures
 			tempTextures ///< "user name"\Application Data\simpllight\temp\textures
 		};
