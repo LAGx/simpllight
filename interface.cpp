@@ -63,10 +63,10 @@ CellInterface::CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, Sty
 	textColor = style.textColor;
 }
 
-void CellInterface::changeDepthRender(int depth) {
-	baseTextr->depthRender += depth;
-	frameTextr->depthRender += depth;
-	depthRender += depth;
+void CellInterface::changeDepthRender(int deltaDepth) {
+	baseTextr->depthRender += deltaDepth;
+	frameTextr->depthRender += deltaDepth;
+	depthRender += deltaDepth;
 }
 
 void CellInterface::blit() {
