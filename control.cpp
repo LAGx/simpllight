@@ -6,6 +6,7 @@
 #include "INIReader.h"
 #include "INIWriter.h"
 #include "service.h"
+#include "state.h"
 
 using ControlBox = spl::ControlBox;
 using string = std::string;
@@ -24,26 +25,33 @@ void ControlBox::updateKeyBindings() {
 	INIReader settings(Folders::getSpecialFolderPath(Folders::myDocuments) + "\\simpllight\\settings.ini");
 
 	if (settings.ParseError() < 0) {
-		Log::log("Can't load 'settings.ini', creating and using default bindings");
+		Log::warning("Can't load 'settings.ini', creating and using default bindings");
 		saveKeyBindings();
 	}
 	else {
-		keyBindings.moveTop = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveTop", 22);
-		keyBindings.moveBottom = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveBottom", 18);
-		keyBindings.moveLeft = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveLeft", 0);
-		keyBindings.moveRight = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRight", 3);
-		keyBindings.haste = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "haste", 38);
-		keyBindings.apply = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "apply", 5);
-		keyBindings.console = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "console", 54);
-		keyBindings.l_ctrl = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "l_ctrl", 37);
-		keyBindings.l_shift = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "l_shift", 38);
-#ifdef DEV_MODE
-		keyBindings.moveRadiusPlus = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRadiusPlus", 4);
-		keyBindings.moveRadiusMinus = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRadiusMinus", 16);
-#endif
+		keyBindings.moveTop = static_cast<sf::Keyboard::Key>(settings.GetInteger("keyBindings", "moveTop", -1));
+		keyBindings.moveBottom = static_cast<sf::Keyboard::Key>(settings.GetInteger("keyBindings", "moveBottom", -1));
+		keyBindings.moveLeft = static_cast<sf::Keyboard::Key>(settings.GetInteger("keyBindings", "moveLeft", -1));
+		keyBindings.moveRight = static_cast<sf::Keyboard::Key>(settings.GetInteger("keyBindings", "moveRight", -1));
+		keyBindings.haste = static_cast<sf::Keyboard::Key>(settings.GetInteger("keyBindings", "haste", -1));
+		keyBindings.apply = static_cast<sf::Keyboard::Key>(settings.GetInteger("keyBindings", "apply", -1));
+		keyBindings.console = static_cast<sf::Keyboard::Key>(settings.GetInteger("keyBindings", "console", -1));
+		keyBindings.l_ctrl = static_cast<sf::Keyboard::Key>(settings.GetInteger("keyBindings", "l_ctrl", -1));
+		keyBindings.l_shift = static_cast<sf::Keyboard::Key>(settings.GetInteger("keyBindings", "l_shift", -1));
+		keyBindings.primaryMouseAction = static_cast<sf::Mouse::Button>(settings.GetInteger("keyBindings", "primaryMouseAction", -1));
+		keyBindings.secondaryMouseAction = static_cast<sf::Mouse::Button>(settings.GetInteger("keyBindings", "secondaryMouseAction", -1));
+/*#ifdef DEV_MODE
+		keyBindings.moveRadiusPlus = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRadiusPlus", -1);
+		keyBindings.moveRadiusMinus = (sf::Keyboard::Key) settings.GetInteger("keyBindings", "moveRadiusMinus", -1);
+#endif*/
 
-		keyBindings.primaryMouseAction = (sf::Mouse::Button) settings.GetInteger("keyBindings", "primaryMouseAction", 0);
-		keyBindings.secondaryMouseAction = (sf::Mouse::Button) settings.GetInteger("keyBindings", "secondaryMouseAction", 1);
+		if (keyBindings.moveTop == -1 || keyBindings.moveBottom == -1 || keyBindings.moveLeft == -1 || keyBindings.moveRight == -1
+			|| keyBindings.haste == -1 || keyBindings.apply == -1 || keyBindings.console == -1 || keyBindings.l_ctrl == -1 
+			|| keyBindings.l_shift == -1 || keyBindings.primaryMouseAction == -1 || keyBindings.secondaryMouseAction == -1) 
+		{
+			Log::warning("Bad bindings, creating and using default bindings");
+			saveKeyBindings();
+		}
 	}
 }
 
