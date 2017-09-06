@@ -218,6 +218,9 @@ protected:
 
 public:
 
+	static std::string getActiveLayer();
+	static std::string getActiveCell();
+
 	UserInterfaceBox();
 	/*!
 	@brief create new layer, with style? that can`t change in game. 

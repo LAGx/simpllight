@@ -479,6 +479,8 @@ AssemblyLayerInterface::~AssemblyLayerInterface() {
 
 string UserInterfaceBox::activeLayer;
 string UserInterfaceBox::activeCell;
+std::string UserInterfaceBox::getActiveLayer() { return activeLayer; }
+std::string UserInterfaceBox::getActiveCell() { return activeCell; }
 
 UserInterfaceBox::UserInterfaceBox() {
 	spl::Folders::deleteFolder(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface");
