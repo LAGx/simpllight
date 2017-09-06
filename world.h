@@ -61,7 +61,7 @@ public:
 	*/
 	void saveLocation(const std::string locationName, const LocationType type = LocationType::mainLoc);
 
-	///@brief close all locations and delete world folder
+	/// close all locations and delete world folder
 	void closeWorld();
 
 	/*!
@@ -100,10 +100,16 @@ private:
 	void loadFromFile(const std::string locationFolder, const LocationType type);
 
 	/*!
-	@brief load player data to
+	@brief save player to specific location
+	@param [in] path  path to location where player should save
 	*/
 	void savePlayer(const std::string path);
 
+	/*!
+	@brief load player from specific location data to player ptr
+	@param [in] locationFolder  location from where player should load
+	@param [in] type  type of location from where player should load
+	*/
 	void loadPlayer(const std::string locationFolder, const LocationType type);
 
 	spl::Window *window;

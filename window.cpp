@@ -4,6 +4,7 @@
 #include <SFML/System.hpp>
 #include <algorithm>
 #include <vector>
+#include <Windows.h>
 
 #include "state.h"
 

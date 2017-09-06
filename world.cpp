@@ -36,13 +36,13 @@ World::World(spl::Window *window)
 
 void World::loadWorld(const std::string saveName)
 {
-	const string path = Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp";
+	const string path = Folders::getGameFolderPath(Folders::GameFolders::workWorld);
 	Folders::createFolder(path);
 
 	if (saveName == "None")
-		Folders::copyFolder("world", path);
+		Folders::copyFolder(Folders::getGameFolderPath(Folders::GameFolders::nativeWorld), path);
 	else
-		Folders::copyFolder(Folders::getSpecialFolderPath(Folders::myDocuments) + "\\simpllight\\saves\\" + saveName, path);
+		Folders::copyFolder(Folders::getGameFolderPath(Folders::GameFolders::savesWorlds) + '\\' + saveName, path);
 
 	json jsonTmp_ptr = new json;
 
@@ -60,7 +60,7 @@ void World::loadWorld(const std::string saveName)
 
 void World::loadLocation(const std::string locationName)
 {
-	const string path = Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp\\" + locationName;
+	const string path = Folders::getGameFolderPath(Folders::GameFolders::workWorld) + '\\' + locationName;
 
 	INIReader locationSettings(path + "\\locationSettings.ini");
 
@@ -77,6 +77,7 @@ void World::loadLocation(const std::string locationName)
 		//TODO: Interface -> "big location" loading proccess
 		if (parentLocName != "None") {
 			closeLocation(World::LocationType::mainLoc, true, false);
+			loadPlayer(path, LocationType::mainLoc);
 			parentLocName = "None";
 
 			for (auto &i : additionalLocation) {
@@ -125,7 +126,7 @@ void World::loadLocation(const std::string locationName)
 		//TODO: Interface -> "small location" loading proccess
 		additionalLocation = mainLocation;
 		parentLocName = currLocName;
-		savePlayer(Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp\\" + parentLocName);
+		savePlayer(Folders::getGameFolderPath(Folders::GameFolders::workWorld) + '\\' + parentLocName);
 
 		for (auto &i : additionalLocation) {
 			for (auto &j : i.second) {
@@ -154,7 +155,8 @@ void World::loadLocation(const std::string locationName)
 		//TODO: Interface -> "small location" loading proccess
 
 		saveLocation(currLocName);
-		closeLocation(World::LocationType::mainLoc, true, false);
+		closeLocation(World::LocationType::mainLoc, true);
+		loadPlayer(path, LocationType::mainLoc);
 		parentLocName = "None";
 
 		for (auto &i : additionalLocation) {
@@ -193,16 +195,16 @@ void World::saveWorld(const std::string saveName)
 	if (parentLocName != "None")
 		saveLocation(parentLocName, LocationType::additionalLoc);
 
-	const string path = Folders::getSpecialFolderPath(Folders::myDocuments) + "\\simpllight\\saves\\" + saveName;
+	const string path = Folders::getGameFolderPath(Folders::GameFolders::savesWorlds) + '\\' + saveName;
 	Folders::createFolder(path);
 
-	Folders::copyFolder(Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp", path);
+	Folders::copyFolder(Folders::getGameFolderPath(Folders::GameFolders::workWorld), path);
 }
 
 void World::saveLocation(const std::string locationName, const LocationType type)
 {
 	// Path to location folder
-	const string path = Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp\\" + locationName;
+	const string path = Folders::getGameFolderPath(Folders::GameFolders::workWorld) + '\\' + locationName;
 
 	// Saving location settings
 	INIWriter locSettings;
@@ -319,7 +321,7 @@ void World::closeWorld()
 
 	closeLocation(LocationType::additionalLoc, true);
 	closeLocation(LocationType::mainLoc, true);
-	Folders::deleteFolder(Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp");
+	Folders::deleteFolder(Folders::getGameFolderPath(Folders::GameFolders::workWorld));
 }
 
 void World::closeLocation(const LocationType type, const bool isDeleteObjects, const bool isDeletePlayer)
@@ -357,6 +359,7 @@ void World::closeLocation(const LocationType type, const bool isDeleteObjects, c
 
 void World::blit()
 {
+	// ------ DEBUG --------
 	if (collideListener.isLoad == 1) {
 		loadLocation("testLoc");
 		collideListener.isLoad = 0;
@@ -494,7 +497,7 @@ void World::savePlayer(const std::string path)
 			{ "health" , player->getHealth() }
 		};
 
-		file->open(Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp\\mainPlayer.json", std::ios::trunc);
+		file->open(Folders::getGameFolderPath(Folders::GameFolders::workWorld) + "\\mainPlayer.json", std::ios::trunc);
 		*file << std::setw(4) << jsonTmp_ptr << std::endl;
 		file->close();
 	}
@@ -518,7 +521,7 @@ void World::loadPlayer(const std::string locationFolder, const LocationType type
 
 		json jsonTmp2_ptr = new json;
 
-		playerFile.open(Folders::getSpecialFolderPath(Folders::userName_applicationData) + "\\simpllight\\temp\\mainPlayer.json");
+		playerFile.open(Folders::getGameFolderPath(Folders::GameFolders::workWorld) + "\\mainPlayer.json");
 		if (!playerFile.is_open())
 			throw Log::Exception("can`t load world file: mainPlayer.json");
 
@@ -541,6 +544,9 @@ void World::loadPlayer(const std::string locationFolder, const LocationType type
 
 		delete jsonTmp2;
 		delete cursor;
+	}
+	else {
+		Log::Exception("uncorrect location type");
 	}
 	delete jsonTmp;
 }
