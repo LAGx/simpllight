@@ -1,4 +1,4 @@
-#ifndef _STATE_
+﻿#ifndef _STATE_
 #define _STATE_
 
 #pragma once
@@ -18,5 +18,8 @@ public:
 	static sf::Color mainColorMajor;
 
 	static sf::Color mainColorMinor;
+
+	
+
 };
 #endif

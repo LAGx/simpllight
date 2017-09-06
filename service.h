@@ -69,13 +69,12 @@ namespace spl {
 		enum class GameFolders
 		{
 			nativeWorld = 0, ///< "game folder"\world
-			workWorld, ///< "user name"\Application Data\simpllight\temp\world
+			tempWorld, ///< "user name"\Application Data\simpllight\temp\world
 			savesWorlds, ///< My Documents\simpllight\saves
 
+			interfaceFiles, ///< "game folder"\interface
 			nativeTextures, ///< "game folder"\textures
-			workTextures, ///< "user name"\Application Data\simpllight\temp\textures
-
-			sounds ///< "game folder"\sounds
+			tempTextures ///< "user name"\Application Data\simpllight\temp\textures
 		};
 
 		/*!
