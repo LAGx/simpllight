@@ -34,6 +34,18 @@ int main() {
 	World world(&window);
 	world.loadWorld();
 
+
+	UserInterfaceBox user_interface;
+	///example to create file (need to use once)
+
+	//user_interface.createLayer("text_test");
+	//user_interface.getCurrLayer()->createNewCell(sf::Vector2f(30, 40), sf::Vector2f(20, 15), CellInterface::rect, "main");
+	//user_interface.getCurrLayer()->textControl("main", "new", 1, "some_text", sf::Vector2f(0, 0), 20);
+
+	user_interface.downloadLayerById("text_test");
+	user_interface.getCurrLayer()->getCellById("main")->getTextPtr(1)->setPositionRatioCell(sf::Vector2f(-user_interface.getCurrLayer()->getCellById("main")->getTextPtr(1)->getRatioCellSize().x/2,0));
+	
+
 	/////////////////////////////////////
 	// ---------- MAIN LOOP ---------- //
 	/////////////////////////////////////
@@ -50,9 +62,9 @@ int main() {
 		}
 		clock.restart();
 #endif
-
 		world.blit();
 		window.updateWindowStateBox();
+		user_interface.blit();///< have to be after updateWindowStateBox
 #ifdef DEV_MODE
 		screenLog.blit();
 #endif
