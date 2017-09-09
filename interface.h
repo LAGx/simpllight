@@ -10,6 +10,7 @@
 
 class BaseClass;
 
+//TODO setTexture in CellInterface
 /// one cell of interface. 
 class CellInterface {
 private:
@@ -22,7 +23,7 @@ private:
 
 		sf::Vector2f posRatio; ///< position of center of text ratio cell(0 by 100)
 		int depthRender = 0; ///< depth render 
-
+		CellInterface *parent_cell;
 	public:
 		/*!
 		 @warning don`t use class directly. only across cellInterface methods
@@ -33,9 +34,9 @@ private:
 		 */
 		Text(int id, std::string text, sf::Vector2f posRatio, float scaleRatio, sf::Color textColor, sf::Font &font, CellInterface& cell);
 
-		/// set position of text
+		///set position of text. don`t use, please
 		void setPosition(sf::Vector2f position);
-		/// set scale factor 
+		///set scale factor 
 		void setScale(float scale);
 		///set new text
 		void setNewText(std::string text);
@@ -47,6 +48,10 @@ private:
 		int getId();
 		/// change depth render by delta point
 		void changeDepthRender(int delta);
+		///set position ratio cell(in %) 
+		void setPositionRatioCell(sf::Vector2f position);
+		///get size of text (in %)
+		sf::Vector2f getRatioCellSize();
 		/// blit
 		void blit();
 
@@ -92,6 +97,7 @@ private:
 	enum typeCell;
 	typeCell type;///< type of cell 
 
+	friend CellInterface::Text;
 	sf::Vector2f sizeCell;           ///< Size in pixel relative window. if it`s circle - first parameter is radius, second ignore
 	sf::Vector2f positionRelWindow; ///<Position in pixel, @warning don`t have to update
 	float speedChangeTransper = 1;  ///< from 0 (newer change) by 1 (in moment change)
@@ -187,14 +193,13 @@ public:
 	@throw Log::Exception no such cell id
 	 */
 	CellInterface* getCellById(std::string id = "None");
-	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, std::string styleId = "default");///<for creating. can be using for update (just input id of upateing cell). doing update of file layer
+	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, std::string styleId = "use_layer_id");///<for creating. can be using for update (just input id of upateing cell). doing update of file layer
 	void deleteCell(std::string id); ///<for creating. doing update of file layer
 	/*!
 	@brief use for text manipulation in cell. doing update of file layer
 	@param [in] mode can take "new"(create new text) and "del"(delete text).
 	 */
 	void textControl(std::string cellId, std::string mod, int idText, std::string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);
-
 
 	std::string id = "None";///<< id layer
 
