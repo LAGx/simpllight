@@ -203,7 +203,8 @@ std::string spl::Folders::getGameFolderPath(GameFolders folder)
 	case GameFolders::nativeWorld:
 		return "world";
 	case GameFolders::tempWorld: 
-		return getSpecialFolderPath(userName_applicationData) + "\\simpllight\\temp\\world";
+		static string result = getSpecialFolderPath(userName_applicationData) + "\\simpllight\\temp\\world";
+		return result;
 	case GameFolders::savesWorlds: 
 		return getSpecialFolderPath(myDocuments) + "\\simpllight\\saves";
 	case GameFolders::nativeTextures:

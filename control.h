@@ -48,10 +48,8 @@ namespace spl {
 	class ControlBox {
 	private:
 
-		/*class Console {
+		class Console {
 		public:
-
-			#define cendl '\n'
 
 			~Console() {
 				history.clear();
@@ -61,23 +59,21 @@ namespace spl {
 
 			void show();
 
-			void renderAll();
-
-			template<class T>
-			void render(T &in);
-
 			template<class T> 
 			Console &operator<<(T &in);
+
 		private:
+			/// clear history
 			void clear();
-			void saveHistory(); //Saving available console history to file "consoleLog.txt"
-		//	void listenCommand();
+
+			/// saving available console history to file "consoleLog.txt"
+			void saveHistory();
 
 			template <class T> 
 			Console &operator>>(std::string &in);
 
 			std::string history;
-		};*/
+		};
 
 		struct KeyBindings {
 			sf::Keyboard::Key moveTop = sf::Keyboard::W;
@@ -87,8 +83,8 @@ namespace spl {
 			sf::Keyboard::Key haste = sf::Keyboard::LShift;
 			sf::Keyboard::Key apply = sf::Keyboard::F;
 			sf::Keyboard::Key console = sf::Keyboard::Tilde;
-			sf::Keyboard::Key l_ctrl = sf::Keyboard::LControl;
-			sf::Keyboard::Key l_shift = sf::Keyboard::LShift;
+			sf::Keyboard::Key l_ctrl = sf::Keyboard::LControl; //Rename
+			sf::Keyboard::Key l_shift = sf::Keyboard::LShift; //Rename
 
 			sf::Mouse::Button primaryMouseAction = sf::Mouse::Button::Left;
 			sf::Mouse::Button secondaryMouseAction = sf::Mouse::Button::Right;
@@ -100,7 +96,7 @@ namespace spl {
 
 	public:
 
-		//static Console *console;
+		Console console;
 
 		ControlBox();
 

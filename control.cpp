@@ -11,6 +11,7 @@
 using ControlBox = spl::ControlBox;
 using string = std::string;
 using Folders = spl::Folders;
+using Time = spl::Time;
 
 
 ///////////////////////////////////////
@@ -70,7 +71,7 @@ void ControlBox::saveKeyBindings() {
 	settings["keyBindings"]["l_ctrl"] = keyBindings.l_ctrl;
 	settings["keyBindings"]["l_shift"] = keyBindings.l_shift;
 
-	string path = Folders::getSpecialFolderPath(Folders::myDocuments);
+	const string path = Folders::getSpecialFolderPath(Folders::myDocuments);
 	Folders::createFolder(path + "\\simpllight");
 	settings.saveToFile(path + "\\simpllight\\settings.ini");
 
@@ -98,8 +99,8 @@ void ControlBox::resulveControl(spl::Window &window) {
 			controlObjects[i]->moveRight();
 		if (sf::Keyboard::isKeyPressed(keyBindings.apply))
 			controlObjects[i]->apply();
-		//if (sf::Keyboard::isKeyPressed(keyBindings.console))
-			//console->show();
+		if (sf::Keyboard::isKeyPressed(keyBindings.console))
+			console.show();
 		if (sf::Keyboard::isKeyPressed(keyBindings.haste))
 			controlObjects[i]->haste();
 		if (sf::Keyboard::isKeyPressed(keyBindings.l_ctrl))
@@ -107,12 +108,12 @@ void ControlBox::resulveControl(spl::Window &window) {
 		if (sf::Keyboard::isKeyPressed(keyBindings.l_shift))
 			controlObjects[i]->l_shift();
 
-#ifdef DEV_MODE
+/*#ifdef DEV_MODE
 		if (sf::Keyboard::isKeyPressed(keyBindings.moveRadiusPlus))
 			controlObjects[i]->moveRadiusPlus();
 		if (sf::Keyboard::isKeyPressed(keyBindings.moveRadiusMinus))
 			controlObjects[i]->moveRadiusMinus();
-#endif
+#endif*/
 
 		if (sf::Mouse::isButtonPressed(keyBindings.primaryMouseAction))
 			controlObjects[i]->primaryMouseAction();
@@ -141,12 +142,11 @@ bool ControlBox::deleteControlObject(spl::EventInterface* obj) {
 }
 
 
-/* TODO: remake with interface i/o
 ///////////////////////////////////////
 // -----------  CONSOLE  ----------- //
 ///////////////////////////////////////
 
-/*void ControlBox::Console::listenCommand()
+void ControlBox::Console::listenCommand()
 {
 	std::string command;
 	do {
@@ -263,12 +263,6 @@ ControlBox::Console &ControlBox::Console::operator>>(std::string &in)
 	} while ((event.type =! sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Return));
 	return *this;
 }
-
-template<class T>
-void spl::ControlBox::Console::render(T &in)
-{
-}
-
 template<class T>
 ControlBox::Console &ControlBox::Console::operator<<(T &in)
 {
@@ -282,25 +276,20 @@ ControlBox::Console &ControlBox::Console::operator<<(T &in)
 void ControlBox::Console::hide()
 {
 	//TODO: Game continue && hide all interface and icon
+
 }
 
 void ControlBox::Console::show()
 {
-	renderAll();
-	//TODO: Game pause && pause icon (in right top corner)
+	//TODO: Game pause && pause icon
 	//listenCommand();
-}
-
-void spl::ControlBox::Console::renderAll()
-{
-	//TODO: render console interface in left top corner with death fields && render all history, last symbol is '_'
 }
 
 void ControlBox::Console::saveHistory()
 {
-	std::ofstream file("consoleLog.txt", std::ios_base::ate);
+	std::ofstream file(Folders::getGameFolderPath(Folders::GameFolders::serviceFiles) + "\\consoleLog.txt", std::ios_base::ate);
 
-	file << spl::Time::getTime(spl::Time::day_HourMinSec) << history << std::endl;
+	file << Time::getTime(Time::TimeMode::Day_HourMinSec) << history << std::endl;
 
 	file.close();
 }
@@ -308,4 +297,4 @@ void ControlBox::Console::saveHistory()
 void ControlBox::Console::clear()
 {
 	history.clear();
-}*/
+}
