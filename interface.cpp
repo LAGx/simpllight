@@ -29,12 +29,12 @@ CellInterface::CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, Sty
 	this->id = id;
 	this->speedChangeTransper = style.speedChangeTransper;
 	deltaTransp = style.deltaTransperActive - style.deltaTransperQuiet;
-	this->positionRelWindow = sf::Vector2f(spl::WindowStateBox::currScreenSize.x * initRatio.x/100, spl::WindowStateBox::currScreenSize.y * initRatio.y / 100);
+	this->positionRelWindow = sf::Vector2f(spl::WindowStateBox::currScreenSize.x * initRatio.x / 100, spl::WindowStateBox::currScreenSize.y * initRatio.y / 100);
 	sizeCell = sf::Vector2f(spl::WindowStateBox::currScreenSize.x * sizeRatio.x / 100, spl::WindowStateBox::currScreenSize.y * sizeRatio.y / 100);
 
 	{
 		spl::TextureGenerator textureGenerator;
-		if ((fopen((spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures)+"\\interface\\" + id + "_base.png").c_str(), "r") == NULL) &&
+		if ((fopen((spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_base.png").c_str(), "r") == NULL) &&
 			(fopen((spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_frame.png").c_str(), "r") == NULL)) {
 			switch (this->type) {
 			case typeCell::rect:
@@ -51,14 +51,14 @@ CellInterface::CellInterface(sf::Vector2f initRatio, sf::Vector2f sizeRatio, Sty
 		}
 	}
 
-	this->baseTextr  = new CellTexture(sf::Vector2f(0,0), spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_base.png");
-	this->frameTextr = new CellTexture(sf::Vector2f(0,0), spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_frame.png");
+	this->baseTextr = new CellTexture(sf::Vector2f(0, 0), spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_base.png");
+	this->frameTextr = new CellTexture(sf::Vector2f(0, 0), spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface\\" + id + "_frame.png");
 
 	baseTextr->depthRender = -1000;
 	depthRender = -1000;
 	frameTextr->depthRender = -1000 - 10;
 
-	if (!font.loadFromFile(style.textFont)){
+	if (!font.loadFromFile(style.textFont)) {
 		throw Log::Exception("load interface font");
 	}
 	textColor = style.textColor;
@@ -78,10 +78,10 @@ void CellInterface::blit() {
 		for (auto text : allText)
 			text->blit();
 		if (item != nullptr) {
-			if(type == typeCell::rect)
+			if (type == typeCell::rect)
 				item->blit(positionRelWindow, sizeCell.y);
 			else
-				item->blit(positionRelWindow, sizeCell.x*2);
+				item->blit(positionRelWindow, sizeCell.x * 2);
 		}
 	}
 	else {
@@ -91,7 +91,7 @@ void CellInterface::blit() {
 
 void CellInterface::phisicCollideDetecting() {
 	if (type == typeCell::rect) {
-		if (((positionRelWindow.x - sizeCell.x / 2 <= spl::WindowStateBox::mouseCurrPositionRelativeWindow.x) && (positionRelWindow.x+ sizeCell.x/2  >= spl::WindowStateBox::mouseCurrPositionRelativeWindow.x)) &&
+		if (((positionRelWindow.x - sizeCell.x / 2 <= spl::WindowStateBox::mouseCurrPositionRelativeWindow.x) && (positionRelWindow.x + sizeCell.x / 2 >= spl::WindowStateBox::mouseCurrPositionRelativeWindow.x)) &&
 			((positionRelWindow.y - sizeCell.y / 2 <= spl::WindowStateBox::mouseCurrPositionRelativeWindow.y) && (positionRelWindow.y + sizeCell.y / 2 >= spl::WindowStateBox::mouseCurrPositionRelativeWindow.y)))
 			isActive = true;
 		else
@@ -101,7 +101,7 @@ void CellInterface::phisicCollideDetecting() {
 		if (sqrt((positionRelWindow.x - spl::WindowStateBox::mouseCurrPositionRelativeWindow.x)*(positionRelWindow.x - spl::WindowStateBox::mouseCurrPositionRelativeWindow.x) + (positionRelWindow.y - spl::WindowStateBox::mouseCurrPositionRelativeWindow.y)*(positionRelWindow.y - spl::WindowStateBox::mouseCurrPositionRelativeWindow.y)) <= sizeCell.x)
 			isActive = true;
 		else
-			isActive =  false;
+			isActive = false;
 	}
 }
 
@@ -112,14 +112,14 @@ void CellInterface::animation() {
 		else
 			animationCoef = 1;
 
-		baseTextr->g_body.setColor(sf::Color(255, 255, 255, deltaTransp+(255-deltaTransp)*animationCoef));
+		baseTextr->g_body.setColor(sf::Color(255, 255, 255, deltaTransp + (255 - deltaTransp)*animationCoef));
 	}
 	else {
 		if (animationCoef - speedChangeTransper >= 0)
 			animationCoef -= speedChangeTransper;
 		else
 			animationCoef = 0;
-		
+
 		baseTextr->g_body.setColor(sf::Color(255, 255, 255, deltaTransp + (255 - deltaTransp)*animationCoef));
 	}
 }
@@ -129,17 +129,17 @@ void CellInterface::setVisible(bool isVisible) {
 }
 
 void CellInterface::update() {
-		phisicCollideDetecting();
-		//spl::Window::updateWindowStateBox();//don`t need there //too much calls 
-		baseTextr->updateTextrPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + positionRelWindow / spl::WindowStateBox::absoluteScale, 0);
-		baseTextr->g_body.setScale(sf::Vector2f(1 / spl::WindowStateBox::absoluteScale, 1 / spl::WindowStateBox::absoluteScale));
-		frameTextr->updateTextrPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + positionRelWindow / spl::WindowStateBox::absoluteScale, 0);
-		frameTextr->g_body.setScale(sf::Vector2f(1 / spl::WindowStateBox::absoluteScale, 1 / spl::WindowStateBox::absoluteScale));
-		animation();
-		for (auto text : allText) {
-			text->setPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + positionRelWindow / spl::WindowStateBox::absoluteScale);
-			text->setScale(1 / spl::WindowStateBox::absoluteScale);
-		}
+	phisicCollideDetecting();
+	//spl::Window::updateWindowStateBox();//don`t need there //too much calls 
+	baseTextr->updateTextrPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + positionRelWindow / spl::WindowStateBox::absoluteScale, 0);
+	baseTextr->g_body.setScale(sf::Vector2f(1 / spl::WindowStateBox::absoluteScale, 1 / spl::WindowStateBox::absoluteScale));
+	frameTextr->updateTextrPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + positionRelWindow / spl::WindowStateBox::absoluteScale, 0);
+	frameTextr->g_body.setScale(sf::Vector2f(1 / spl::WindowStateBox::absoluteScale, 1 / spl::WindowStateBox::absoluteScale));
+	animation();
+	for (auto text : allText) {
+		text->setPosition(spl::WindowStateBox::inGameZeroCordRelativeWindow + positionRelWindow / spl::WindowStateBox::absoluteScale);
+		text->setScale(1 / spl::WindowStateBox::absoluteScale);
+	}
 }
 
 CellInterface::~CellInterface() {
@@ -171,11 +171,11 @@ void CellInterface::textControl(std::string mod, int id, std::string text, sf::V
 				allText.erase(i);
 				goto end;
 			}
-		} 
+		}
 		Log::warning("No such text in " + this->id + " cell to delete", true);
 	}
 	else
-		throw Log::Exception("no such mode in CellInterface::textControl",true);
+		throw Log::Exception("no such mode in CellInterface::textControl", true);
 end:;
 
 
@@ -191,10 +191,10 @@ CellInterface::Text* CellInterface::getTextPtr(int id) {
 void CellInterface::setItem(InterfaceItem *item) {
 	this->item = nullptr;
 	this->item = item;
-	this->item->setDepthRender(depthRender-3);
+	this->item->setDepthRender(depthRender - 3);
 }
 
-void CellInterface::removeItem(){
+void CellInterface::removeItem() {
 	item = nullptr;
 }
 
@@ -230,13 +230,13 @@ CellInterface::Text::Text(int id, std::string text, sf::Vector2f posRatio, float
 	this->id = id;
 	this->text.setFont(font);
 	this->text.setString(text);
-	this->text.setCharacterSize(scaleRatio* (spl::WindowStateBox::currScreenSize.x/1000));
+	this->text.setCharacterSize(scaleRatio* (spl::WindowStateBox::currScreenSize.x / 1000));
 	this->text.setFillColor(textColor);
-	this->text.setOutlineColor(textColor - sf::Color(10,10,10));
+	this->text.setOutlineColor(textColor - sf::Color(10, 10, 10));
 
-	this->text.setOrigin(this->text.getCharacterSize() * text.size()/4, this->text.getCharacterSize() / 2);
+	this->text.setOrigin(this->text.getCharacterSize() * text.size() / 4, this->text.getCharacterSize() / 2);
 
-	if(cell.type == typeCell::rect)
+	if (cell.type == typeCell::rect)
 		this->posRatio = sf::Vector2f((posRatio.x / 100)*cell.sizeCell.x, (posRatio.y / 100)*cell.sizeCell.y);
 	else
 		this->posRatio = sf::Vector2f((posRatio.x / 100)*cell.sizeCell.x, (posRatio.y / 100)*cell.sizeCell.x);
@@ -244,7 +244,7 @@ CellInterface::Text::Text(int id, std::string text, sf::Vector2f posRatio, float
 }
 
 void CellInterface::Text::setPosition(sf::Vector2f position) {
-	text.setPosition(position + posRatio/spl::WindowStateBox::absoluteScale);
+	text.setPosition(position + posRatio / spl::WindowStateBox::absoluteScale);
 }
 
 void CellInterface::Text::setScale(float scale) {
@@ -336,9 +336,10 @@ void AssemblyLayerInterface::updateAllCellFromFile() {
 					}
 				allCell.push_back(toSaveCell);
 
-				
+
 			}
-		}catch (domain_error) {}
+		}
+		catch (domain_error) {}
 	}
 	file.close();
 }
@@ -357,7 +358,7 @@ void AssemblyLayerInterface::textControl(string cellId, string mod, int idText, 
 		j[cellId]["text"][to_string(idText)]["posRatio"] = { posRatio.x , posRatio.y };
 		j[cellId]["text"][to_string(idText)]["scale"] = scaleRatio;
 	}
-	else if(mod == "del") {
+	else if (mod == "del") {
 		j[cellId]["text"].erase(to_string(idText));
 	}
 	file.close();
@@ -379,10 +380,10 @@ void AssemblyLayerInterface::createNewCell(sf::Vector2f initRatio, sf::Vector2f 
 
 
 	jStyle << inStreamFile;
-	jStyle[id]["initRatio"] = { initRatio.x, initRatio.y};
-	jStyle[id]["sizeRatio"] = { sizeRatio.x, sizeRatio.y};
+	jStyle[id]["initRatio"] = { initRatio.x, initRatio.y };
+	jStyle[id]["sizeRatio"] = { sizeRatio.x, sizeRatio.y };
 	jStyle[id]["type"] = int(type);
-	if(styleId == "default")
+	if (styleId == "default")
 		jStyle[id]["style"] = this->styleId;
 	else
 		jStyle[id]["style"] = styleId;
@@ -439,7 +440,7 @@ CellInterface* AssemblyLayerInterface::getCellById(string id) {
 	for (int i = 0; i < allCell.size(); i++)
 		if (allCell[i]->id == id)
 			return allCell[i];
-	throw Log::Exception("no such cell id",true);
+	throw Log::Exception("no such cell id", true);
 }
 
 void AssemblyLayerInterface::deleteCell(std::string id) {
@@ -469,7 +470,7 @@ void AssemblyLayerInterface::blit() {
 
 AssemblyLayerInterface::~AssemblyLayerInterface() {
 	for (int i = 0; i < allCell.size(); i++)
-		delete allCell[i];	
+		delete allCell[i];
 }
 
 
@@ -486,8 +487,8 @@ UserInterfaceBox::UserInterfaceBox() {
 	spl::Folders::deleteFolder(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface");
 	spl::Folders::createFolder(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::tempTextures) + "\\interface");
 
-	CellInterface::StyleCell style = { sf::Color(10,60,50), sf::Color(0,255,255), 2, 2, 50, 200, 0.05, "font/arial.ttf", sf::Color(255,255,255)};
-	createStyle("default",style); 
+	CellInterface::StyleCell style = { sf::Color(10,60,50), sf::Color(0,255,255), 2, 2, 50, 200, 0.05, "font/arial.ttf", sf::Color(255,255,255) };
+	createStyle("default", style);
 }
 
 void UserInterfaceBox::createStyle(string id, CellInterface::StyleCell& style) {
@@ -506,7 +507,7 @@ void UserInterfaceBox::createStyle(string id, CellInterface::StyleCell& style) {
 	jStyle[id]["deltaTransperQuiet"] = style.deltaTransperQuiet;
 	jStyle[id]["speedChangeTransper"] = style.speedChangeTransper;
 	jStyle[id]["font"] = style.textFont;
-	jStyle[id]["textColor"] = { style.frameColor.r,style.frameColor.g, style.frameColor.b};
+	jStyle[id]["textColor"] = { style.frameColor.r,style.frameColor.g, style.frameColor.b };
 
 	ofstream outStreamFile(spl::Folders::getGameFolderPath(spl::Folders::GameFolders::interfaceFiles) + "\\styles.json");
 	if (!outStreamFile.is_open())
@@ -539,7 +540,7 @@ void UserInterfaceBox::blit() {
 	if (currInterfaceLayer != nullptr) {
 		currInterfaceLayer->blit();
 		activeCell = currInterfaceLayer->getActiveCell();
-	}	
+	}
 }
 
 AssemblyLayerInterface* UserInterfaceBox::getCurrLayer() {

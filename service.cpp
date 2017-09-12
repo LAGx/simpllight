@@ -212,6 +212,8 @@ std::string spl::Folders::getGameFolderPath(GameFolders folder)
 		return getSpecialFolderPath(userName_applicationData) + "\\simpllight\\temp\\textures";
 	case GameFolders::interfaceFiles:
 		return "interface";
+	case GameFolders::serviceFiles:
+		return getSpecialFolderPath(myDocuments) + "\\simpllight";
 	}
 }
 

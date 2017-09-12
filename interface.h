@@ -1,4 +1,3 @@
-
 #ifndef _INTERFACE_
 #define _INTERFACE_
 
@@ -6,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
+
 #include "item.h"
 
 class BaseClass;
@@ -17,43 +17,55 @@ private:
 	/// interface text, don`t use directly
 	class Text {
 	private:
-		int id;///< id of this text
-		sf::Text text;///< sfml text
+		int id; ///< id of this text
+		sf::Text text; ///< sfml text
 
 		sf::Vector2f posRatio; ///< position of center of text ratio cell(0 by 100)
 		int depthRender = 0; ///< depth render 
 
 	public:
 		/*!
-		 @warning don`t use class directly. only across cellInterface methods
-		 @param [in] text start text
-		 @param [in] posRatio position of center of text ratio cell(0 by 100)
-		 @param [in] scaleRatio scele factor  
-		 @param [in] cell parent cell
+		@warning don`t use class directly. only across cellInterface methods
+
+		@param [in] text start text
+		@param [in] posRatio position of center of text ratio cell(0 by 100)
+		@param [in] scaleRatio scele factor
+		@param [in] cell parent cell
 		 */
 		Text(int id, std::string text, sf::Vector2f posRatio, float scaleRatio, sf::Color textColor, sf::Font &font, CellInterface& cell);
 
 		/// set position of text
 		void setPosition(sf::Vector2f position);
+
 		/// set scale factor 
 		void setScale(float scale);
+
 		///set new text
 		void setNewText(std::string text);
+
 		///set new color
 		void setColor(sf::Color color);
+
 		///set new size
 		void setSize(float size);
-		/// @return id of text
+
+		/*!
+		@brief return id of this text
+
+		@return id of text
+		*/
 		int getId();
+
 		/// change depth render by delta point
 		void changeDepthRender(int delta);
+
 		/// blit
 		void blit();
 
 	};
 
 	///cell texture 
-	class CellTexture {//gvnocod becouse of circular include
+	class CellTexture {
 	public:
 		sf::Texture texture;
 		sf::Sprite g_body;
@@ -62,7 +74,7 @@ private:
 		bool isVisible = true;
 
 		int depthRender = 0;
-		
+
 		CellTexture(sf::Vector2f initCord, std::string texture);
 
 		CellTexture();
@@ -73,17 +85,15 @@ private:
 
 	sf::Color textColor; ///< default color of all text
 	sf::Font font; ///< default font of all text
-	vector<Text* > allText; ///< storage for all text
-	
+	vector<Text*> allText; ///< storage for all text
+
 	void update();///< resolving small operations
 	float animationCoef = 0; ///< for animation make 
 	void animation(); ///< make animation 
 
 	InterfaceItem* item = nullptr; ///< @warning have to be created outside
 
-	/*!
-	 @brief check if mouse on cell and set "isActive" true or false
-	 */
+	/// check if mouse on cell and set "isActive" true or false
 	void phisicCollideDetecting();
 
 	CellInterface::CellTexture *baseTextr;/// <background of texture
@@ -105,18 +115,19 @@ public:
 
 	/// define style of cell
 	struct StyleCell {
+
 		/// generate texture
-		sf::Color baseColor = { 0,0,0,255 };///<base color of background
-		sf::Color frameColor = { 0,0,0 };///<base color of frane
+		sf::Color baseColor = { 0,0,0,255 }; ///<base color of background
+		sf::Color frameColor = { 0,0,0 }; ///<base color of frane
 		int borderSize = 1; ///< size of frame
 		int shadow = 0; ///< size of shadow cell
 
-		unsigned char deltaTransperActive = 0;///<how more transperent base, then 100%
-		unsigned char deltaTransperQuiet = 0;///< transperent od background cell in usual state
-		float speedChangeTransper = 0;///< speed of animation
+		unsigned char deltaTransperActive = 0; ///<how more transperent base, then 100%
+		unsigned char deltaTransperQuiet = 0; ///< transperent od background cell in usual state
+		float speedChangeTransper = 0; ///< speed of animation
 
-		std::string textFont = "None";///< path to text font
-		sf::Color textColor = {255,255,255};///<< start text color
+		std::string textFont = "None"; ///< path to text font
+		sf::Color textColor = { 255,255,255 }; ///<< start text color
 	};
 
 	///what type of cell. define form of cell
@@ -132,17 +143,19 @@ public:
 	@throw Log::Exception invalid mod
 	*/
 	void textControl(std::string mod, int id, std::string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);
+
 	Text* getTextPtr(int id);///< get text by id for control it
 
 	void setItem(InterfaceItem* item);///< set item in sell
+
 	void removeItem();///< remove item in sell
 
 	/*!
-	 @param [in] initRatio (in %) position of center ratio window
-	 @param [in] sizeRatio (in %) size ratio window
-	 @param [in] style set style settings
-	 @param [in] type type of cell(round or rect). warning: can`t be changed 
-	 @param [in] id id cell on layer
+	@param [in] initRatio (in %) position of center ratio window
+	@param [in] sizeRatio (in %) size ratio window
+	@param [in] style set style settings
+	@param [in] type type of cell(round or rect). warning: can`t be changed
+	@param [in] id id cell on layer
 	@warning dont`t use cell directly. only across AssemblyLayerInterface
 	@throw Log::Exception if does not exist given type
 	@throw Log::Exception if does not exist given font from style
@@ -168,39 +181,44 @@ public:
 /// layer of group of cells
 class AssemblyLayerInterface {
 
-	CellInterface::StyleCell getStyle(std::string styleId);///< transform style from file to normal style type
-	void updateAllCellFromFile();///< read layer by json file
+	CellInterface::StyleCell getStyle(std::string styleId); ///< transform style from file to normal style type
+	void updateAllCellFromFile(); ///< read layer by json file
 
-	std::vector<CellInterface*> allCell;///< all cell are stored in vector
-	std::string styleId = "None";///<can be changed only once in constructor
+	std::vector<CellInterface*> allCell; ///< all cell are stored in vector
+	std::string styleId = "None"; ///<can be changed only once in constructor
 
 public:
 
 	/*!
-	 @warning style of layer can`t be changed in work. 
+	@warning style of layer can`t be changed in work.
 	@param [in] mode can take "new"(create new file) and "old"(load file)
 	 */
 	AssemblyLayerInterface(std::string id, std::string mode, std::string styleId = "default"); ///< mod "new", "old"(can`t change style)
-	
+
 	/*!
-	 @brief every cell have id, u can take one cell by id and do manipulation
+	@brief every cell have id, u can take one cell by id and do manipulation
 	@throw Log::Exception no such cell id
 	 */
 	CellInterface* getCellById(std::string id = "None");
+
 	void createNewCell(sf::Vector2f initRatio, sf::Vector2f sizeRatio, CellInterface::typeCell type, std::string id, std::string styleId = "default");///<for creating. can be using for update (just input id of upateing cell). doing update of file layer
-	void deleteCell(std::string id); ///<for creating. doing update of file layer
+
+	/// for creating. doing update of file layer
+	void deleteCell(std::string id);
+
 	/*!
 	@brief use for text manipulation in cell. doing update of file layer
 	@param [in] mode can take "new"(create new text) and "del"(delete text).
 	 */
-	void textControl(std::string cellId, std::string mod, int idText, std::string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);
+	void textControl(std::string cellId, std::string mode, int idText, std::string text = "None", sf::Vector2f posRatio = { 0,0 }, float scaleRatio = 1);
 
+	/// get cell on which mouse on
+	std::string getActiveCell();
 
-	std::string id = "None";///<< id layer
+	/// blit all vesible cells in layer 
+	void blit();
 
-	std::string getActiveCell();///< get cell on which mouse on
-
-	void blit();///< blit all vesible cells in layer 
+	std::string id = "None"; ///< id layer
 
 	~AssemblyLayerInterface();
 };
@@ -211,7 +229,7 @@ protected:
 	std::vector<AssemblyLayerInterface*> fastAccessLayer;///layers, that in RAM
 
 	AssemblyLayerInterface* currInterfaceLayer = nullptr;/// layer, that blit on screen now
-	
+
 	static std::string activeLayer;///< id of currInterfaceLayer
 
 	static std::string activeCell;///< id of cell, that mouse on
@@ -223,18 +241,22 @@ public:
 
 	UserInterfaceBox();
 	/*!
-	@brief create new layer, with style? that can`t change in game. 
+	@brief create new layer, with style? that can`t change in game.
 	@warning if id match with some else layer id, this layer delete and create empty.
 	 */
-	void createLayer(std::string id, std::string styleId = "default"); 
+	void createLayer(std::string id, std::string styleId = "default");
 
-	void createStyle(std::string id, CellInterface::StyleCell& style); ///<write new style in style file
+	/// write new style in style file
+	void createStyle(std::string id, CellInterface::StyleCell& style);
 
-	void downloadLayerById(std::string id);///<download layer fom file if it not in RAM. set this layer as current
+	/// download layer fom file if it not in RAM. set this layer as current
+	void downloadLayerById(std::string id);
 
-	AssemblyLayerInterface* getCurrLayer();///<get access to curr layer for manipulating 
+	/// get access to curr layer for manipulating 
+	AssemblyLayerInterface* getCurrLayer();
 
-	void blit();///< ZAEBALO I TAK JACNO. blit curr layer
+	/// blit curr layer
+	void blit();
 
 	~UserInterfaceBox();
 };

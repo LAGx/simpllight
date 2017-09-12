@@ -36,7 +36,7 @@ World::World(spl::Window *window)
 
 void World::loadWorld(const std::string saveName)
 {
-	const string path = Folders::getGameFolderPath(Folders::GameFolders::workWorld);
+	const string path = Folders::getGameFolderPath(Folders::GameFolders::tempWorld);
 	Folders::createFolder(path);
 
 	if (saveName == "None")
@@ -60,7 +60,7 @@ void World::loadWorld(const std::string saveName)
 
 void World::loadLocation(const std::string locationName)
 {
-	const string path = Folders::getGameFolderPath(Folders::GameFolders::workWorld) + '\\' + locationName;
+	const string path = Folders::getGameFolderPath(Folders::GameFolders::tempWorld) + '\\' + locationName;
 
 	INIReader locationSettings(path + "\\locationSettings.ini");
 
@@ -126,7 +126,7 @@ void World::loadLocation(const std::string locationName)
 		//TODO: Interface -> "small location" loading proccess
 		additionalLocation = mainLocation;
 		parentLocName = currLocName;
-		savePlayer(Folders::getGameFolderPath(Folders::GameFolders::workWorld) + '\\' + parentLocName);
+		savePlayer(Folders::getGameFolderPath(Folders::GameFolders::tempWorld) + '\\' + parentLocName);
 
 		for (auto &i : additionalLocation) {
 			for (auto &j : i.second) {
@@ -198,13 +198,13 @@ void World::saveWorld(const std::string saveName)
 	const string path = Folders::getGameFolderPath(Folders::GameFolders::savesWorlds) + '\\' + saveName;
 	Folders::createFolder(path);
 
-	Folders::copyFolder(Folders::getGameFolderPath(Folders::GameFolders::workWorld), path);
+	Folders::copyFolder(Folders::getGameFolderPath(Folders::GameFolders::tempWorld), path);
 }
 
 void World::saveLocation(const std::string locationName, const LocationType type)
 {
 	// Path to location folder
-	const string path = Folders::getGameFolderPath(Folders::GameFolders::workWorld) + '\\' + locationName;
+	const string path = Folders::getGameFolderPath(Folders::GameFolders::tempWorld) + '\\' + locationName;
 
 	// Saving location settings
 	INIWriter locSettings;
@@ -321,7 +321,7 @@ void World::closeWorld()
 
 	closeLocation(LocationType::additionalLoc, true);
 	closeLocation(LocationType::mainLoc, true);
-	Folders::deleteFolder(Folders::getGameFolderPath(Folders::GameFolders::workWorld));
+	Folders::deleteFolder(Folders::getGameFolderPath(Folders::GameFolders::tempWorld));
 }
 
 void World::closeLocation(const LocationType type, const bool isDeleteObjects, const bool isDeletePlayer)
@@ -497,7 +497,7 @@ void World::savePlayer(const std::string path)
 			{ "health" , player->getHealth() }
 		};
 
-		file->open(Folders::getGameFolderPath(Folders::GameFolders::workWorld) + "\\mainPlayer.json", std::ios::trunc);
+		file->open(Folders::getGameFolderPath(Folders::GameFolders::tempWorld) + "\\mainPlayer.json", std::ios::trunc);
 		*file << std::setw(4) << jsonTmp_ptr << std::endl;
 		file->close();
 	}
@@ -521,7 +521,7 @@ void World::loadPlayer(const std::string locationFolder, const LocationType type
 
 		json jsonTmp2_ptr = new json;
 
-		playerFile.open(Folders::getGameFolderPath(Folders::GameFolders::workWorld) + "\\mainPlayer.json");
+		playerFile.open(Folders::getGameFolderPath(Folders::GameFolders::tempWorld) + "\\mainPlayer.json");
 		if (!playerFile.is_open())
 			throw Log::Exception("can`t load world file: mainPlayer.json");
 

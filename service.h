@@ -74,7 +74,9 @@ namespace spl {
 
 			interfaceFiles, ///< "game folder"\interface
 			nativeTextures, ///< "game folder"\textures
-			tempTextures ///< "user name"\Application Data\simpllight\temp\textures
+			tempTextures, ///< "user name"\Application Data\simpllight\temp\textures
+
+			serviceFiles ///< My Documents\simpllight
 		};
 
 		/*!
@@ -116,7 +118,6 @@ namespace spl {
 		In Dev Mode function also prints all details of copying proccess
 
 		@param[in] from  full path to folder from where you want to copy
-		
 		@param[in] to  full path to folder to where you want to copy
 		*/
 		static void copyFolder(std::string from, std::string to);
