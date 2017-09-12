@@ -232,9 +232,9 @@ CellInterface::Text::Text(int id, std::string text, sf::Vector2f posRatio, float
 	this->text.setString(text);
 	this->text.setCharacterSize(scaleRatio* (spl::WindowStateBox::currScreenSize.x / 1000));
 	this->text.setFillColor(textColor);
-	this->text.setOutlineColor(textColor - sf::Color(10, 10, 10));
-
-	this->text.setOrigin(this->text.getCharacterSize() * text.size() / 4, this->text.getCharacterSize() / 2);
+	this->text.setOutlineColor(textColor - sf::Color(10,10,10));
+	this->parent_cell = &cell;
+	this->text.setOrigin(this->text.getCharacterSize() * text.size()/4, this->text.getCharacterSize() / 2);
 
 	if (cell.type == typeCell::rect)
 		this->posRatio = sf::Vector2f((posRatio.x / 100)*cell.sizeCell.x, (posRatio.y / 100)*cell.sizeCell.y);
@@ -265,6 +265,17 @@ void CellInterface::Text::setSize(float size) {
 
 int CellInterface::Text::getId() {
 	return id;
+}
+
+sf::Vector2f CellInterface::Text::getRatioCellSize() {
+	return sf::Vector2f((this->text.getGlobalBounds().width*100)/parent_cell->sizeCell.x, (this->text.getGlobalBounds().height*100)/parent_cell->sizeCell.y);
+}
+
+void CellInterface::Text::setPositionRatioCell(sf::Vector2f posRatio) {
+	if (parent_cell->type == typeCell::rect)
+		this->posRatio = sf::Vector2f((posRatio.x / 100)*parent_cell->sizeCell.x, (posRatio.y / 100)*parent_cell->sizeCell.y);
+	else
+		this->posRatio = sf::Vector2f((posRatio.x / 100)*parent_cell->sizeCell.x, (posRatio.y / 100)*parent_cell->sizeCell.x);
 }
 
 void CellInterface::Text::changeDepthRender(int delta) {
@@ -383,7 +394,8 @@ void AssemblyLayerInterface::createNewCell(sf::Vector2f initRatio, sf::Vector2f 
 	jStyle[id]["initRatio"] = { initRatio.x, initRatio.y };
 	jStyle[id]["sizeRatio"] = { sizeRatio.x, sizeRatio.y };
 	jStyle[id]["type"] = int(type);
-	if (styleId == "default")
+	
+	if(styleId == "use_layer_id")
 		jStyle[id]["style"] = this->styleId;
 	else
 		jStyle[id]["style"] = styleId;
